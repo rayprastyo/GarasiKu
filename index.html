@@ -1,0 +1,1791 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>GarasiKu Premium Pro</title>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <style>
+/* Soft Premium Blue & Slate Dark Mode Palette */
+:root {
+    /* Soft Premium Blue (Tema Terang) */
+    --bg-main: #F8FAFC;
+    --bg-container: #FFFFFF;
+    --bg-card: #FFFFFF;
+    --bg-input: #F1F5F9;
+    --primary: #2563EB;
+    --primary-glow: rgba(37, 99, 235, 0.08);
+    --secondary: #3B82F6;
+    --success: #10B981;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    --text-main: #0F172A;
+    --text-muted: #64748B;
+    --border: #E2E8F0;
+    --accent: #2563EB;
+    --header-bg: rgba(255, 255, 255, 0.85);
+    --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.05);
+    --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.05);
+    --hero-bg: linear-gradient(135deg, #1E40AF 0%, #2563EB 100%);
+    --hero-text: #FFFFFF;
+    --badge-bg: rgba(255, 255, 255, 0.18);
+    --badge-text: #FFFFFF;
+    --node-border: #F1F5F9;
+}
+
+[data-theme="dark"] {
+    /* Slate Dark Mode (Tema Gelap) */
+    --bg-main: #090D16;
+    --bg-container: #0F172A;
+    --bg-card: #1E293B;
+    --bg-input: #0F172A;
+    --primary: #3B82F6;
+    --primary-glow: rgba(59, 130, 246, 0.15);
+    --secondary: #60A5FA;
+    --success: #34D399;
+    --warning: #FBBF24;
+    --danger: #F87171;
+    --text-main: #F8FAFC;
+    --text-muted: #94A3B8;
+    --border: #334155;
+    --accent: #3B82F6;
+    --header-bg: rgba(15, 23, 42, 0.85);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+    --hero-bg: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+    --hero-text: #F8FAFC;
+    --badge-bg: rgba(255, 255, 255, 0.1);
+    --badge-text: #F8FAFC;
+    --node-border: #334155;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Layout Container */
+.app-container {
+    width: 100%;
+    max-width: 1024px;
+    background: var(--bg-container);
+    min-height: 100vh;
+    padding-bottom: 90px;
+    box-sizing: border-box;
+    position: relative;
+    box-shadow: var(--shadow-md);
+    transition: background-color 0.3s ease;
+    margin: 0 auto;
+}
+
+header {
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    background: var(--header-bg);
+    z-index: 10;
+    border-bottom: 1px solid var(--border);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+header h1 {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.5px;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+header h1 span {
+    font-weight: 400;
+    color: var(--secondary);
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Navigasi Desktop */
+.desktop-nav {
+    display: none;
+    gap: 6px;
+    margin-right: 12px;
+}
+
+.desktop-nav-item {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.desktop-nav-item:hover, .desktop-nav-item.active {
+    background: var(--primary-glow);
+    color: var(--primary);
+}
+
+.icon-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    padding: 0;
+    position: relative;
+}
+
+.icon-btn:hover {
+    background: var(--primary-glow);
+}
+
+.icon-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--text-main);
+    fill: none;
+    transition: transform 0.2s ease;
+}
+
+.icon-btn:active svg {
+    transform: scale(0.95);
+}
+
+/* Dropdown Menu */
+.menu-dropdown-wrapper {
+    position: relative;
+}
+
+.menu-dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 48px;
+    background-color: var(--bg-card);
+    min-width: 220px;
+    box-shadow: var(--shadow-md);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    z-index: 1000;
+    overflow: hidden;
+    padding: 6px 0;
+}
+
+.menu-dropdown-wrapper.show .menu-dropdown-content {
+    display: block;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.dropdown-item {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-main);
+    cursor: pointer;
+    transition: background 0.2s ease;
+    background: transparent;
+    border: none;
+    width: 100%;
+    text-align: left;
+    box-sizing: border-box;
+}
+
+.dropdown-item:hover {
+    background: var(--primary-glow);
+    color: var(--primary);
+}
+
+.dropdown-item svg {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    fill: none;
+}
+
+.tab-content {
+    padding: 20px;
+    display: none;
+    animation: cubic-bezier(0.4, 0, 0.2, 1) fadeIn 0.3s forwards;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card-modern {
+    background: var(--bg-card);
+    border-radius: 20px;
+    padding: 24px;
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
+    transition: background-color 0.3s ease;
+}
+
+/* Filter & Summary Banner */
+.filter-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-sm);
+}
+
+.filter-card label {
+    text-align: left;
+    margin-bottom: 6px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+}
+
+.summary-banner {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.summary-card {
+    flex: 1;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+.summary-card .s-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.summary-card .s-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-top: 4px;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+label {
+    display: block;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    letter-spacing: 0.2px;
+    font-weight: 600;
+    text-align: left;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 12px 14px;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text-main);
+    font-size: 14px;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-glow);
+    background: var(--bg-card);
+}
+
+input[readonly] {
+    opacity: 0.6;
+    background: var(--border);
+    cursor: not-allowed;
+}
+
+.flex-group {
+    display: flex;
+    gap: 12px;
+}
+
+.flex-item {
+    flex: 1;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: #FFFFFF;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+    background: var(--secondary);
+}
+
+.btn-primary:active {
+    transform: scale(0.98);
+}
+
+.vehicle-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.vehicle-hero {
+    padding: 16px 20px;
+    background: var(--hero-bg);
+    color: var(--hero-text);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.v-info-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    min-width: 0;
+}
+
+.v-meta-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #FFFFFF;
+}
+
+.v-badge {
+    background: var(--badge-bg);
+    backdrop-filter: blur(8px);
+    color: var(--badge-text);
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    white-space: nowrap;
+}
+
+.v-badge-year {
+    background: rgba(245, 158, 11, 0.2);
+    color: #FDE68A;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.v-total-cost {
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.v-total-cost div {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.v-total-cost font {
+    font-size: 15px;
+    font-weight: 700;
+    color: #FFFFFF;
+    display: block;
+    margin-top: 2px;
+}
+
+.history-list {
+    padding: 8px 20px;
+}
+
+.history-node {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--node-border);
+}
+
+.history-node:last-child {
+    border-bottom: none;
+}
+
+.node-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.node-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin: 6px 0;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.node-notes {
+    font-size: 12px;
+    background: var(--bg-input);
+    padding: 8px 12px;
+    border-radius: 10px;
+    margin-top: 6px;
+    color: var(--text-main);
+    display: block;
+    border: 1px solid var(--border);
+}
+
+.node-actions {
+    display: flex;
+    gap: 16px;
+    margin-top: 10px;
+}
+
+.action-link {
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.action-edit { color: var(--warning); }
+.action-delete { color: var(--danger); }
+
+.checkbox-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    max-height: 250px;
+    overflow-y: auto;
+    padding: 2px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    padding: 10px 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.checkbox-label:has(input:checked) {
+    background: var(--primary-glow);
+    border-color: var(--primary);
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.checkbox-label input[type="checkbox"],
+.checkbox-label input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary);
+    margin: 0;
+    cursor: pointer;
+}
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 64px;
+    background: var(--header-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 100;
+    padding-bottom: 4px;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: 600;
+    background: none;
+    border: none;
+    gap: 3px;
+    transition: all 0.2s ease;
+    padding: 4px 8px;
+}
+
+.nav-item.active {
+    color: var(--primary);
+}
+
+.nav-icon svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--text-muted);
+    transition: all 0.2s ease;
+    fill: none;
+}
+
+.nav-item.active .nav-icon svg {
+    stroke: var(--primary);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+}
+
+.empty-state svg {
+    width: 44px;
+    height: 44px;
+    stroke: var(--text-muted);
+    margin-bottom: 12px;
+}
+
+.new-plate-container {
+    display: none;
+    margin-top: 12px;
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Responsive Styles */
+@media (max-width: 480px) {
+    .flex-group {
+        flex-direction: column;
+        gap: 0;
+    }
+    .checkbox-container {
+        grid-template-columns: 1fr;
+    }
+    .tab-content {
+        padding: 16px;
+    }
+}
+
+@media (min-width: 768px) {
+    body {
+        padding: 30px 0;
+    }
+    
+    .app-container {
+        min-height: calc(100vh - 60px);
+        border-radius: 24px;
+        border: 1px solid var(--border);
+        padding-bottom: 30px;
+    }
+
+    header {
+        border-top-left-radius: 24px;
+        border-top-right-radius: 24px;
+        padding: 20px 32px;
+    }
+
+    .tab-content {
+        padding: 32px;
+    }
+
+    .bottom-nav {
+        display: none;
+    }
+
+    .desktop-nav {
+        display: flex;
+    }
+
+    .checkbox-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .summary-banner {
+        gap: 20px;
+    }
+
+    .summary-card {
+        padding: 20px;
+    }
+
+    .summary-card .s-value {
+        font-size: 22px;
+    }
+}
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <header>
+        <h1>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 22px; height: 22px; stroke: var(--primary);"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
+            Garasi<span>Ku</span> Pro
+        </h1>
+        
+        <div class="header-actions">
+            <nav class="desktop-nav">
+                <button class="desktop-nav-item active" onclick="switchTab('dashboard', this)">Servis</button>
+                <button class="desktop-nav-item" id="navFormBtn" onclick="switchTab('form', this)">+ Servis</button>
+                <button class="desktop-nav-item" onclick="switchTab('fuelHistory', this)">BBM</button>
+                <button class="desktop-nav-item" id="navFuelFormBtn" onclick="switchTab('fuelForm', this)">+ BBM</button>
+            </nav>
+
+            <div class="menu-dropdown-wrapper" id="menuDropdownWrapper">
+                <button type="button" class="icon-btn" id="menuToggleBtn" aria-label="Opsi Lainnya" title="Menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a0.75 0.75 0 110-1.5 0.75 0.75 0 010 1.5zM12 12.75a0.75 0.75 0 110-1.5 0.75 0.75 0 010 1.5zM12 18.75a0.75 0.75 0 110-1.5 0.75 0.75 0 010 1.5z" />
+                    </svg>
+                </button>
+                <div class="menu-dropdown-content">
+                    <label class="dropdown-item" style="margin: 0; cursor: pointer;">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+                        <span>Impor Data (JSON)</span>
+                        <input type="file" id="importFile" accept=".json" style="display: none;">
+                    </label>
+                    <button type="button" class="dropdown-item" id="exportBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" /></svg>
+                        <span>Ekspor Data (JSON)</span>
+                    </button>
+                    <button type="button" class="dropdown-item" id="exportExcelBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9z" /></svg>
+                        <span>Ekspor Laporan (.xlsx)</span>
+                    </button>
+                    <button type="button" class="dropdown-item" id="themeToggleBtn">
+                        <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                        <span id="themeLabel">Ubah Tema</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id="tabDashboard" class="tab-content active">
+        <div class="filter-card">
+            <label for="filterServiceVehicle">Filter Kendaraan</label>
+            <select id="filterServiceVehicle" onchange="tampilkanRiwayat()">
+                <option value="ALL">Semua Kendaraan</option>
+            </select>
+        </div>
+
+        <div class="summary-banner">
+            <div class="summary-card">
+                <div class="s-label">Total Biaya</div>
+                <div class="s-value" id="summaryTotalCost">Rp 0</div>
+            </div>
+            <div class="summary-card">
+                <div class="s-label">Total Servis</div>
+                <div class="s-value" id="summaryTotalCount">0 Log</div>
+            </div>
+        </div>
+
+        <div id="historyContainer"></div>
+    </div>
+
+    <div id="tabForm" class="tab-content">
+        <div class="card-modern">
+            <form id="serviceForm">
+                <input type="hidden" id="editId" value="">
+
+                <div class="form-group">
+                    <label for="plateSelect">Identitas Kendaraan</label>
+                    <select id="plateSelect" class="plate-dropdown" required></select>
+                    
+                    <div id="newPlateContainer" class="new-plate-container">
+                        <label for="newPlateNumber">Ketik Plat Nomor Baru</label>
+                        <input type="text" id="newPlateNumber" style="text-transform: uppercase;" placeholder="B 1234 ABC">
+                    </div>
+                </div>
+
+                <div class="flex-group">
+                    <div class="form-group flex-item" style="flex: 1.4;">
+                        <label for="vehicle">Nama Kendaraan</label>
+                        <input type="text" id="vehicle" style="text-transform: uppercase;" placeholder="Vario 160" required>
+                    </div>
+                    <div class="form-group flex-item">
+                        <label for="vehicleType">Jenis</label>
+                        <select id="vehicleType" required>
+                            <option value="🏍️ Motor">Motor</option>
+                            <option value="🚗 Mobil">Mobil</option>
+                            <option value="🚚 Lainnya">Lainnya</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="manufactureDate">Tanggal Pembuatan / Perakitan Kendaraan</label>
+                    <input type="date" id="manufactureDate">
+                </div>
+
+                <div class="flex-group">
+                    <div class="form-group flex-item">
+                        <label for="date">Tanggal Servis</label>
+                        <input type="date" id="date" required>
+                    </div>
+                    <div class="form-group flex-item">
+                        <label for="odometer">Odometer (KM)</label>
+                        <input type="text" inputmode="numeric" id="odometer" placeholder="0" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Tindakan Perawatan (Pilih Item)</label>
+                    <div class="checkbox-container">
+                        <label class="checkbox-label"><input type="checkbox" name="serviceItems" value="Saringan Udara"> Saringan Udara</label>
+                        <label class="checkbox-label"><input type="checkbox" name="serviceItems" value="Busi"> Busi</label>
+                        <label class="checkbox-label"><input type="checkbox" name="serviceItems" value="Oli Mesin"> Oli Mesin</label>
+                        <label class="checkbox-label"><input type="checkbox" name="serviceItems" value="Cairan Pendingin Radiator"> Cairan Radiator</label>
+                        <label class="checkbox-label"><input type="checkbox" name="serviceItems" value="Drive Belt"> Drive Belt</label>
+                        <label class="checkbox-label"><input type="checkbox" name="serviceItems" value="Oli Final Drive"> Oli Final Drive</label>
+                        <label class="checkbox-label"><input type="checkbox" name="serviceItems" value="Minyak Rem"> Minyak Rem</label>
+                        <label class="checkbox-label"><input type="checkbox" name="serviceItems" value="Baterai"> Baterai / Aki</label>
+                        <label class="checkbox-label"><input type="checkbox" name="serviceItems" value="Kampas Rem"> Kampas Rem</label>
+                        <label class="checkbox-label"><input type="checkbox" name="serviceItems" value="Kelistrikan"> Kelistrikan / Lampu</label>
+                        <label class="checkbox-label"><input type="checkbox" name="serviceItems" value="Ban"> Ban</label>
+                        <label class="checkbox-label"><input type="checkbox" name="serviceItems" value="Filter Oli"> Filter Oli</label>
+                        
+                        <label class="checkbox-label" id="otherServiceLabel">
+                            <input type="checkbox" id="otherServiceCheckbox">
+                            <input type="text" id="otherServiceInput" placeholder="Lainnya..." style="padding: 4px 8px; font-size: 12px; border-radius: 6px; margin: 0; width: 100%;">
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="cost">Rincian Total Biaya (Rp)</label>
+                    <input type="text" inputmode="numeric" id="cost" placeholder="0" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="notes">Catatan Tambahan (Opsional)</label>
+                    <textarea id="notes" rows="2" placeholder="Tulis catatan sparepart atau merek oli di sini..."></textarea>
+                </div>
+                
+                <button type="submit" id="submitBtn" class="btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 18px; height: 18px;"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                    Simpan Log Aktivitas
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="tabFuelHistory" class="tab-content">
+        <div class="filter-card">
+            <label for="filterFuelVehicle">Filter Kendaraan</label>
+            <select id="filterFuelVehicle" onchange="tampilkanRiwayatBBM()">
+                <option value="ALL">Semua Kendaraan</option>
+            </select>
+        </div>
+
+        <div class="summary-banner">
+            <div class="summary-card">
+                <div class="s-label">Total Biaya BBM</div>
+                <div class="s-value" id="summaryFuelTotalCost">Rp 0</div>
+            </div>
+            <div class="summary-card">
+                <div class="s-label">Total Pengisian</div>
+                <div class="s-value" id="summaryFuelTotalCount">0 Log</div>
+            </div>
+        </div>
+
+        <div id="fuelHistoryContainer"></div>
+    </div>
+
+    <div id="tabFuelForm" class="tab-content">
+        <div class="card-modern">
+            <form id="fuelForm">
+                <input type="hidden" id="editFuelId" value="">
+
+                <div class="form-group">
+                    <label for="fuelPlateSelect">Identitas Kendaraan</label>
+                    <select id="fuelPlateSelect" class="plate-dropdown" required></select>
+                    
+                    <div id="newFuelPlateContainer" class="new-plate-container">
+                        <label for="newFuelPlateNumber">Ketik Plat Nomor Baru</label>
+                        <input type="text" id="newFuelPlateNumber" style="text-transform: uppercase;" placeholder="B 1234 ABC">
+                    </div>
+                </div>
+
+                <div class="flex-group">
+                    <div class="form-group flex-item" style="flex: 1.4;">
+                        <label for="fuelVehicle">Nama Kendaraan</label>
+                        <input type="text" id="fuelVehicle" style="text-transform: uppercase;" placeholder="Vario 160" required>
+                    </div>
+                    <div class="form-group flex-item">
+                        <label for="fuelVehicleType">Jenis</label>
+                        <select id="fuelVehicleType" required>
+                            <option value="🏍️ Motor">Motor</option>
+                            <option value="🚗 Mobil">Mobil</option>
+                            <option value="🚚 Lainnya">Lainnya</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="fuelManufactureDate">Tanggal Pembuatan / Perakitan Kendaraan</label>
+                    <input type="date" id="fuelManufactureDate">
+                </div>
+
+                <div class="flex-group">
+                    <div class="form-group flex-item">
+                        <label for="fuelDate">Tanggal Pengisian</label>
+                        <input type="date" id="fuelDate" required>
+                    </div>
+                    <div class="form-group flex-item">
+                        <label for="fuelOdometer">Odometer (KM)</label>
+                        <input type="text" inputmode="numeric" id="fuelOdometer" placeholder="0" required>
+                    </div>
+                </div>
+
+                <div class="flex-group">
+                    <div class="form-group flex-item">
+                        <label for="fuelUnitPrice">Harga / Liter (Rp)</label>
+                        <input type="text" inputmode="numeric" id="fuelUnitPrice" placeholder="0" required>
+                    </div>
+                    <div class="form-group flex-item">
+                        <label for="fuelCost">Total Biaya Pengisian (Rp)</label>
+                        <input type="text" inputmode="numeric" id="fuelCost" placeholder="0" required>
+                    </div>
+                </div>
+
+                <div class="form-group flex-item">
+                    <label for="fuelLiters">Jumlah Liter (L)</label>
+                    <input type="number" step="0.01" id="fuelLiters" placeholder="0.0" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Jenis / Brand BBM</label>
+                    <div class="checkbox-container">
+                        <label class="checkbox-label"><input type="radio" name="fuelBrand" value="Pertalite" checked> Pertalite</label>
+                        <label class="checkbox-label"><input type="radio" name="fuelBrand" value="Pertamax"> Pertamax</label>
+                    </div>
+                </div>
+                
+                <button type="submit" id="submitFuelBtn" class="btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 18px; height: 18px;"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                    Simpan Catatan BBM
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="switchTab('dashboard', this)">
+            <span class="nav-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.67 2.67 0 0 0 21 17.25l-5.83-5.83M11.42 15.17l-4.66-4.66m4.66 4.66 6.11-6.11a2.67 2.67 0 0 0-3.77-3.77l-6.11 6.11m0 0L3 11.42A2.67 2.67 0 0 0 6.75 15.17l4.67-4.67" /></svg>
+            </span>
+            <span>Servis</span>
+        </button>
+        <button class="nav-item" id="navFormBtnMobile" onclick="switchTab('form', this)">
+            <span class="nav-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+            </span>
+            <span>+ Servis</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('fuelHistory', this)">
+            <span class="nav-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 1 9 3.603e-4a1 1 0 0 1 1.2 1.488 6.25 6.25 0 0 0 1.8 11.262 1 1 0 0 0 1.2-1.488c-.687-.825-1.2-1.83-1.2-2.925a1 1 0 0 1 1.707-.707c1.55 1.55 2.655 3.5 2.655 5.576Z" /></svg>
+            </span>
+            <span>BBM</span>
+        </button>
+        <button class="nav-item" id="navFuelFormBtnMobile" onclick="switchTab('fuelForm', this)">
+            <span class="nav-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+            </span>
+            <span>+ BBM</span>
+        </button>
+    </nav>
+</div>
+
+<script>
+/* Mode Dark/Light */
+const themeToggleBtn = document.getElementById('themeToggleBtn');
+const themeIcon = document.getElementById('themeIcon');
+const themeLabel = document.getElementById('themeLabel');
+
+const moonIconPath = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+const sunIconPath = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
+
+function aturTema(isDark) {
+    if (isDark) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        themeIcon.innerHTML = sunIconPath;
+        if (themeLabel) themeLabel.textContent = 'Tema Terang';
+        localStorage.setItem('garasi_theme', 'dark');
+    } else {
+        document.documentElement.removeAttribute('data-theme');
+        themeIcon.innerHTML = moonIconPath;
+        if (themeLabel) themeLabel.textContent = 'Tema Gelap';
+        localStorage.setItem('garasi_theme', 'light');
+    }
+}
+
+const savedTheme = localStorage.getItem('garasi_theme');
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+    aturTema(true);
+} else {
+    aturTema(false);
+}
+
+themeToggleBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isCurrentDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    aturTema(!isCurrentDark);
+});
+
+/* Toggle Dropdown Menu */
+const menuDropdownWrapper = document.getElementById('menuDropdownWrapper');
+const menuToggleBtn = document.getElementById('menuToggleBtn');
+
+menuToggleBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    menuDropdownWrapper.classList.toggle('show');
+});
+
+document.addEventListener('click', (e) => {
+    if (!menuDropdownWrapper.contains(e.target)) {
+        menuDropdownWrapper.classList.remove('show');
+    }
+});
+
+/* State Management & Logic */
+function setHariIni() {
+    const today = new Date().toISOString().substring(0, 10);
+    document.getElementById('date').value = today;
+    document.getElementById('fuelDate').value = today;
+}
+
+const serviceForm = document.getElementById('serviceForm');
+const fuelForm = document.getElementById('fuelForm');
+const historyContainer = document.getElementById('historyContainer');
+const fuelHistoryContainer = document.getElementById('fuelHistoryContainer');
+const submitBtn = document.getElementById('submitBtn');
+const submitFuelBtn = document.getElementById('submitFuelBtn');
+const editIdInput = document.getElementById('editId');
+const editFuelIdInput = document.getElementById('editFuelId');
+const exportBtn = document.getElementById('exportBtn');
+const exportExcelBtn = document.getElementById('exportExcelBtn');
+const importFile = document.getElementById('importFile');
+const filterServiceVehicle = document.getElementById('filterServiceVehicle');
+const filterFuelVehicle = document.getElementById('filterFuelVehicle');
+
+// Elemen Servis
+const plateSelect = document.getElementById('plateSelect');
+const newPlateContainer = document.getElementById('newPlateContainer');
+const newPlateNumber = document.getElementById('newPlateNumber');
+const vehicleInput = document.getElementById('vehicle');
+const typeInput = document.getElementById('vehicleType');
+const manufactureDateInput = document.getElementById('manufactureDate');
+const odometerInput = document.getElementById('odometer');
+const costInput = document.getElementById('cost');
+
+// Elemen BBM
+const fuelPlateSelect = document.getElementById('fuelPlateSelect');
+const newFuelPlateContainer = document.getElementById('newFuelPlateContainer');
+const newFuelPlateNumber = document.getElementById('newFuelPlateNumber');
+const fuelVehicleInput = document.getElementById('fuelVehicle');
+const fuelTypeInput = document.getElementById('fuelVehicleType');
+const fuelManufactureDateInput = document.getElementById('fuelManufactureDate');
+const fuelOdometerInput = document.getElementById('fuelOdometer');
+const fuelLitersInput = document.getElementById('fuelLiters');
+const fuelUnitPriceInput = document.getElementById('fuelUnitPrice');
+const fuelCostInput = document.getElementById('fuelCost');
+
+let dataServis = JSON.parse(localStorage.getItem('dataServis_v2')) || [];
+let dataBBM = JSON.parse(localStorage.getItem('dataBBM_v1')) || [];
+
+setHariIni();
+
+function formatRibuan(angka) {
+    if (!angka && angka !== 0) return '';
+    const cleanNumber = String(angka).replace(/\D/g, '');
+    return cleanNumber ? Number(cleanNumber).toLocaleString('id-ID') : '';
+}
+
+function parseRibuan(val) {
+    if (!val) return 0;
+    const clean = String(val).replace(/\D/g, '');
+    return clean ? parseFloat(clean) : 0;
+}
+
+function attachThousandSeparator(inputElement, onInputCallback) {
+    inputElement.addEventListener('input', function(e) {
+        const valNumeric = parseRibuan(e.target.value);
+        e.target.value = valNumeric ? formatRibuan(valNumeric) : '';
+        if (typeof onInputCallback === 'function') {
+            onInputCallback();
+        }
+    });
+}
+
+attachThousandSeparator(odometerInput);
+attachThousandSeparator(costInput);
+attachThousandSeparator(fuelOdometerInput);
+
+function hitungTotalBBM() {
+    const liter = parseFloat(fuelLitersInput.value);
+    const hargaPerLiter = parseRibuan(fuelUnitPriceInput.value);
+    if (!isNaN(liter) && hargaPerLiter > 0) {
+        fuelCostInput.value = formatRibuan(Math.round(liter * hargaPerLiter));
+    }
+}
+
+function hitungLiterDariTotal() {
+    const totalCost = parseRibuan(fuelCostInput.value);
+    const hargaPerLiter = parseRibuan(fuelUnitPriceInput.value);
+    if (totalCost > 0 && hargaPerLiter > 0) {
+        fuelLitersInput.value = (totalCost / hargaPerLiter).toFixed(2);
+    }
+}
+
+function hitungPadaPerubahanHarga() {
+    const liter = parseFloat(fuelLitersInput.value);
+    const hargaPerLiter = parseRibuan(fuelUnitPriceInput.value);
+    const totalCost = parseRibuan(fuelCostInput.value);
+
+    if (totalCost > 0 && hargaPerLiter > 0) {
+        fuelLitersInput.value = (totalCost / hargaPerLiter).toFixed(2);
+    } else if (!isNaN(liter) && hargaPerLiter > 0) {
+        fuelCostInput.value = formatRibuan(Math.round(liter * hargaPerLiter));
+    }
+}
+
+fuelLitersInput.addEventListener('input', hitungTotalBBM);
+attachThousandSeparator(fuelUnitPriceInput, hitungPadaPerubahanHarga);
+attachThousandSeparator(fuelCostInput, hitungLiterDariTotal);
+
+function simpanKeBrowser() {
+    localStorage.setItem('dataServis_v2', JSON.stringify(dataServis));
+    localStorage.setItem('dataBBM_v1', JSON.stringify(dataBBM));
+}
+
+function perbaruiDropdownPlat() {
+    const mapKendaraan = new Map();
+
+    dataServis.forEach(item => {
+        if (item.plateNumber) {
+            mapKendaraan.set(item.plateNumber.toUpperCase(), {
+                vehicle: item.vehicle,
+                type: item.vehicleType,
+                manufactureDate: item.manufactureDate || ''
+            });
+        }
+    });
+
+    dataBBM.forEach(item => {
+        if (item.plateNumber) {
+            const existing = mapKendaraan.get(item.plateNumber.toUpperCase());
+            mapKendaraan.set(item.plateNumber.toUpperCase(), {
+                vehicle: item.vehicle,
+                type: item.vehicleType,
+                manufactureDate: item.manufactureDate || (existing ? existing.manufactureDate : '')
+            });
+        }
+    });
+
+    const currentFilterVal = filterServiceVehicle.value;
+    filterServiceVehicle.innerHTML = '<option value="ALL">Semua Kendaraan</option>';
+    
+    const currentFuelFilterVal = filterFuelVehicle.value;
+    filterFuelVehicle.innerHTML = '<option value="ALL">Semua Kendaraan</option>';
+
+    mapKendaraan.forEach((info, plat) => {
+        const optFilter = document.createElement('option');
+        optFilter.value = plat;
+        optFilter.textContent = `${plat} — ${info.vehicle}`;
+        filterServiceVehicle.appendChild(optFilter);
+
+        const optFuelFilter = document.createElement('option');
+        optFuelFilter.value = plat;
+        optFuelFilter.textContent = `${plat} — ${info.vehicle}`;
+        filterFuelVehicle.appendChild(optFuelFilter);
+    });
+
+    filterServiceVehicle.value = currentFilterVal;
+    filterFuelVehicle.value = currentFuelFilterVal;
+
+    const dropdowns = [
+        { select: plateSelect },
+        { select: fuelPlateSelect }
+    ];
+
+    dropdowns.forEach(({ select }) => {
+        select.innerHTML = '';
+
+        if (mapKendaraan.size > 0) {
+            mapKendaraan.forEach((info, plat) => {
+                const opt = document.createElement('option');
+                opt.value = plat;
+                opt.textContent = `${plat} — ${info.vehicle}`;
+                opt.dataset.vehicle = info.vehicle;
+                opt.dataset.type = info.type;
+                opt.dataset.mfg = info.manufactureDate;
+                select.appendChild(opt);
+            });
+
+            const optNew = document.createElement('option');
+            optNew.value = 'BARU';
+            optNew.textContent = '[ + Daftarkan Kendaraan Baru ]';
+            select.appendChild(optNew);
+        } else {
+            const optEmpty = document.createElement('option');
+            optEmpty.value = 'BARU';
+            optEmpty.textContent = 'Belum Ada Kendaraan (Buat Baru)';
+            select.appendChild(optEmpty);
+        }
+    });
+
+    pemicuPerubahanPlat();
+    pemicuPerubahanPlatBBM();
+}
+
+function pemicuPerubahanPlat() {
+    if (plateSelect.value === 'BARU') {
+        newPlateContainer.style.display = 'block';
+        newPlateNumber.setAttribute('required', 'true');
+        if (editIdInput.value === '') {
+            vehicleInput.value = '';
+            vehicleInput.removeAttribute('readonly');
+            typeInput.style.pointerEvents = 'auto';
+            manufactureDateInput.value = '';
+        }
+    } else {
+        newPlateContainer.style.display = 'none';
+        newPlateNumber.removeAttribute('required');
+
+        const opsiTerpilih = plateSelect.options[plateSelect.selectedIndex];
+        if (opsiTerpilih) {
+            vehicleInput.value = opsiTerpilih.dataset.vehicle || '';
+            typeInput.value = opsiTerpilih.dataset.type || '🏍️ Motor';
+            manufactureDateInput.value = opsiTerpilih.dataset.mfg || '';
+        }
+        vehicleInput.setAttribute('readonly', 'true');
+        typeInput.style.pointerEvents = 'none';
+    }
+}
+
+function pemicuPerubahanPlatBBM() {
+    if (fuelPlateSelect.value === 'BARU') {
+        newFuelPlateContainer.style.display = 'block';
+        newFuelPlateNumber.setAttribute('required', 'true');
+        if (editFuelIdInput.value === '') {
+            fuelVehicleInput.value = '';
+            fuelVehicleInput.removeAttribute('readonly');
+            fuelTypeInput.style.pointerEvents = 'auto';
+            fuelManufactureDateInput.value = '';
+        }
+    } else {
+        newFuelPlateContainer.style.display = 'none';
+        newFuelPlateNumber.removeAttribute('required');
+
+        const opsiTerpilih = fuelPlateSelect.options[fuelPlateSelect.selectedIndex];
+        if (opsiTerpilih) {
+            fuelVehicleInput.value = opsiTerpilih.dataset.vehicle || '';
+            fuelTypeInput.value = opsiTerpilih.dataset.type || '🏍️ Motor';
+            fuelManufactureDateInput.value = opsiTerpilih.dataset.mfg || '';
+        }
+        fuelVehicleInput.setAttribute('readonly', 'true');
+        fuelTypeInput.style.pointerEvents = 'none';
+    }
+}
+
+plateSelect.addEventListener('change', pemicuPerubahanPlat);
+fuelPlateSelect.addEventListener('change', pemicuPerubahanPlatBBM);
+
+function switchTab(tabName, element) {
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+    document.querySelectorAll('.desktop-nav-item').forEach(item => item.classList.remove('active'));
+
+    if (tabName === 'dashboard') {
+        document.getElementById('tabDashboard').classList.add('active');
+        tampilkanRiwayat();
+    } else if (tabName === 'form') {
+        document.getElementById('tabForm').classList.add('active');
+        if (editIdInput.value === '') perbaruiDropdownPlat();
+    } else if (tabName === 'fuelHistory') {
+        document.getElementById('tabFuelHistory').classList.add('active');
+        tampilkanRiwayatBBM();
+    } else if (tabName === 'fuelForm') {
+        document.getElementById('tabFuelForm').classList.add('active');
+        if (editFuelIdInput.value === '') perbaruiDropdownPlat();
+    }
+
+    if (element) element.classList.add('active');
+}
+
+function formatTanggalSederhana(strDate) {
+    if (!strDate) return '';
+    const d = new Date(strDate);
+    if (isNaN(d.getTime())) return '';
+    return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function tampilkanRiwayat() {
+    perbaruiDropdownPlat();
+
+    const selectedFilter = filterServiceVehicle.value;
+    let filteredData = dataServis.map((item, index) => ({ ...item, originalIndex: index }));
+
+    if (selectedFilter !== 'ALL') {
+        filteredData = filteredData.filter(item => item.plateNumber.toUpperCase() === selectedFilter.toUpperCase());
+    }
+
+    const grandTotal = filteredData.reduce((sum, item) => sum + Number(item.cost), 0);
+    document.getElementById('summaryTotalCost').textContent = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(grandTotal);
+    document.getElementById('summaryTotalCount').textContent = `${filteredData.length} Log`;
+
+    if (filteredData.length === 0) {
+        historyContainer.innerHTML = `
+            <div class="empty-state">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.008 1.24l.885 1.77a2.25 2.25 0 0 0 2.007 1.24h1.98a2.25 2.25 0 0 0 2.007-1.24l.885-1.77a2.25 2.25 0 0 1 2.007-1.24h3.86m-18 0h18a2.25 2.25 0 0 1 2.25 2.25v4.25A2.25 2.25 0 0 1 18.75 21H5.25A2.25 2.25 0 0 1 3 18.75V15.75A2.25 2.25 0 0 1 2.25 13.5ZM2.25 13.5V6a2.25 2.25 0 0 1 2.25-2.25h15A2.25 2.25 0 0 1 21.75 6v7.5m-10.5-6h.008v.008H11.25V7.5Zm.008 3h.008v.008H11.25v-.008Zm3-3h.008v.008h-.008V7.5Zm.008 3h.008v.008h-.008v-.008Z" /></svg>
+                <h3 style="margin: 0; font-size: 15px; font-weight:700;">Riwayat Servis Tidak Ditemukan</h3>
+                <p style="font-size:12px; max-width:260px; margin:6px auto 0 auto; line-height:1.4;">Tidak ada catatan pemeliharaan yang cocok dengan filter kendaraan saat ini.</p>
+            </div>`;
+        return;
+    }
+
+    const grupKendaraan = {};
+    filteredData.forEach(item => {
+        const key = `${item.vehicle.toUpperCase()}|||${item.plateNumber.toUpperCase()}|||${item.vehicleType}|||${item.manufactureDate || ''}`;
+        if (!grupKendaraan[key]) grupKendaraan[key] = [];
+        grupKendaraan[key].push(item);
+    });
+
+    historyContainer.innerHTML = '';
+
+    for (const key in grupKendaraan) {
+        const [namaKendaraan, platNomor, jenis, tglBuat] = key.split('|||');
+        grupKendaraan[key].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        const totalBiaya = grupKendaraan[key].reduce((sum, item) => sum + Number(item.cost), 0);
+        const formatTotalRupiah = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(totalBiaya);
+        const textTglRakit = formatTanggalSederhana(tglBuat);
+
+        let cardHtml = `
+            <div class="vehicle-card">
+                <div class="vehicle-hero">
+                    <div class="v-info-group">
+                        <h3 class="v-meta-title">${namaKendaraan}</h3>
+                        <span class="v-badge">${platNomor}</span>
+                        ${textTglRakit ? `<span class="v-badge v-badge-year">🏗️ ${textTglRakit}</span>` : ''}
+                    </div>
+                    <div class="v-total-cost">
+                        <div>Subtotal Servis</div>
+                        <font>${formatTotalRupiah}</font>
+                    </div>
+                </div>
+                <div class="history-list">
+        `;
+
+        grupKendaraan[key].forEach((item) => {
+            const formatRupiah = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(item.cost);
+            const formatTanggal = formatTanggalSederhana(item.date);
+
+            cardHtml += `
+                <div class="history-node">
+                    <div class="node-top">
+                        <span>${item.serviceType}</span>
+                        <span style="color: var(--primary);">${formatRupiah}</span>
+                    </div>
+                    <div class="node-sub">
+                        <span>📅 ${formatTanggal}</span>
+                        <span>⏱️ ${Number(item.odometer).toLocaleString('id-ID')} KM</span>
+                    </div>
+                    ${item.notes ? `<div class="node-notes">${item.notes}</div>` : ''}
+                    <div class="node-actions">
+                        <button class="action-link action-edit" onclick="aktifkanModeEdit(${item.originalIndex})">Ubah</button>
+                        <button class="action-link action-delete" onclick="hapusCatatan(${item.originalIndex})">Hapus</button>
+                    </div>
+                </div>
+            `;
+        });
+
+        cardHtml += `</div></div>`;
+        historyContainer.innerHTML += cardHtml;
+    }
+}
+
+function tampilkanRiwayatBBM() {
+    perbaruiDropdownPlat();
+
+    const selectedFilter = filterFuelVehicle.value;
+    let filteredData = dataBBM.map((item, index) => ({ ...item, originalIndex: index }));
+
+    if (selectedFilter !== 'ALL') {
+        filteredData = filteredData.filter(item => item.plateNumber.toUpperCase() === selectedFilter.toUpperCase());
+    }
+
+    const grandTotal = filteredData.reduce((sum, item) => sum + Number(item.cost), 0);
+    document.getElementById('summaryFuelTotalCost').textContent = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(grandTotal);
+    document.getElementById('summaryFuelTotalCount').textContent = `${filteredData.length} Log`;
+
+    if (filteredData.length === 0) {
+        fuelHistoryContainer.innerHTML = `
+            <div class="empty-state">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 1 9 3.603e-4a1 1 0 0 1 1.2 1.488 6.25 6.25 0 0 0 1.8 11.262 1 1 0 0 0 1.2-1.488c-.687-.825-1.2-1.83-1.2-2.925a1 1 0 0 1 1.707-.707c1.55 1.55 2.655 3.5 2.655 5.576Z" /></svg>
+                <h3 style="margin: 0; font-size: 15px; font-weight:700;">Belum Ada Catatan BBM</h3>
+                <p style="font-size:12px; max-width:260px; margin:6px auto 0 auto; line-height:1.4;">Tidak ada catatan BBM yang cocok dengan filter kendaraan saat ini.</p>
+            </div>`;
+        return;
+    }
+
+    const grupKendaraan = {};
+    filteredData.forEach(item => {
+        const key = `${item.vehicle.toUpperCase()}|||${item.plateNumber.toUpperCase()}|||${item.vehicleType}|||${item.manufactureDate || ''}`;
+        if (!grupKendaraan[key]) grupKendaraan[key] = [];
+        grupKendaraan[key].push(item);
+    });
+
+    fuelHistoryContainer.innerHTML = '';
+
+    for (const key in grupKendaraan) {
+        const [namaKendaraan, platNomor, jenis, tglBuat] = key.split('|||');
+        grupKendaraan[key].sort((a, b) => Number(a.odometer) - Number(b.odometer));
+
+        const totalBiaya = grupKendaraan[key].reduce((sum, item) => sum + Number(item.cost), 0);
+        const formatTotalRupiah = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(totalBiaya);
+        const textTglRakit = formatTanggalSederhana(tglBuat);
+
+        let cardHtml = `
+            <div class="vehicle-card">
+                <div class="vehicle-hero">
+                    <div class="v-info-group">
+                        <h3 class="v-meta-title">${namaKendaraan}</h3>
+                        <span class="v-badge">${platNomor}</span>
+                        ${textTglRakit ? `<span class="v-badge v-badge-year">🏗️ ${textTglRakit}</span>` : ''}
+                    </div>
+                    <div class="v-total-cost">
+                        <div>Total Pengeluaran</div>
+                        <font>${formatTotalRupiah}</font>
+                    </div>
+                </div>
+                <div class="history-list">
+        `;
+
+        const dataReversed = [...grupKendaraan[key]].reverse();
+
+        dataReversed.forEach((item) => {
+            const formatRupiah = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(item.cost);
+            const unitPrice = item.unitPrice ? item.unitPrice : Math.round(item.cost / item.liters);
+            const hargaPerLiter = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(unitPrice);
+            const formatTanggal = formatTanggalSederhana(item.date);
+
+            const indexAsc = grupKendaraan[key].findIndex(x => x.originalIndex === item.originalIndex);
+            let textEfisiensi = "";
+
+            if (indexAsc > 0) {
+                const isiSebelumnya = grupKendaraan[key][indexAsc - 1];
+                const jarak = Number(item.odometer) - Number(isiSebelumnya.odometer);
+                if (jarak > 0 && Number(item.liters) > 0) {
+                    const efisiensi = (jarak / Number(item.liters)).toFixed(1);
+                    const biayaPerKm = Math.round(Number(item.cost) / jarak);
+                    textEfisiensi = `⚡ <b>${efisiensi} KM/L</b> (Rp ${biayaPerKm}/KM) • Δ ${jarak} KM`;
+                }
+            }
+
+            cardHtml += `
+                <div class="history-node">
+                    <div class="node-top">
+                        <span>⛽ ${item.brand || 'BBM'} (${item.liters} L)</span>
+                        <span style="color: var(--primary);">${formatRupiah}</span>
+                    </div>
+                    <div class="node-sub">
+                        <span>📅 ${formatTanggal}</span>
+                        <span>⏱️ ${Number(item.odometer).toLocaleString('id-ID')} KM</span>
+                        <span>💵 ${hargaPerLiter}/L</span>
+                    </div>
+                    ${textEfisiensi ? `<div class="node-notes" style="background:var(--primary-glow); border-color:var(--primary); color:var(--primary);">${textEfisiensi}</div>` : ''}
+                    <div class="node-actions">
+                        <button class="action-link action-edit" onclick="aktifkanModeEditBBM(${item.originalIndex})">Ubah</button>
+                        <button class="action-link action-delete" onclick="hapusCatatanBBM(${item.originalIndex})">Hapus</button>
+                    </div>
+                </div>
+            `;
+        });
+
+        cardHtml += `</div></div>`;
+        fuelHistoryContainer.innerHTML += cardHtml;
+    }
+}
+
+exportBtn.addEventListener('click', function() {
+    if (dataServis.length === 0 && dataBBM.length === 0) {
+        return alert('Tidak ada data untuk disalin!');
+    }
+    const combinedData = { servis: dataServis, bbm: dataBBM };
+    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(combinedData, null, 2));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute('href', dataStr);
+    downloadAnchor.setAttribute('download', `garasiku_pro_backup.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+    menuDropdownWrapper.classList.remove('show');
+});
+
+exportExcelBtn.addEventListener('click', function() {
+    if (dataServis.length === 0 && dataBBM.length === 0) {
+        return alert('Tidak ada data untuk diekspor!');
+    }
+
+    if (typeof XLSX === 'undefined') {
+        return alert('Pustaka SheetJS belum dimuat. Pastikan koneksi internet stabil.');
+    }
+
+    const wb = XLSX.utils.book_new();
+
+    const rowsServis = dataServis.map(item => ({
+        'Plat Nomor': item.plateNumber,
+        'Nama Kendaraan': item.vehicle,
+        'Jenis Kendaraan': item.vehicleType,
+        'Tgl Rakit/Pembuatan': item.manufactureDate || '-',
+        'Tanggal Servis': item.date,
+        'Odometer (KM)': Number(item.odometer),
+        'Tindakan Perawatan': item.serviceType,
+        'Total Biaya (Rp)': Number(item.cost),
+        'Catatan': item.notes || '-'
+    }));
+
+    const rowsBBM = dataBBM.map(item => ({
+        'Plat Nomor': item.plateNumber,
+        'Nama Kendaraan': item.vehicle,
+        'Jenis Kendaraan': item.vehicleType,
+        'Tgl Rakit/Pembuatan': item.manufactureDate || '-',
+        'Tanggal Pengisian': item.date,
+        'Odometer (KM)': Number(item.odometer),
+        'Merek/Jenis BBM': item.brand || 'BBM',
+        'Jumlah Liter (L)': Number(item.liters),
+        'Harga / Liter (Rp)': Number(item.unitPrice || Math.round(item.cost / item.liters)),
+        'Total Biaya (Rp)': Number(item.cost)
+    }));
+
+    if (rowsServis.length > 0) {
+        const wsServis = XLSX.utils.json_to_sheet(rowsServis);
+        XLSX.utils.book_append_sheet(wb, wsServis, "Laporan Servis");
+    }
+
+    if (rowsBBM.length > 0) {
+        const wsBBM = XLSX.utils.json_to_sheet(rowsBBM);
+        XLSX.utils.book_append_sheet(wb, wsBBM, "Laporan BBM");
+    }
+
+    XLSX.writeFile(wb, `Laporan_GarasiKu_Pro_${new Date().toISOString().substring(0,10)}.xlsx`);
+    menuDropdownWrapper.classList.remove('show');
+});
+
+importFile.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+        try {
+            const parsedData = JSON.parse(evt.target.result);
+            if (Array.isArray(parsedData)) {
+                dataServis = parsedData;
+                simpanKeBrowser();
+                tampilkanRiwayat();
+                alert('Sinkronisasi riwayat servis berhasil!');
+            } else if (parsedData.servis || parsedData.bbm) {
+                dataServis = parsedData.servis || [];
+                dataBBM = parsedData.bbm || [];
+                simpanKeBrowser();
+                tampilkanRiwayat();
+                tampilkanRiwayatBBM();
+                alert('Sinkronisasi seluruh data garasi berhasil!');
+            }
+        } catch (e) {
+            alert('Format berkas cadangan JSON tidak valid.');
+        }
+    };
+    reader.readAsText(file);
+    importFile.value = '';
+    menuDropdownWrapper.classList.remove('show');
+});
+
+function sinkronkanTglPembuatan(plat, mfgDate) {
+    if (!plat) return;
+    dataServis.forEach(item => {
+        if (item.plateNumber.toUpperCase() === plat.toUpperCase()) {
+            item.manufactureDate = mfgDate;
+        }
+    });
+    dataBBM.forEach(item => {
+        if (item.plateNumber.toUpperCase() === plat.toUpperCase()) {
+            item.manufactureDate = mfgDate;
+        }
+    });
+}
+
+serviceForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    let platFinal = (plateSelect.value === 'BARU') ? newPlateNumber.value.toUpperCase().trim() : plateSelect.value;
+    const checkedBoxes = document.querySelectorAll('input[name="serviceItems"]:checked');
+    const otherCheckbox = document.getElementById('otherServiceCheckbox');
+    const otherInput = document.getElementById('otherServiceInput');
+
+    if (checkedBoxes.length === 0 && !otherCheckbox.checked) {
+        return alert('Pilih minimal satu item perawatan!');
+    }
+
+    const serviceTypeArray = [];
+    checkedBoxes.forEach(cb => serviceTypeArray.push(cb.value));
+
+    if (otherCheckbox.checked) {
+        const otherValue = otherInput.value.trim();
+        if (otherValue !== '') {
+            serviceTypeArray.push(otherValue);
+        } else {
+            return alert('Harap isi nama perawatan lainnya!');
+        }
+    }
+
+    const idx = editIdInput.value;
+    const itemData = {
+        vehicle: vehicleInput.value.toUpperCase().trim(),
+        plateNumber: platFinal,
+        vehicleType: typeInput.value,
+        manufactureDate: manufactureDateInput.value,
+        date: document.getElementById('date').value,
+        odometer: parseRibuan(odometerInput.value),
+        serviceType: serviceTypeArray.join(', '),
+        cost: parseRibuan(costInput.value),
+        notes: document.getElementById('notes').value
+    };
+
+    if (idx === '') {
+        dataServis.push(itemData);
+    } else {
+        dataServis[parseInt(idx)] = itemData;
+        submitBtn.innerHTML = 'Simpan Log Aktivitas';
+        editIdInput.value = '';
+    }
+
+    sinkronkanTglPembuatan(platFinal, manufactureDateInput.value);
+    simpanKeBrowser();
+    tampilkanRiwayat();
+    serviceForm.reset();
+    document.querySelectorAll('input[name="serviceItems"]').forEach(cb => cb.checked = false);
+    otherCheckbox.checked = false;
+    otherInput.value = '';
+    setHariIni();
+    switchTab('dashboard', document.querySelector('.desktop-nav-item'));
+});
+
+fuelForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    let platFinal = (fuelPlateSelect.value === 'BARU') ? newFuelPlateNumber.value.toUpperCase().trim() : fuelPlateSelect.value;
+    const idx = editFuelIdInput.value;
+    const selectedBrandRadio = document.querySelector('input[name="fuelBrand"]:checked');
+
+    const itemData = {
+        vehicle: fuelVehicleInput.value.toUpperCase().trim(),
+        plateNumber: platFinal,
+        vehicleType: fuelTypeInput.value,
+        manufactureDate: fuelManufactureDateInput.value,
+        date: document.getElementById('fuelDate').value,
+        odometer: parseRibuan(fuelOdometerInput.value),
+        liters: fuelLitersInput.value,
+        unitPrice: parseRibuan(fuelUnitPriceInput.value),
+        cost: parseRibuan(fuelCostInput.value),
+        brand: selectedBrandRadio ? selectedBrandRadio.value : 'Pertalite'
+    };
+
+    if (idx === '') {
+        dataBBM.push(itemData);
+    } else {
+        dataBBM[parseInt(idx)] = itemData;
+        submitFuelBtn.innerHTML = 'Simpan Catatan BBM';
+        editFuelIdInput.value = '';
+    }
+
+    sinkronkanTglPembuatan(platFinal, fuelManufactureDateInput.value);
+    simpanKeBrowser();
+    tampilkanRiwayatBBM();
+    fuelForm.reset();
+    document.querySelector('input[name="fuelBrand"][value="Pertalite"]').checked = true;
+    setHariIni();
+    switchTab('fuelHistory', document.querySelectorAll('.desktop-nav-item')[2]);
+});
+
+function aktifkanModeEdit(originalIndex) {
+    const item = dataServis[originalIndex];
+    editIdInput.value = originalIndex;
+
+    plateSelect.innerHTML = `<option value="${item.plateNumber}">${item.plateNumber}</option>`;
+    newPlateContainer.style.display = 'none';
+
+    vehicleInput.value = item.vehicle;
+    typeInput.value = item.vehicleType;
+    manufactureDateInput.value = item.manufactureDate || '';
+    document.getElementById('date').value = item.date;
+    odometerInput.value = formatRibuan(item.odometer);
+
+    const checkboxes = document.querySelectorAll('input[name="serviceItems"]');
+    const otherCheckbox = document.getElementById('otherServiceCheckbox');
+    const otherInput = document.getElementById('otherServiceInput');
+
+    checkboxes.forEach(cb => cb.checked = false);
+    otherCheckbox.checked = false;
+    otherInput.value = '';
+
+    if (item.serviceType) {
+        const itemServices = item.serviceType.split(', ');
+        const standardValues = Array.from(checkboxes).map(cb => cb.value);
+
+        itemServices.forEach(serviceName => {
+            if (standardValues.includes(serviceName)) {
+                const targetCb = Array.from(checkboxes).find(cb => cb.value === serviceName);
+                if (targetCb) targetCb.checked = true;
+            } else {
+                otherCheckbox.checked = true;
+                otherInput.value = serviceName;
+            }
+        });
+    }
+
+    costInput.value = formatRibuan(item.cost);
+    document.getElementById('notes').value = item.notes;
+
+    submitBtn.innerHTML = '🔄 Perbarui Informasi Servis';
+    switchTab('form', document.getElementById('navFormBtn'));
+}
+
+function hapusCatatan(originalIndex) {
+    if (confirm('Apakah Anda yakin ingin menghapus data log servis ini?')) {
+        dataServis.splice(originalIndex, 1);
+        simpanKeBrowser();
+        tampilkanRiwayat();
+    }
+}
+
+function aktifkanModeEditBBM(originalIndex) {
+    const item = dataBBM[originalIndex];
+    editFuelIdInput.value = originalIndex;
+
+    fuelPlateSelect.innerHTML = `<option value="${item.plateNumber}">${item.plateNumber}</option>`;
+    newFuelPlateContainer.style.display = 'none';
+
+    fuelVehicleInput.value = item.vehicle;
+    fuelTypeInput.value = item.vehicleType;
+    fuelManufactureDateInput.value = item.manufactureDate || '';
+    document.getElementById('fuelDate').value = item.date;
+    fuelOdometerInput.value = formatRibuan(item.odometer);
+    fuelLitersInput.value = item.liters || (item.unitPrice ? (item.cost / item.unitPrice).toFixed(2) : 0);
+    fuelUnitPriceInput.value = formatRibuan(item.unitPrice);
+    fuelCostInput.value = formatRibuan(item.cost);
+
+    const fuelRadios = document.querySelectorAll('input[name="fuelBrand"]');
+    fuelRadios.forEach(radio => {
+        if (item.brand && item.brand.includes(radio.value)) {
+            radio.checked = true;
+        }
+    });
+
+    submitFuelBtn.innerHTML = '🔄 Perbarui Catatan BBM';
+    switchTab('fuelForm', document.getElementById('navFuelFormBtn'));
+}
+
+function hapusCatatanBBM(originalIndex) {
+    if (confirm('Apakah Anda yakin ingin menghapus catatan BBM ini?')) {
+        dataBBM.splice(originalIndex, 1);
+        simpanKeBrowser();
+        tampilkanRiwayatBBM();
+    }
+}
+
+// Inisialisasi awal
+tampilkanRiwayat();
+tampilkanRiwayatBBM();
+</script>
+</body>
+</html>
