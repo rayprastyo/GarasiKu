@@ -8,7 +8,6 @@
     <style>
 /* Soft Premium Blue & Slate Dark Mode Palette */
 :root {
-    /* Soft Premium Blue (Tema Terang) */
     --bg-main: #F8FAFC;
     --bg-container: #FFFFFF;
     --bg-card: #FFFFFF;
@@ -34,7 +33,6 @@
 }
 
 [data-theme="dark"] {
-    /* Slate Dark Mode (Tema Gelap) */
     --bg-main: #090D16;
     --bg-container: #0F172A;
     --bg-card: #1E293B;
@@ -73,7 +71,6 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Layout Container */
 .app-container {
     width: 100%;
     max-width: 1024px;
@@ -98,7 +95,6 @@ header {
     -webkit-backdrop-filter: blur(16px);
     background: var(--header-bg);
     z-index: 10;
-    border-bottom: 1px solid var(--border);
     transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
@@ -124,7 +120,6 @@ header h1 span {
     gap: 8px;
 }
 
-/* Navigasi Desktop */
 .desktop-nav {
     display: none;
     gap: 6px;
@@ -180,7 +175,6 @@ header h1 span {
     transform: scale(0.95);
 }
 
-/* Dropdown Menu */
 .menu-dropdown-wrapper {
     position: relative;
 }
@@ -258,7 +252,6 @@ header h1 span {
     transition: background-color 0.3s ease;
 }
 
-/* Filter & Summary Banner */
 .filter-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
@@ -575,7 +568,6 @@ input[readonly] {
     background: var(--header-bg);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border-top: 1px solid var(--border);
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -635,7 +627,6 @@ input[readonly] {
     animation: fadeIn 0.3s ease-out;
 }
 
-/* Responsive Styles */
 @media (max-width: 480px) {
     .flex-group {
         flex-direction: column;
@@ -708,10 +699,10 @@ input[readonly] {
         
         <div class="header-actions">
             <nav class="desktop-nav">
-                <button class="desktop-nav-item active" onclick="switchTab('dashboard', this)">Servis</button>
-                <button class="desktop-nav-item" id="navFormBtn" onclick="switchTab('form', this)">+ Servis</button>
-                <button class="desktop-nav-item" onclick="switchTab('fuelHistory', this)">BBM</button>
-                <button class="desktop-nav-item" id="navFuelFormBtn" onclick="switchTab('fuelForm', this)">+ BBM</button>
+                <button class="desktop-nav-item" data-tab="dashboard" onclick="switchTab('dashboard')">Servis</button>
+                <button class="desktop-nav-item" data-tab="form" onclick="switchTab('form')">+ Servis</button>
+                <button class="desktop-nav-item" data-tab="fuelHistory" onclick="switchTab('fuelHistory')">BBM</button>
+                <button class="desktop-nav-item" data-tab="fuelForm" onclick="switchTab('fuelForm')">+ BBM</button>
             </nav>
 
             <div class="menu-dropdown-wrapper" id="menuDropdownWrapper">
@@ -745,7 +736,7 @@ input[readonly] {
         </div>
     </header>
 
-    <div id="tabDashboard" class="tab-content active">
+    <div id="tabDashboard" class="tab-content">
         <div class="filter-card">
             <label for="filterServiceVehicle">Filter Kendaraan</label>
             <select id="filterServiceVehicle" onchange="tampilkanRiwayat()">
@@ -935,7 +926,7 @@ input[readonly] {
 
                 <div class="form-group flex-item">
                     <label for="fuelLiters">Jumlah Liter (L)</label>
-                    <input type="number" step="0.01" id="fuelLiters" placeholder="0.0" required>
+                    <input type="number" step="0.01" min="0.01" id="fuelLiters" placeholder="0.0" required>
                 </div>
 
                 <div class="form-group">
@@ -955,25 +946,25 @@ input[readonly] {
     </div>
 
     <nav class="bottom-nav">
-        <button class="nav-item active" onclick="switchTab('dashboard', this)">
+        <button class="nav-item" data-tab="dashboard" onclick="switchTab('dashboard')">
             <span class="nav-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.67 2.67 0 0 0 21 17.25l-5.83-5.83M11.42 15.17l-4.66-4.66m4.66 4.66 6.11-6.11a2.67 2.67 0 0 0-3.77-3.77l-6.11 6.11m0 0L3 11.42A2.67 2.67 0 0 0 6.75 15.17l4.67-4.67" /></svg>
             </span>
             <span>Servis</span>
         </button>
-        <button class="nav-item" id="navFormBtnMobile" onclick="switchTab('form', this)">
+        <button class="nav-item" data-tab="form" onclick="switchTab('form')">
             <span class="nav-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
             </span>
             <span>+ Servis</span>
         </button>
-        <button class="nav-item" onclick="switchTab('fuelHistory', this)">
+        <button class="nav-item" data-tab="fuelHistory" onclick="switchTab('fuelHistory')">
             <span class="nav-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 1 9 3.603e-4a1 1 0 0 1 1.2 1.488 6.25 6.25 0 0 0 1.8 11.262 1 1 0 0 0 1.2-1.488c-.687-.825-1.2-1.83-1.2-2.925a1 1 0 0 1 1.707-.707c1.55 1.55 2.655 3.5 2.655 5.576Z" /></svg>
             </span>
             <span>BBM</span>
         </button>
-        <button class="nav-item" id="navFuelFormBtnMobile" onclick="switchTab('fuelForm', this)">
+        <button class="nav-item" data-tab="fuelForm" onclick="switchTab('fuelForm')">
             <span class="nav-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
             </span>
@@ -983,7 +974,7 @@ input[readonly] {
 </div>
 
 <script>
-/* Mode Dark/Light */
+/* Theme Engine */
 const themeToggleBtn = document.getElementById('themeToggleBtn');
 const themeIcon = document.getElementById('themeIcon');
 const themeLabel = document.getElementById('themeLabel');
@@ -992,35 +983,31 @@ const moonIconPath = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z">
 const sunIconPath = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
 
 function aturTema(isDark) {
-    if (isDark) {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        themeIcon.innerHTML = sunIconPath;
-        if (themeLabel) themeLabel.textContent = 'Tema Terang';
-        localStorage.setItem('garasi_theme', 'dark');
-    } else {
-        document.documentElement.removeAttribute('data-theme');
-        themeIcon.innerHTML = moonIconPath;
-        if (themeLabel) themeLabel.textContent = 'Tema Gelap';
-        localStorage.setItem('garasi_theme', 'light');
-    }
+    try {
+        if (isDark) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeIcon.innerHTML = sunIconPath;
+            if (themeLabel) themeLabel.textContent = 'Tema Terang';
+            localStorage.setItem('garasi_theme', 'dark');
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+            themeIcon.innerHTML = moonIconPath;
+            if (themeLabel) themeLabel.textContent = 'Tema Gelap';
+            localStorage.setItem('garasi_theme', 'light');
+        }
+    } catch(e) { console.warn("Penyimpanan lokal tidak tersedia untuk tema."); }
 }
 
-const savedTheme = localStorage.getItem('garasi_theme');
+const savedTheme = (() => { try { return localStorage.getItem('garasi_theme'); } catch(e) { return null; } })();
 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-    aturTema(true);
-} else {
-    aturTema(false);
-}
+aturTema(savedTheme === 'dark' || (!savedTheme && prefersDark));
 
 themeToggleBtn.addEventListener('click', (e) => {
     e.stopPropagation();
-    const isCurrentDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    aturTema(!isCurrentDark);
+    aturTema(document.documentElement.getAttribute('data-theme') !== 'dark');
 });
 
-/* Toggle Dropdown Menu */
+/* Menu Dropdown Control */
 const menuDropdownWrapper = document.getElementById('menuDropdownWrapper');
 const menuToggleBtn = document.getElementById('menuToggleBtn');
 
@@ -1035,13 +1022,7 @@ document.addEventListener('click', (e) => {
     }
 });
 
-/* State Management & Logic */
-function setHariIni() {
-    const today = new Date().toISOString().substring(0, 10);
-    document.getElementById('date').value = today;
-    document.getElementById('fuelDate').value = today;
-}
-
+/* DOM Referensi */
 const serviceForm = document.getElementById('serviceForm');
 const fuelForm = document.getElementById('fuelForm');
 const historyContainer = document.getElementById('historyContainer');
@@ -1056,7 +1037,6 @@ const importFile = document.getElementById('importFile');
 const filterServiceVehicle = document.getElementById('filterServiceVehicle');
 const filterFuelVehicle = document.getElementById('filterFuelVehicle');
 
-// Elemen Servis
 const plateSelect = document.getElementById('plateSelect');
 const newPlateContainer = document.getElementById('newPlateContainer');
 const newPlateNumber = document.getElementById('newPlateNumber');
@@ -1066,7 +1046,6 @@ const manufactureDateInput = document.getElementById('manufactureDate');
 const odometerInput = document.getElementById('odometer');
 const costInput = document.getElementById('cost');
 
-// Elemen BBM
 const fuelPlateSelect = document.getElementById('fuelPlateSelect');
 const newFuelPlateContainer = document.getElementById('newFuelPlateContainer');
 const newFuelPlateNumber = document.getElementById('newFuelPlateNumber');
@@ -1078,11 +1057,39 @@ const fuelLitersInput = document.getElementById('fuelLiters');
 const fuelUnitPriceInput = document.getElementById('fuelUnitPrice');
 const fuelCostInput = document.getElementById('fuelCost');
 
-let dataServis = JSON.parse(localStorage.getItem('dataServis_v2')) || [];
-let dataBBM = JSON.parse(localStorage.getItem('dataBBM_v1')) || [];
+/* Storage Data Access Layer */
+let dataServis = [];
+let dataBBM = [];
 
+function muatData() {
+    try {
+        dataServis = JSON.parse(localStorage.getItem('dataServis_v2')) || [];
+        dataBBM = JSON.parse(localStorage.getItem('dataBBM_v1')) || [];
+    } catch (e) {
+        dataServis = [];
+        dataBBM = [];
+    }
+}
+
+function simpanKeBrowser() {
+    try {
+        localStorage.setItem('dataServis_v2', JSON.stringify(dataServis));
+        localStorage.setItem('dataBBM_v1', JSON.stringify(dataBBM));
+    } catch(e) {
+        alert("Gagal menyimpan data ke penyimpanan lokal browser.");
+    }
+}
+
+muatData();
+
+function setHariIni() {
+    const today = new Date().toISOString().substring(0, 10);
+    document.getElementById('date').value = today;
+    document.getElementById('fuelDate').value = today;
+}
 setHariIni();
 
+/* Formatter & Sanitizer */
 function formatRibuan(angka) {
     if (!angka && angka !== 0) return '';
     const cleanNumber = String(angka).replace(/\D/g, '');
@@ -1099,9 +1106,7 @@ function attachThousandSeparator(inputElement, onInputCallback) {
     inputElement.addEventListener('input', function(e) {
         const valNumeric = parseRibuan(e.target.value);
         e.target.value = valNumeric ? formatRibuan(valNumeric) : '';
-        if (typeof onInputCallback === 'function') {
-            onInputCallback();
-        }
+        if (typeof onInputCallback === 'function') onInputCallback();
     });
 }
 
@@ -1109,6 +1114,7 @@ attachThousandSeparator(odometerInput);
 attachThousandSeparator(costInput);
 attachThousandSeparator(fuelOdometerInput);
 
+/* Kalkulasi BBM Mandiri */
 function hitungTotalBBM() {
     const liter = parseFloat(fuelLitersInput.value);
     const hargaPerLiter = parseRibuan(fuelUnitPriceInput.value);
@@ -1141,11 +1147,7 @@ fuelLitersInput.addEventListener('input', hitungTotalBBM);
 attachThousandSeparator(fuelUnitPriceInput, hitungPadaPerubahanHarga);
 attachThousandSeparator(fuelCostInput, hitungLiterDariTotal);
 
-function simpanKeBrowser() {
-    localStorage.setItem('dataServis_v2', JSON.stringify(dataServis));
-    localStorage.setItem('dataBBM_v1', JSON.stringify(dataBBM));
-}
-
+/* Pengelolaan Kendaraan & Dropdown */
 function perbaruiDropdownPlat() {
     const mapKendaraan = new Map();
 
@@ -1191,12 +1193,8 @@ function perbaruiDropdownPlat() {
     filterServiceVehicle.value = currentFilterVal;
     filterFuelVehicle.value = currentFuelFilterVal;
 
-    const dropdowns = [
-        { select: plateSelect },
-        { select: fuelPlateSelect }
-    ];
-
-    dropdowns.forEach(({ select }) => {
+    [plateSelect, fuelPlateSelect].forEach(select => {
+        const curValue = select.value;
         select.innerHTML = '';
 
         if (mapKendaraan.size > 0) {
@@ -1220,6 +1218,10 @@ function perbaruiDropdownPlat() {
             optEmpty.textContent = 'Belum Ada Kendaraan (Buat Baru)';
             select.appendChild(optEmpty);
         }
+
+        if (curValue && Array.from(select.options).some(o => o.value === curValue)) {
+            select.value = curValue;
+        }
     });
 
     pemicuPerubahanPlat();
@@ -1241,7 +1243,7 @@ function pemicuPerubahanPlat() {
         newPlateNumber.removeAttribute('required');
 
         const opsiTerpilih = plateSelect.options[plateSelect.selectedIndex];
-        if (opsiTerpilih) {
+        if (opsiTerpilih && opsiTerpilih.dataset) {
             vehicleInput.value = opsiTerpilih.dataset.vehicle || '';
             typeInput.value = opsiTerpilih.dataset.type || '🏍️ Motor';
             manufactureDateInput.value = opsiTerpilih.dataset.mfg || '';
@@ -1266,7 +1268,7 @@ function pemicuPerubahanPlatBBM() {
         newFuelPlateNumber.removeAttribute('required');
 
         const opsiTerpilih = fuelPlateSelect.options[fuelPlateSelect.selectedIndex];
-        if (opsiTerpilih) {
+        if (opsiTerpilih && opsiTerpilih.dataset) {
             fuelVehicleInput.value = opsiTerpilih.dataset.vehicle || '';
             fuelTypeInput.value = opsiTerpilih.dataset.type || '🏍️ Motor';
             fuelManufactureDateInput.value = opsiTerpilih.dataset.mfg || '';
@@ -1279,10 +1281,39 @@ function pemicuPerubahanPlatBBM() {
 plateSelect.addEventListener('change', pemicuPerubahanPlat);
 fuelPlateSelect.addEventListener('change', pemicuPerubahanPlatBBM);
 
-function switchTab(tabName, element) {
+/* Reset State Form */
+function resetForms() {
+    editIdInput.value = '';
+    submitBtn.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 18px; height: 18px;"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+        Simpan Log Aktivitas`;
+    serviceForm.reset();
+    document.querySelectorAll('input[name="serviceItems"]').forEach(cb => cb.checked = false);
+    document.getElementById('otherServiceCheckbox').checked = false;
+    document.getElementById('otherServiceInput').value = '';
+
+    editFuelIdInput.value = '';
+    submitFuelBtn.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 18px; height: 18px;"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+        Simpan Catatan BBM`;
+    fuelForm.reset();
+    const pertaliteRadio = document.querySelector('input[name="fuelBrand"][value="Pertalite"]');
+    if (pertaliteRadio) pertaliteRadio.checked = true;
+
+    setHariIni();
+    perbaruiDropdownPlat();
+}
+
+/* Navigasi Tab Terpusat */
+function switchTab(tabName) {
     document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-    document.querySelectorAll('.desktop-nav-item').forEach(item => item.classList.remove('active'));
+    document.querySelectorAll('.nav-item, .desktop-nav-item').forEach(item => {
+        if (item.getAttribute('data-tab') === tabName) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
+    });
 
     if (tabName === 'dashboard') {
         document.getElementById('tabDashboard').classList.add('active');
@@ -1297,8 +1328,6 @@ function switchTab(tabName, element) {
         document.getElementById('tabFuelForm').classList.add('active');
         if (editFuelIdInput.value === '') perbaruiDropdownPlat();
     }
-
-    if (element) element.classList.add('active');
 }
 
 function formatTanggalSederhana(strDate) {
@@ -1308,6 +1337,7 @@ function formatTanggalSederhana(strDate) {
     return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
+/* Render Dashboard & Riwayat */
 function tampilkanRiwayat() {
     perbaruiDropdownPlat();
 
@@ -1318,7 +1348,7 @@ function tampilkanRiwayat() {
         filteredData = filteredData.filter(item => item.plateNumber.toUpperCase() === selectedFilter.toUpperCase());
     }
 
-    const grandTotal = filteredData.reduce((sum, item) => sum + Number(item.cost), 0);
+    const grandTotal = filteredData.reduce((sum, item) => sum + Number(item.cost || 0), 0);
     document.getElementById('summaryTotalCost').textContent = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(grandTotal);
     document.getElementById('summaryTotalCount').textContent = `${filteredData.length} Log`;
 
@@ -1345,7 +1375,7 @@ function tampilkanRiwayat() {
         const [namaKendaraan, platNomor, jenis, tglBuat] = key.split('|||');
         grupKendaraan[key].sort((a, b) => new Date(b.date) - new Date(a.date));
 
-        const totalBiaya = grupKendaraan[key].reduce((sum, item) => sum + Number(item.cost), 0);
+        const totalBiaya = grupKendaraan[key].reduce((sum, item) => sum + Number(item.cost || 0), 0);
         const formatTotalRupiah = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(totalBiaya);
         const textTglRakit = formatTanggalSederhana(tglBuat);
 
@@ -1403,7 +1433,7 @@ function tampilkanRiwayatBBM() {
         filteredData = filteredData.filter(item => item.plateNumber.toUpperCase() === selectedFilter.toUpperCase());
     }
 
-    const grandTotal = filteredData.reduce((sum, item) => sum + Number(item.cost), 0);
+    const grandTotal = filteredData.reduce((sum, item) => sum + Number(item.cost || 0), 0);
     document.getElementById('summaryFuelTotalCost').textContent = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(grandTotal);
     document.getElementById('summaryFuelTotalCount').textContent = `${filteredData.length} Log`;
 
@@ -1430,7 +1460,7 @@ function tampilkanRiwayatBBM() {
         const [namaKendaraan, platNomor, jenis, tglBuat] = key.split('|||');
         grupKendaraan[key].sort((a, b) => Number(a.odometer) - Number(b.odometer));
 
-        const totalBiaya = grupKendaraan[key].reduce((sum, item) => sum + Number(item.cost), 0);
+        const totalBiaya = grupKendaraan[key].reduce((sum, item) => sum + Number(item.cost || 0), 0);
         const formatTotalRupiah = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(totalBiaya);
         const textTglRakit = formatTanggalSederhana(tglBuat);
 
@@ -1496,9 +1526,10 @@ function tampilkanRiwayatBBM() {
     }
 }
 
+/* Ekspor & Impor */
 exportBtn.addEventListener('click', function() {
     if (dataServis.length === 0 && dataBBM.length === 0) {
-        return alert('Tidak ada data untuk disalin!');
+        return alert('Tidak ada data untuk diekspor!');
     }
     const combinedData = { servis: dataServis, bbm: dataBBM };
     const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(combinedData, null, 2));
@@ -1517,7 +1548,7 @@ exportExcelBtn.addEventListener('click', function() {
     }
 
     if (typeof XLSX === 'undefined') {
-        return alert('Pustaka SheetJS belum dimuat. Pastikan koneksi internet stabil.');
+        return alert('Pustaka SheetJS belum dimuat. Periksa koneksi internet Anda.');
     }
 
     const wb = XLSX.utils.book_new();
@@ -1571,17 +1602,18 @@ importFile.addEventListener('change', function(e) {
             if (Array.isArray(parsedData)) {
                 dataServis = parsedData;
                 simpanKeBrowser();
-                tampilkanRiwayat();
+                switchTab('dashboard');
                 alert('Sinkronisasi riwayat servis berhasil!');
-            } else if (parsedData.servis || parsedData.bbm) {
+            } else if (parsedData && (parsedData.servis || parsedData.bbm)) {
                 dataServis = parsedData.servis || [];
                 dataBBM = parsedData.bbm || [];
                 simpanKeBrowser();
-                tampilkanRiwayat();
-                tampilkanRiwayatBBM();
+                switchTab('dashboard');
                 alert('Sinkronisasi seluruh data garasi berhasil!');
+            } else {
+                alert('Struktur berkas JSON tidak sesuai.');
             }
-        } catch (e) {
+        } catch (err) {
             alert('Format berkas cadangan JSON tidak valid.');
         }
     };
@@ -1604,10 +1636,13 @@ function sinkronkanTglPembuatan(plat, mfgDate) {
     });
 }
 
+/* Submit Form Handlers */
 serviceForm.addEventListener('submit', function(e) {
     e.preventDefault();
 
     let platFinal = (plateSelect.value === 'BARU') ? newPlateNumber.value.toUpperCase().trim() : plateSelect.value;
+    if (!platFinal) return alert('Plat nomor wajib diisi!');
+
     const checkedBoxes = document.querySelectorAll('input[name="serviceItems"]:checked');
     const otherCheckbox = document.getElementById('otherServiceCheckbox');
     const otherInput = document.getElementById('otherServiceInput');
@@ -1638,32 +1673,27 @@ serviceForm.addEventListener('submit', function(e) {
         odometer: parseRibuan(odometerInput.value),
         serviceType: serviceTypeArray.join(', '),
         cost: parseRibuan(costInput.value),
-        notes: document.getElementById('notes').value
+        notes: document.getElementById('notes').value.trim()
     };
 
     if (idx === '') {
         dataServis.push(itemData);
     } else {
-        dataServis[parseInt(idx)] = itemData;
-        submitBtn.innerHTML = 'Simpan Log Aktivitas';
-        editIdInput.value = '';
+        dataServis[parseInt(idx, 10)] = itemData;
     }
 
     sinkronkanTglPembuatan(platFinal, manufactureDateInput.value);
     simpanKeBrowser();
-    tampilkanRiwayat();
-    serviceForm.reset();
-    document.querySelectorAll('input[name="serviceItems"]').forEach(cb => cb.checked = false);
-    otherCheckbox.checked = false;
-    otherInput.value = '';
-    setHariIni();
-    switchTab('dashboard', document.querySelector('.desktop-nav-item'));
+    resetForms();
+    switchTab('dashboard');
 });
 
 fuelForm.addEventListener('submit', function(e) {
     e.preventDefault();
 
     let platFinal = (fuelPlateSelect.value === 'BARU') ? newFuelPlateNumber.value.toUpperCase().trim() : fuelPlateSelect.value;
+    if (!platFinal) return alert('Plat nomor wajib diisi!');
+
     const idx = editFuelIdInput.value;
     const selectedBrandRadio = document.querySelector('input[name="fuelBrand"]:checked');
 
@@ -1674,7 +1704,7 @@ fuelForm.addEventListener('submit', function(e) {
         manufactureDate: fuelManufactureDateInput.value,
         date: document.getElementById('fuelDate').value,
         odometer: parseRibuan(fuelOdometerInput.value),
-        liters: fuelLitersInput.value,
+        liters: parseFloat(fuelLitersInput.value) || 0,
         unitPrice: parseRibuan(fuelUnitPriceInput.value),
         cost: parseRibuan(fuelCostInput.value),
         brand: selectedBrandRadio ? selectedBrandRadio.value : 'Pertalite'
@@ -1683,26 +1713,25 @@ fuelForm.addEventListener('submit', function(e) {
     if (idx === '') {
         dataBBM.push(itemData);
     } else {
-        dataBBM[parseInt(idx)] = itemData;
-        submitFuelBtn.innerHTML = 'Simpan Catatan BBM';
-        editFuelIdInput.value = '';
+        dataBBM[parseInt(idx, 10)] = itemData;
     }
 
     sinkronkanTglPembuatan(platFinal, fuelManufactureDateInput.value);
     simpanKeBrowser();
-    tampilkanRiwayatBBM();
-    fuelForm.reset();
-    document.querySelector('input[name="fuelBrand"][value="Pertalite"]').checked = true;
-    setHariIni();
-    switchTab('fuelHistory', document.querySelectorAll('.desktop-nav-item')[2]);
+    resetForms();
+    switchTab('fuelHistory');
 });
 
+/* Mode Edit & Hapus */
 function aktifkanModeEdit(originalIndex) {
     const item = dataServis[originalIndex];
+    if (!item) return;
+
     editIdInput.value = originalIndex;
 
-    plateSelect.innerHTML = `<option value="${item.plateNumber}">${item.plateNumber}</option>`;
-    newPlateContainer.style.display = 'none';
+    perbaruiDropdownPlat();
+    plateSelect.value = item.plateNumber;
+    pemicuPerubahanPlat();
 
     vehicleInput.value = item.vehicle;
     typeInput.value = item.vehicleType;
@@ -1734,10 +1763,10 @@ function aktifkanModeEdit(originalIndex) {
     }
 
     costInput.value = formatRibuan(item.cost);
-    document.getElementById('notes').value = item.notes;
+    document.getElementById('notes').value = item.notes || '';
 
     submitBtn.innerHTML = '🔄 Perbarui Informasi Servis';
-    switchTab('form', document.getElementById('navFormBtn'));
+    switchTab('form');
 }
 
 function hapusCatatan(originalIndex) {
@@ -1750,10 +1779,13 @@ function hapusCatatan(originalIndex) {
 
 function aktifkanModeEditBBM(originalIndex) {
     const item = dataBBM[originalIndex];
+    if (!item) return;
+
     editFuelIdInput.value = originalIndex;
 
-    fuelPlateSelect.innerHTML = `<option value="${item.plateNumber}">${item.plateNumber}</option>`;
-    newFuelPlateContainer.style.display = 'none';
+    perbaruiDropdownPlat();
+    fuelPlateSelect.value = item.plateNumber;
+    pemicuPerubahanPlatBBM();
 
     fuelVehicleInput.value = item.vehicle;
     fuelTypeInput.value = item.vehicleType;
@@ -1766,13 +1798,11 @@ function aktifkanModeEditBBM(originalIndex) {
 
     const fuelRadios = document.querySelectorAll('input[name="fuelBrand"]');
     fuelRadios.forEach(radio => {
-        if (item.brand && item.brand.includes(radio.value)) {
-            radio.checked = true;
-        }
+        radio.checked = (item.brand && item.brand.includes(radio.value));
     });
 
     submitFuelBtn.innerHTML = '🔄 Perbarui Catatan BBM';
-    switchTab('fuelForm', document.getElementById('navFuelFormBtn'));
+    switchTab('fuelForm');
 }
 
 function hapusCatatanBBM(originalIndex) {
@@ -1783,9 +1813,8 @@ function hapusCatatanBBM(originalIndex) {
     }
 }
 
-// Inisialisasi awal
-tampilkanRiwayat();
-tampilkanRiwayatBBM();
+/* Inisialisasi Aplikasi */
+switchTab('dashboard');
 </script>
 </body>
 </html>
