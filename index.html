@@ -1,1108 +1,1029 @@
 <!DOCTYPE html>
-<!-- saved from url=(0094)file:///C:/Users/ASUS/Documents/File%20dhendar/Buku%20digital%20service%20kendaraan/index.html -->
-<html lang="id"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cyber Vault - Smart Link Manager</title>
+  
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#0A0A1A">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="CyberVault">
 
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Buku Servis Digital &amp; Catatan BBM</title>
-<meta name="description" content="Catat servis kendaraan dan pengisian BBM, hitung konsumsi bahan bakar, semua tersimpan offline di perangkat Anda.">
-<meta name="theme-color" content="#0B4F4A">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Servis Digital">
-<link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiQnVrdSBTZXJ2aXMgRGlnaXRhbCAmIENhdGF0YW4gQkJNIiwic2hvcnRfbmFtZSI6IlNlcnZpcyBEaWdpdGFsIiwiZGVzY3JpcHRpb24iOiJBcGxpa2FzaSBwZW5jYXRhdGFuIHNlcnZpcyBrZW5kYXJhYW4gZGFuIGtvbnN1bXNpIEJCTSwgdGVyc2ltcGFuIG9mZmxpbmUgZGkgcGVyYW5na2F0LiIsInN0YXJ0X3VybCI6Ii4iLCJzY29wZSI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMEIxMjIwIiwidGhlbWVfY29sb3IiOiIjMEI0RjRBIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdC1wcmltYXJ5IiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjRiV3h1Y3owaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNQzl6ZG1jaUlIWnBaWGRDYjNnOUlqQWdNQ0ExTVRJZ05URXlJajRLUEdSbFpuTStDanhzYVc1bFlYSkhjbUZrYVdWdWRDQnBaRDBpWnlJZ2VERTlJakFpSUhreFBTSXdJaUI0TWowaU1TSWdlVEk5SWpFaVBnbzhjM1J2Y0NCdlptWnpaWFE5SWpBaUlITjBiM0F0WTI5c2IzSTlJaU14TmpNeU5FWWlMejRLUEhOMGIzQWdiMlptYzJWMFBTSXhJaUJ6ZEc5d0xXTnZiRzl5UFNJak1FSTBSalJCSWk4K0Nqd3ZiR2x1WldGeVIzSmhaR2xsYm5RK0Nqd3ZaR1ZtY3o0S1BISmxZM1FnZDJsa2RHZzlJalV4TWlJZ2FHVnBaMmgwUFNJMU1USWlJSEo0UFNJeE1UQWlJR1pwYkd3OUluVnliQ2dqWnlraUx6NEtQR05wY21Oc1pTQmplRDBpTWpVMklpQmplVDBpTWpNd0lpQnlQU0l4TXpBaUlHWnBiR3c5SW01dmJtVWlJSE4wY205clpUMGlJMFU0UlVORlJpSWdjM1J5YjJ0bExYZHBaSFJvUFNJeE9DSXZQZ284Y0dGMGFDQmtQU0pOTWpVMklESXpNQ0JNTXpRd0lERTJNQ0lnYzNSeWIydGxQU0lqUmpKQk9UTkNJaUJ6ZEhKdmEyVXRkMmxrZEdnOUlqRTJJaUJ6ZEhKdmEyVXRiR2x1WldOaGNEMGljbTkxYm1RaUx6NEtQR05wY21Oc1pTQmplRDBpTWpVMklpQmplVDBpTWpNd0lpQnlQU0l4TkNJZ1ptbHNiRDBpSTBZeVFUa3pRaUl2UGdvOGNHRjBhQ0JrUFNKTk1UVXdJRE00TUNCeE1UQTJJQzAzTUNBeU1USWdNQ0JzTFRJd0lETTBJSEV0T0RZZ0xUVTBJQzB4TnpJZ01DQjZJaUJtYVd4c1BTSWpSakpCT1ROQ0lpQnZjR0ZqYVhSNVBTSXdMamt5SWk4K0Nqd3ZjM1puUGdvPSIsInNpemVzIjoiYW55IiwidHlwZSI6ImltYWdlL3N2Zyt4bWwiLCJwdXJwb3NlIjoiYW55In0seyJzcmMiOiJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lJSFpwWlhkQ2IzZzlJakFnTUNBMU1USWdOVEV5SWo0S1BHUmxabk0rQ2p4c2FXNWxZWEpIY21Ga2FXVnVkQ0JwWkQwaVp5SWdlREU5SWpBaUlIa3hQU0l3SWlCNE1qMGlNU0lnZVRJOUlqRWlQZ284YzNSdmNDQnZabVp6WlhROUlqQWlJSE4wYjNBdFkyOXNiM0k5SWlNeE5qTXlORVlpTHo0S1BITjBiM0FnYjJabWMyVjBQU0l4SWlCemRHOXdMV052Ykc5eVBTSWpNRUkwUmpSQklpOCtDand2YkdsdVpXRnlSM0poWkdsbGJuUStDand2WkdWbWN6NEtQSEpsWTNRZ2QybGtkR2c5SWpVeE1pSWdhR1ZwWjJoMFBTSTFNVElpSUhKNFBTSXhNVEFpSUdacGJHdzlJblZ5YkNnalp5a2lMejRLUEdOcGNtTnNaU0JqZUQwaU1qVTJJaUJqZVQwaU1qTXdJaUJ5UFNJeE16QWlJR1pwYkd3OUltNXZibVVpSUhOMGNtOXJaVDBpSTBVNFJVTkZSaUlnYzNSeWIydGxMWGRwWkhSb1BTSXhPQ0l2UGdvOGNHRjBhQ0JrUFNKTk1qVTJJREl6TUNCTU16UXdJREUyTUNJZ2MzUnliMnRsUFNJalJqSkJPVE5DSWlCemRISnZhMlV0ZDJsa2RHZzlJakUySWlCemRISnZhMlV0YkdsdVpXTmhjRDBpY205MWJtUWlMejRLUEdOcGNtTnNaU0JqZUQwaU1qVTJJaUJqZVQwaU1qTXdJaUJ5UFNJeE5DSWdabWxzYkQwaUkwWXlRVGt6UWlJdlBnbzhjR0YwYUNCa1BTSk5NVFV3SURNNE1DQnhNVEEySUMwM01DQXlNVElnTUNCc0xUSXdJRE0wSUhFdE9EWWdMVFUwSUMweE56SWdNQ0I2SWlCbWFXeHNQU0lqUmpKQk9UTkNJaUJ2Y0dGamFYUjVQU0l3TGpreUlpOCtDand2YzNablBnbz0iLCJzaXplcyI6ImFueSIsInR5cGUiOiJpbWFnZS9zdmcreG1sIiwicHVycG9zZSI6Im1hc2thYmxlIn1dfQo=">
-<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPgo8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMxNjMyNEYiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMEI0RjRBIi8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSIxMTAiIGZpbGw9InVybCgjZykiLz4KPGNpcmNsZSBjeD0iMjU2IiBjeT0iMjMwIiByPSIxMzAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0U4RUNFRiIgc3Ryb2tlLXdpZHRoPSIxOCIvPgo8cGF0aCBkPSJNMjU2IDIzMCBMMzQwIDE2MCIgc3Ryb2tlPSIjRjJBOTNCIiBzdHJva2Utd2lkdGg9IjE2IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPGNpcmNsZSBjeD0iMjU2IiBjeT0iMjMwIiByPSIxNCIgZmlsbD0iI0YyQTkzQiIvPgo8cGF0aCBkPSJNMTUwIDM4MCBxMTA2IC03MCAyMTIgMCBsLTIwIDM0IHEtODYgLTU0IC0xNzIgMCB6IiBmaWxsPSIjRjJBOTNCIiBvcGFjaXR5PSIwLjkyIi8+Cjwvc3ZnPgo=">
-<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPgo8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMxNjMyNEYiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMEI0RjRBIi8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSIxMTAiIGZpbGw9InVybCgjZykiLz4KPGNpcmNsZSBjeD0iMjU2IiBjeT0iMjMwIiByPSIxMzAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0U4RUNFRiIgc3Ryb2tlLXdpZHRoPSIxOCIvPgo8cGF0aCBkPSJNMjU2IDIzMCBMMzQwIDE2MCIgc3Ryb2tlPSIjRjJBOTNCIiBzdHJva2Utd2lkdGg9IjE2IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPGNpcmNsZSBjeD0iMjU2IiBjeT0iMjMwIiByPSIxNCIgZmlsbD0iI0YyQTkzQiIvPgo8cGF0aCBkPSJNMTUwIDM4MCBxMTA2IC03MCAyMTIgMCBsLTIwIDM0IHEtODYgLTU0IC0xNzIgMCB6IiBmaWxsPSIjRjJBOTNCIiBvcGFjaXR5PSIwLjkyIi8+Cjwvc3ZnPgo=">
-<style>
-  :root{
-    --navy-950:#0B1220;
-    --navy-900:#101B2D;
-    --navy-800:#16233A;
-    --navy-700:#1E2E48;
-    --line:#26374F;
-    --paper:#F4F6F5;
-    --paper-2:#FFFFFF;
-    --ink-900:#101A17;
-    --ink-600:#4B5B57;
-    --ink-400:#7C8B87;
-    --teal:#0B4F4A;
-    --teal-600:#0E6A63;
-    --teal-100:#E2F1EE;
-    --amber:#D98A2B;
-    --amber-600:#B96F17;
-    --amber-100:#FBEBD4;
-    --red:#B3402A;
-    --red-100:#F7E4DE;
-    --radius-sm:6px;
-    --radius-md:10px;
-    --mono: ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", Consolas, monospace;
-    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  }
-  *,*::before,*::after{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    font-family:var(--sans);
-    background:var(--paper);
-    color:var(--ink-900);
-    -webkit-font-smoothing:antialiased;
-    padding-bottom:56px;
-  }
-  @media (prefers-reduced-motion: reduce){
-    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
-  }
-  a{color:inherit;}
-  button{font-family:inherit;}
-  ::selection{background:var(--amber-100);}
+  <link rel="manifest" id="pwa-manifest">
+  <link rel="icon" id="dynamic-favicon" type="image/png">
+  <link rel="apple-touch-icon" id="apple-touch-icon">
+  <meta name="msapplication-TileColor" content="#0A0A1A">
 
-  /* ---------- App shell ---------- */
-  .topbar{
-    background:var(--navy-950);
-    color:#EDF2F1;
-    padding:22px 18px 54px;
-    position:relative;
-    overflow:hidden;
-  }
-  .topbar::after{
-    content:"";
-    position:absolute;
-    right:-40px; top:-60px;
-    width:220px; height:220px;
-    border-radius:50%;
-    background:radial-gradient(circle at 30% 30%, rgba(217,138,43,0.28), transparent 70%);
-  }
-  .topbar-inner{
-    position:relative;
-    z-index:1;
-    max-width:720px;
-    margin:0 auto;
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:12px;
-  }
-  .brand-mark{
-    display:flex;
-    gap:12px;
-    align-items:center;
-  }
-  .brand-mark svg{flex:none;width:38px;height:38px;border-radius:9px;}
-  .brand-title{font-size:18px;font-weight:700;letter-spacing:-0.01em;line-height:1.25;margin:0;}
-  .brand-sub{font-size:12.5px;color:#9FB3AD;margin:2px 0 0;}
-  .install-btn{
-    background:var(--amber);
-    color:#241503;
-    border:none;
-    padding:9px 14px;
-    border-radius:var(--radius-sm);
-    font-size:13px;
-    font-weight:600;
-    cursor:pointer;
-    display:none;
-    white-space:nowrap;
-    box-shadow:0 2px 0 rgba(0,0,0,0.18);
-    transition:transform .12s ease, box-shadow .12s ease;
-  }
-  .install-btn:active{transform:translateY(1px); box-shadow:0 1px 0 rgba(0,0,0,0.18);}
-  .install-btn.show{display:inline-block;}
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Vue 3 CDN -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <!-- SheetJS (xlsx) untuk Ekspor Excel -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
-  .vehicle-strip{
-    max-width:720px;
-    margin:14px auto 0;
-    position:relative;
-    z-index:1;
-    display:flex;
-    gap:10px;
-    align-items:center;
-  }
-  .vehicle-strip input{
-    background:rgba(255,255,255,0.07);
-    border:1px solid rgba(255,255,255,0.14);
-    color:#EDF2F1;
-    padding:8px 11px;
-    border-radius:var(--radius-sm);
-    font-size:13px;
-    width:100%;
-  }
-  .vehicle-strip input::placeholder{color:#8DA29C;}
-  .vehicle-strip input:focus{outline:2px solid var(--amber); outline-offset:1px;}
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            vault: {
+              bg: '#0A0A1A',
+              card: '#12122A',
+              cyan: '#00F5FF',
+              magenta: '#FF00FF',
+            }
+          }
+        }
+      }
+    }
+  </script>
 
-  .tabbar-wrap{
-    max-width:720px;
-    margin:-32px auto 0;
-    padding:0 16px;
-    position:relative;
-    z-index:2;
-  }
-  .tabbar{
-    display:grid;
-    grid-template-columns:1fr 1fr 1fr;
-    background:var(--paper-2);
-    border-radius:12px;
-    box-shadow:0 8px 22px -10px rgba(11,18,32,0.35);
-    padding:5px;
-    gap:4px;
-  }
-  .tab-btn{
-    border:none;
-    background:transparent;
-    padding:11px 6px;
-    border-radius:8px;
-    font-size:13.5px;
-    font-weight:600;
-    color:var(--ink-400);
-    cursor:pointer;
-    transition:background .15s ease, color .15s ease;
-  }
-  .tab-btn.active{
-    background:var(--navy-950);
-    color:#fff;
-  }
-
-  main{
-    max-width:720px;
-    margin:0 auto;
-    padding:20px 16px 40px;
-  }
-  .view{display:none;}
-  .view.active{display:block; animation:fadein .18s ease;}
-  @keyframes fadein{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
-
-  /* ---------- Section headers ---------- */
-  .section-head{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:12px;
-  }
-  .section-head h2{
-    font-size:15.5px;
-    margin:0;
-    font-weight:700;
-  }
-  .section-head .count{
-    font-size:12px;
-    color:var(--ink-400);
-    font-family:var(--mono);
-  }
-
-  .btn{
-    border:none;
-    border-radius:var(--radius-sm);
-    padding:10px 14px;
-    font-size:13.5px;
-    font-weight:600;
-    cursor:pointer;
-    transition:filter .12s ease, transform .1s ease;
-  }
-  .btn:active{transform:translateY(1px);}
-  .btn-primary{background:var(--teal); color:#fff;}
-  .btn-primary:hover{filter:brightness(1.08);}
-  .btn-amber{background:var(--amber); color:#241503;}
-  .btn-amber:hover{filter:brightness(1.05);}
-  .btn-ghost{background:transparent; color:var(--teal-600); border:1px solid var(--line);}
-  .btn-ghost:hover{background:var(--teal-100);}
-  .btn-danger-ghost{background:transparent; color:var(--red); border:1px solid #E2C3B8;}
-  .btn-danger-ghost:hover{background:var(--red-100);}
-  .btn-block{width:100%;}
-  .btn-sm{padding:6px 10px; font-size:12px;}
-
-  /* ---------- Form card ---------- */
-  .form-card{
-    background:var(--paper-2);
-    border:1px solid var(--line);
-    border-radius:var(--radius-md);
-    padding:16px;
-    margin-bottom:18px;
-    display:none;
-  }
-  .form-card.open{display:block;}
-  .form-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
-  }
-  .form-grid .full{grid-column:1 / -1;}
-  .field{display:flex; flex-direction:column; gap:5px;}
-  .field label{font-size:12px; font-weight:600; color:var(--ink-600);}
-  .field input, .field select, .field textarea{
-    border:1px solid var(--line);
-    border-radius:var(--radius-sm);
-    padding:9px 10px;
-    font-size:14px;
-    font-family:inherit;
-    background:var(--paper);
-    color:var(--ink-900);
-  }
-  .field input:focus, .field select:focus, .field textarea:focus{
-    outline:2px solid var(--teal-600);
-    outline-offset:0px;
-    background:#fff;
-  }
-  .field textarea{resize:vertical; min-height:52px;}
-  .form-actions{
-    display:flex;
-    gap:10px;
-    margin-top:14px;
-  }
-  .hint-line{
-    font-size:12px;
-    color:var(--ink-400);
-    margin-top:8px;
-    font-family:var(--mono);
-  }
-
-  /* ---------- Ledger rows ---------- */
-  .ledger{display:flex; flex-direction:column; gap:8px;}
-  .row{
-    background:var(--paper-2);
-    border:1px solid var(--line);
-    border-left:4px solid var(--teal);
-    border-radius:8px;
-    padding:12px 12px;
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
-    align-items:flex-start;
-  }
-  .row.bbm{border-left-color:var(--amber);}
-  .row-main{flex:1; min-width:0;}
-  .row-top{
-    display:flex;
-    justify-content:space-between;
-    gap:8px;
-    align-items:baseline;
-    flex-wrap:wrap;
-  }
-  .row-title{font-weight:700; font-size:14px;}
-  .row-date{font-size:12px; color:var(--ink-400); font-family:var(--mono);}
-  .row-meta{
-    display:flex;
-    flex-wrap:wrap;
-    gap:6px 14px;
-    margin-top:6px;
-    font-size:12.5px;
-    color:var(--ink-600);
-  }
-  .row-meta b{color:var(--ink-900); font-family:var(--mono); font-weight:600;}
-  .row-note{
-    margin-top:6px;
-    font-size:12.5px;
-    color:var(--ink-600);
-    font-style:italic;
-  }
-  .row-cost{
-    font-family:var(--mono);
-    font-weight:700;
-    font-size:14.5px;
-    white-space:nowrap;
-  }
-  .row-actions{display:flex; flex-direction:column; gap:6px; align-items:flex-end;}
-  .icon-btn{
-    border:none;
-    background:transparent;
-    color:var(--ink-400);
-    cursor:pointer;
-    font-size:12px;
-    padding:4px 6px;
-    border-radius:6px;
-  }
-  .icon-btn:hover{background:var(--red-100); color:var(--red);}
-  .badge{
-    display:inline-block;
-    font-size:10.5px;
-    font-weight:700;
-    padding:2px 7px;
-    border-radius:20px;
-    background:var(--amber-100);
-    color:var(--amber-600);
-  }
-
-  .empty-state{
-    text-align:center;
-    padding:36px 18px;
-    color:var(--ink-400);
-    border:1px dashed var(--line);
-    border-radius:10px;
-    font-size:13.5px;
-  }
-  .empty-state strong{display:block; color:var(--ink-600); font-size:14.5px; margin-bottom:4px;}
-
-  /* ---------- Dashboard ---------- */
-  .stat-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-    margin-bottom:20px;
-  }
-  .stat-card{
-    background:var(--navy-950);
-    color:#EDF2F1;
-    border-radius:10px;
-    padding:14px;
-    position:relative;
-    overflow:hidden;
-  }
-  .stat-card.alt{background:var(--paper-2); color:var(--ink-900); border:1px solid var(--line);}
-  .stat-label{font-size:11.5px; color:#9FB3AD; margin:0 0 6px; font-weight:600;}
-  .stat-card.alt .stat-label{color:var(--ink-400);}
-  .stat-value{font-family:var(--mono); font-size:19px; font-weight:700; margin:0;}
-  .stat-value small{font-size:12px; font-weight:600; opacity:.7;}
-
-  .settings-block{
-    background:var(--paper-2);
-    border:1px solid var(--line);
-    border-radius:var(--radius-md);
-    padding:16px;
-    margin-bottom:14px;
-  }
-  .settings-block h3{margin:0 0 4px; font-size:14px;}
-  .settings-block p{margin:0 0 12px; font-size:12.5px; color:var(--ink-600); line-height:1.5;}
-  .settings-row{display:flex; gap:10px; flex-wrap:wrap;}
-  .file-input-wrap{position:relative; overflow:hidden; display:inline-block;}
-  .file-input-wrap input[type=file]{
-    position:absolute; inset:0; opacity:0; cursor:pointer; width:100%;
-  }
-
-  .toast{
-    position:fixed;
-    left:50%;
-    bottom:22px;
-    transform:translateX(-50%) translateY(8px);
-    background:var(--navy-950);
-    color:#fff;
-    padding:11px 18px;
-    border-radius:8px;
-    font-size:13px;
-    opacity:0;
-    pointer-events:none;
-    transition:opacity .2s ease, transform .2s ease;
-    z-index:80;
-    max-width:88vw;
-    text-align:center;
-  }
-  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
-
-  .modal-overlay{
-    position:fixed; inset:0;
-    background:rgba(11,18,32,0.55);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    z-index:90;
-    padding:20px;
-  }
-  .modal-overlay.show{display:flex;}
-  .modal-box{
-    background:#fff;
-    border-radius:12px;
-    padding:20px;
-    max-width:360px;
-    width:100%;
-  }
-  .modal-box h3{margin:0 0 8px; font-size:15.5px;}
-  .modal-box p{margin:0 0 16px; font-size:13.5px; color:var(--ink-600); line-height:1.5;}
-  .modal-actions{display:flex; gap:10px; justify-content:flex-end;}
-
-  footer.app-footer{
-    text-align:center;
-    font-size:11.5px;
-    color:var(--ink-400);
-    padding:10px 16px 26px;
-  }
-
-  @media (min-width:600px){
-    .form-grid{grid-template-columns:1fr 1fr 1fr;}
-  }
-</style>
+  <style>
+    body { background-color: #0A0A1A; }
+    .pb-safe { padding-bottom: env(safe-area-inset-bottom, 1rem); }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0A0A1A; }
+    ::-webkit-scrollbar-thumb { background: #1e1e3f; border-radius: 9999px; }
+    .neon-border-cyan { box-shadow: 0 0 10px rgba(0, 245, 255, 0.25), inset 0 0 10px rgba(0, 245, 255, 0.1); }
+    .neon-glow-cyan { box-shadow: 0 0 15px rgba(0, 245, 255, 0.6); }
+    .neon-glow-magenta { box-shadow: 0 0 15px rgba(255, 0, 255, 0.6); }
+    .vault-grid-bg {
+      background-image: linear-gradient(rgba(0, 245, 255, 0.03) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(0, 245, 255, 0.03) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+  </style>
 </head>
-<body>
+<body class="bg-[#0A0A1A] text-slate-100 antialiased font-sans selection:bg-[#00F5FF] selection:text-black vault-grid-bg">
+  <div id="app" class="min-h-screen flex flex-col pb-24 md:pb-8">
+    
+    <!-- System Toast Notification -->
+    <transition enter-active-class="transition duration-300 ease-out" enter-from-class="transform translate-y-[-100%] opacity-0" enter-to-class="transform translate-y-0 opacity-100" leave-active-class="transition duration-200 ease-in" leave-from-class="transform translate-y-0 opacity-100" leave-to-class="transform translate-y-[-100%] opacity-0">
+      <div v-if="toast.show" class="fixed top-4 right-4 z-50 flex items-center gap-3 bg-[#12122A] border border-[#00F5FF]/60 px-4 py-3 rounded-2xl shadow-[0_0_20px_rgba(0,245,255,0.3)] text-xs sm:text-sm font-mono text-[#00F5FF]">
+        <span class="w-2 h-2 rounded-full bg-[#00F5FF] animate-ping"></span>
+        <span>{{ toast.message }}</span>
+      </div>
+    </transition>
 
-<div class="topbar">
-  <div class="topbar-inner">
-    <div class="brand-mark">
-      <svg viewBox="0 0 512 512" aria-hidden="true"><defs><lineargradient id="gg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#16324F"></stop><stop offset="1" stop-color="#0B4F4A"></stop></lineargradient></defs><rect width="512" height="512" rx="110" fill="url(#gg)"></rect><circle cx="256" cy="230" r="130" fill="none" stroke="#E8ECEF" stroke-width="18"></circle><path d="M256 230 L340 160" stroke="#D98A2B" stroke-width="16" stroke-linecap="round"></path><circle cx="256" cy="230" r="14" fill="#D98A2B"></circle><path d="M150 380 q106 -70 212 0 l-20 34 q-86 -54 -172 0 z" fill="#D98A2B" opacity="0.92"></path></svg>
-      <div>
-        <p class="brand-title">Buku Servis Digital</p>
-        <p class="brand-sub">&amp; Catatan BBM · tersimpan di perangkat ini</p>
+    <!-- Header -->
+    <header class="sticky top-0 z-30 bg-[#0A0A1A]/90 backdrop-blur-md px-4 py-3">
+      <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+        
+        <div class="flex items-center justify-between w-full sm:w-auto">
+          <div @click="activeTab = 'home'" class="flex items-center gap-2.5 group cursor-pointer select-none">
+            <div class="relative flex items-center justify-center text-[#00F5FF] group-hover:text-[#FF00FF] transition-colors duration-300">
+              <svg class="w-7 h-7 transform transition-all duration-300 ease-out group-hover:scale-110 drop-shadow-[0_0_10px_rgba(0,245,255,0.8)]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457-.39-2.823-1.07-4" />
+              </svg>
+            </div>
+            <h1 class="font-black text-lg tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-[#00F5FF] via-[#FF00FF] to-[#00F5FF]">
+              CYBER VAULT
+            </h1>
+          </div>
+
+          <div class="hidden md:flex items-center gap-2 ml-6 text-xs font-bold uppercase tracking-wider">
+            <button @click="activeTab = 'home'" :class="activeTab === 'home' ? 'text-[#00F5FF] bg-[#00F5FF]/10 border border-[#00F5FF]/50 neon-border-cyan' : 'text-slate-400 hover:text-slate-200'" class="px-3 py-1.5 rounded-lg transition">Utama</button>
+            <button @click="activeTab = 'folders'" :class="activeTab === 'folders' ? 'text-[#00F5FF] bg-[#00F5FF]/10 border border-[#00F5FF]/50 neon-border-cyan' : 'text-slate-400 hover:text-slate-200'" class="px-3 py-1.5 rounded-lg transition">Folder</button>
+            <button @click="activeTab = 'favorites'" :class="activeTab === 'favorites' ? 'text-[#FF00FF] bg-[#FF00FF]/10 border border-[#FF00FF]/50 shadow-[0_0_10px_rgba(255,0,255,0.3)]' : 'text-slate-400 hover:text-slate-200'" class="px-3 py-1.5 rounded-lg transition">Favorit</button>
+            <button @click="activeTab = 'stats'" :class="activeTab === 'stats' ? 'text-[#00F5FF] bg-[#00F5FF]/10 border border-[#00F5FF]/50 neon-border-cyan' : 'text-slate-400 hover:text-slate-200'" class="px-3 py-1.5 rounded-lg transition">Sistem</button>
+          </div>
+        </div>
+
+        <div class="relative w-full sm:w-64 md:w-80">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#00F5FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <input
+            type="text"
+            placeholder="Cari tautan, domain, tag..."
+            v-model="searchQuery"
+            class="w-full bg-[#12122A] border border-[#00F5FF]/30 rounded-full pl-9 pr-4 py-1.5 text-xs sm:text-sm text-[#00F5FF] placeholder-slate-500 focus:outline-none focus:border-[#00F5FF] focus:ring-1 focus:ring-[#00F5FF] transition shadow-inner"
+          />
+        </div>
+
+      </div>
+    </header>
+
+    <!-- Banner PWA -->
+    <div v-if="deferredPrompt" class="bg-[#12122A] border border-[#00F5FF]/40 mx-4 mt-3 rounded-2xl px-4 py-2.5 max-w-5xl md:mx-auto neon-border-cyan">
+      <div class="flex items-center justify-between text-xs text-[#00F5FF]">
+        <span class="font-medium tracking-wide">Install Cyber Vault ke Perangkat untuk Akses Cepat</span>
+        <button @click="installPWA" class="bg-[#00F5FF] hover:bg-[#00F5FF]/80 text-black font-extrabold px-3 py-1 rounded-lg transition neon-glow-cyan tracking-wider">INSTALL</button>
       </div>
     </div>
-    <button class="install-btn" id="installBtn" type="button">Instal Aplikasi</button>
+
+    <!-- Main Content -->
+    <main class="max-w-5xl w-full mx-auto px-4 pt-4 flex-1">
+      
+      <!-- Tab 1: Utama -->
+      <div v-if="activeTab === 'home'" class="space-y-6">
+        
+        <!-- Metrics -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="bg-[#12122A] border border-[#00F5FF]/30 rounded-2xl p-3.5 sm:p-4 neon-border-cyan">
+            <span class="text-[10px] sm:text-xs text-slate-400 font-mono uppercase tracking-widest">Total Links</span>
+            <p class="text-xl sm:text-2xl font-black text-[#00F5FF] mt-1 drop-shadow-[0_0_10px_rgba(0,245,255,0.6)]">{{ links.length }}</p>
+          </div>
+          <div class="bg-[#12122A] border border-[#FF00FF]/30 rounded-2xl p-3.5 sm:p-4 shadow-[0_0_10px_rgba(255,0,255,0.15)]">
+            <span class="text-[10px] sm:text-xs text-slate-400 font-mono uppercase tracking-widest">Favorites</span>
+            <p class="text-xl sm:text-2xl font-black text-[#FF00FF] mt-1 drop-shadow-[0_0_10px_rgba(255,0,255,0.6)]">{{ favoriteCount }}</p>
+          </div>
+          <div class="bg-[#12122A] border border-[#00F5FF]/30 rounded-2xl p-3.5 sm:p-4 neon-border-cyan">
+            <span class="text-[10px] sm:text-xs text-slate-400 font-mono uppercase tracking-widest">Folders</span>
+            <p class="text-xl sm:text-2xl font-black text-[#00F5FF] mt-1 drop-shadow-[0_0_10px_rgba(0,245,255,0.6)]">{{ folders.length }}</p>
+          </div>
+          <div class="bg-[#12122A] border border-[#FF00FF]/30 rounded-2xl p-3.5 sm:p-4 shadow-[0_0_10px_rgba(255,0,255,0.15)]">
+            <span class="text-[10px] sm:text-xs text-slate-400 font-mono uppercase tracking-widest">Total Clicks</span>
+            <p class="text-xl sm:text-2xl font-black text-[#FF00FF] mt-1 drop-shadow-[0_0_10px_rgba(255,0,255,0.6)]">{{ totalClicks }}</p>
+          </div>
+        </div>
+
+        <!-- Folder Active Bar -->
+        <div v-if="selectedFolder !== 'all'" class="flex items-center justify-between bg-[#12122A] border border-[#00F5FF]/40 px-4 py-2 rounded-xl text-xs text-[#00F5FF]">
+          <span>Filter Folder: <strong class="text-white">{{ getFolderName(selectedFolder) }}</strong></span>
+          <button @click="selectedFolder = 'all'" class="text-slate-400 hover:text-[#00F5FF] transition uppercase tracking-wider text-[10px] font-bold">Bersihkan Filter</button>
+        </div>
+
+        <!-- Tag Filter Cloud -->
+        <div v-if="allTags.length > 0" class="space-y-2">
+          <span class="text-[10px] sm:text-xs font-bold text-slate-400 tracking-widest font-mono">FILTER TAGS</span>
+          <div class="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto pr-1">
+            <button
+              @click="selectedTag = null"
+              :class="selectedTag === null ? 'bg-[#00F5FF] text-black font-extrabold neon-glow-cyan' : 'bg-[#12122A] text-slate-400 border border-slate-800 hover:border-[#00F5FF]/40'"
+              class="px-2.5 py-1 rounded-full text-xs font-medium transition"
+            >Semua</button>
+            <button
+              v-for="tag in allTags"
+              :key="tag"
+              @click="selectedTag = selectedTag === tag ? null : tag"
+              :class="selectedTag === tag ? 'bg-[#00F5FF] text-black font-extrabold neon-glow-cyan' : 'bg-[#12122A] text-slate-300 border border-slate-800 hover:border-[#00F5FF]/40'"
+              class="px-2.5 py-1 rounded-full text-xs font-mono transition"
+            >#{{ tag }}</button>
+          </div>
+        </div>
+
+        <!-- Links Cards -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xs font-bold text-[#00F5FF] tracking-widest uppercase font-mono">Daftar Tautan Tersimpan</h2>
+            <button @click="exportExcel" class="flex items-center gap-1.5 bg-[#00F5FF]/10 hover:bg-[#00F5FF]/20 text-[#00F5FF] border border-[#00F5FF]/30 px-3 py-1 rounded-xl text-xs font-semibold transition">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              <span>Export Excel</span>
+            </button>
+          </div>
+
+          <div v-if="filteredLinks.length === 0" class="text-center py-12 bg-[#12122A]/40 rounded-2xl border border-dashed border-[#00F5FF]/20">
+            <p class="text-slate-500 text-sm font-mono">SYSTEM: Tidak ada tautan ditemukan.</p>
+          </div>
+          
+          <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div v-for="link in filteredLinks" :key="link.id" 
+              :class="link.isPinned ? 'border-[#00F5FF] bg-[#12122A]/90 neon-border-cyan' : 'border-slate-800 bg-[#12122A]'"
+              class="border hover:border-[#00F5FF]/60 rounded-2xl p-4 transition duration-300 flex flex-col justify-between space-y-3 hover:shadow-[0_0_20px_rgba(0,245,255,0.15)] relative">
+              
+              <div class="space-y-2">
+                <div class="flex items-start justify-between gap-3">
+                  <div class="flex items-center gap-3 min-w-0">
+                    <img :src="link.favicon" alt="" class="w-8 h-8 rounded-lg bg-[#0A0A1A] p-1 shrink-0 border border-[#00F5FF]/30" @error="handleImageError" />
+                    <div class="min-w-0 flex-1">
+                      <div class="flex items-center gap-1.5">
+                        <span v-if="link.isPinned" class="text-[9px] bg-[#00F5FF] text-black font-extrabold px-1.5 rounded uppercase">Pinned</span>
+                        <h3 @click="openLink(link)" class="font-semibold text-slate-100 hover:text-[#00F5FF] cursor-pointer truncate text-sm transition">{{ link.title }}</h3>
+                      </div>
+                      <span class="text-xs text-[#00F5FF]/70 font-mono block truncate">{{ link.domain }}</span>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center gap-1">
+                    <button @click="togglePin(link.id)" class="p-1 rounded text-slate-500 hover:text-[#00F5FF]" title="Pin Link">
+                      <svg class="w-4 h-4" :class="{'text-[#00F5FF] fill-current': link.isPinned}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+                    </button>
+                    <button @click="toggleFavorite(link.id)" :class="link.isFavorite ? 'text-[#FF00FF]' : 'text-slate-600 hover:text-slate-300'" class="p-1 rounded transition shrink-0">
+                      <svg class="w-4 h-4 fill-current drop-shadow-[0_0_8px_rgba(255,0,255,0.8)]" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </button>
+                  </div>
+                </div>
+
+                <p v-if="link.description" class="text-xs text-slate-400 line-clamp-2 leading-relaxed">{{ link.description }}</p>
+
+                <div class="flex flex-wrap items-center gap-1.5 pt-1">
+                  <span class="text-[10px] bg-[#0A0A1A] text-[#00F5FF] border border-[#00F5FF]/30 px-2 py-0.5 rounded-md font-mono">{{ getFolderName(link.folderId) }}</span>
+                  <span v-for="tag in link.tags" :key="tag" class="text-[10px] bg-[#0A0A1A] text-[#FF00FF] border border-[#FF00FF]/30 px-2 py-0.5 rounded-md font-mono">#{{ tag }}</span>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between border-t border-slate-800/80 pt-3 text-xs text-slate-400 mt-auto">
+                <div class="flex items-center gap-1">
+                  <button @click="copyUrl(link)" class="p-1.5 hover:bg-[#0A0A1A] rounded-lg transition flex items-center gap-1 text-slate-300">
+                    <svg v-if="copiedId === link.id" class="w-3.5 h-3.5 text-[#00F5FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    <svg v-else class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                  </button>
+                  <button @click="editLink(link)" class="p-1.5 hover:bg-[#0A0A1A] rounded-lg transition text-slate-400 hover:text-[#00F5FF]">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                  </button>
+                  <button @click="shareLink(link)" class="p-1.5 hover:bg-[#0A0A1A] rounded-lg transition text-slate-400 hover:text-[#00F5FF]">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+                  </button>
+                  <button @click="deleteLink(link.id)" class="p-1.5 hover:bg-rose-500/10 hover:text-rose-400 rounded-lg transition text-slate-600">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                  </button>
+                </div>
+
+                <button @click="openLink(link)" class="flex items-center gap-1.5 bg-[#00F5FF]/10 hover:bg-[#00F5FF]/20 text-[#00F5FF] border border-[#00F5FF]/30 px-3 py-1.5 rounded-lg font-bold transition text-xs font-mono tracking-wider">
+                  <span>BUKA</span>
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 2: Folder -->
+      <div v-if="activeTab === 'folders'" class="space-y-4">
+        <div class="flex justify-between items-center">
+          <h2 class="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#00F5FF] to-[#FF00FF] font-mono tracking-wider">KATEGORI / FOLDER</h2>
+          <button @click="openAddFolderModal" class="text-[#00F5FF] hover:text-[#FF00FF] transition duration-200" title="Tambah Folder">
+            <svg class="w-6 h-6 drop-shadow-[0_0_8px_rgba(0,245,255,0.8)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div v-for="folder in folders" :key="folder.id" class="bg-[#12122A] border border-slate-800 p-4 rounded-2xl flex items-center justify-between hover:border-[#00F5FF]/50 transition shadow-md">
+            <div @click="selectedFolder = folder.id; activeTab = 'home'" class="flex items-center gap-3 flex-1 cursor-pointer min-w-0">
+              <div class="p-2.5 bg-[#00F5FF]/10 text-[#00F5FF] rounded-xl border border-[#00F5FF]/20 shrink-0">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+              </div>
+              <div class="min-w-0 flex-1">
+                <h3 class="font-semibold text-slate-200 truncate text-sm sm:text-base">{{ folder.name }}</h3>
+                <p class="text-xs text-[#00F5FF]/70 font-mono">{{ getLinkCountByFolder(folder.id) }} Tautan</p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-1 shrink-0">
+              <button @click="openEditFolderModal(folder)" class="p-1.5 hover:bg-[#0A0A1A] rounded-lg text-slate-400 hover:text-[#00F5FF] transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+              </button>
+              <button v-if="folder.id !== 'general'" @click="deleteFolder(folder)" class="p-1.5 hover:bg-rose-500/10 text-slate-500 hover:text-rose-400 rounded-lg transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 3: Favorit -->
+      <div v-if="activeTab === 'favorites'" class="space-y-3">
+        <h2 class="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FF00FF] to-[#00F5FF] font-mono tracking-wider">TAUTAN FAVORIT</h2>
+        <div v-if="favoriteLinks.length === 0" class="text-center py-12 bg-[#12122A]/40 rounded-2xl border border-dashed border-[#FF00FF]/20">
+          <p class="text-slate-500 text-sm font-mono">SYSTEM: Belum ada tautan favorit.</p>
+        </div>
+        <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div v-for="link in favoriteLinks" :key="link.id" class="bg-[#12122A] border border-slate-800 rounded-2xl p-4 space-y-3 hover:border-[#FF00FF]/50 transition shadow-[0_0_15px_rgba(255,0,255,0.1)]">
+            <div class="flex items-center justify-between gap-2">
+              <h3 @click="openLink(link)" class="font-medium text-slate-100 cursor-pointer hover:text-[#FF00FF] text-sm truncate">{{ link.title }}</h3>
+              <button @click="toggleFavorite(link.id)" class="text-[#FF00FF] bg-[#FF00FF]/10 p-1.5 rounded-lg shrink-0">
+                <svg class="w-4 h-4 fill-current drop-shadow-[0_0_8px_rgba(255,0,255,0.8)]" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              </button>
+            </div>
+            <span class="text-xs text-[#00F5FF]/70 block font-mono truncate">{{ link.domain }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 4: Sistem & Data -->
+      <div v-if="activeTab === 'stats'" class="space-y-6">
+        <h2 class="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#00F5FF] to-[#FF00FF] font-mono tracking-wider">PENGATURAN & BACKUP</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-[#12122A] border border-[#00F5FF]/30 rounded-2xl p-4 space-y-3 flex flex-col justify-between neon-border-cyan">
+            <div>
+              <h3 class="text-sm font-semibold text-[#00F5FF] font-mono uppercase">Ekspor Excel Spreadsheet</h3>
+              <p class="text-xs text-slate-400 mt-1">Unduh seluruh daftar tautan lengkap dalam format standar Excel (.xlsx).</p>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-2">
+              <button @click="exportExcel" class="flex-1 flex items-center justify-center gap-2 bg-[#00F5FF] hover:bg-[#00F5FF]/80 text-black font-extrabold py-2.5 rounded-xl text-sm transition neon-glow-cyan uppercase tracking-wider">
+                Ekspor Excel
+              </button>
+              <label class="flex-1 flex items-center justify-center gap-2 bg-[#0A0A1A] hover:bg-slate-900 text-[#00F5FF] border border-[#00F5FF]/50 py-2.5 rounded-xl text-sm font-extrabold cursor-pointer transition uppercase tracking-wider">
+                Import Excel
+                <input type="file" accept=".xlsx,.xls" @change="importExcel" class="hidden" />
+              </label>
+            </div>
+            <p class="text-[10px] text-slate-500">Import akan membaca kolom: Judul, URL, Domain, Folder, Tags, Favorit, Klik, Deskripsi (sesuai format Export).</p>
+          </div>
+
+          <div class="bg-[#12122A] border border-slate-800 rounded-2xl p-4 space-y-3 flex flex-col justify-between">
+            <div>
+              <h3 class="text-sm font-semibold text-slate-300 font-mono uppercase">Backup & Restore JSON</h3>
+              <p class="text-xs text-slate-400 mt-1">Simpan atau pulihkan cadangan basis data lokal aplikasi secara utuh.</p>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-2">
+              <button @click="exportJSON" class="flex-1 flex items-center justify-center gap-2 bg-[#0A0A1A] hover:bg-slate-900 text-[#00F5FF] border border-[#00F5FF]/30 py-2.5 rounded-xl text-xs font-medium transition">
+                Export JSON
+              </button>
+              <label class="flex-1 flex items-center justify-center gap-2 bg-[#0A0A1A] hover:bg-slate-900 text-[#00F5FF] border border-[#00F5FF]/30 py-2.5 rounded-xl text-xs font-medium cursor-pointer transition">
+                Import JSON
+                <input type="file" accept=".json" @change="importJSON" class="hidden" />
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-[#12122A] border border-rose-500/30 rounded-2xl p-4 space-y-3">
+          <h3 class="text-sm font-semibold text-rose-400 font-mono uppercase">Zona Bahaya</h3>
+          <p class="text-xs text-slate-400">Menghapus seluruh daftar tautan & folder lokal aplikasi.</p>
+          <button @click="clearAllData" class="w-full flex items-center justify-center gap-2 bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/40 font-bold py-2.5 rounded-xl text-sm transition">
+            Clear Semua Data
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- FAB Add Link -->
+    <button @click="openAddModal" class="fixed right-5 bottom-20 md:bottom-8 z-40 bg-gradient-to-tr from-[#00F5FF] to-[#FF00FF] text-black font-extrabold p-3.5 sm:p-4 rounded-full shadow-[0_0_20px_rgba(0,245,255,0.6)] transition active:scale-95 flex items-center justify-center">
+      <svg class="w-6 h-6 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+    </button>
+
+    <!-- Bottom Mobile Nav -->
+    <nav class="fixed bottom-0 left-0 right-0 z-30 bg-[#0A0A1A]/90 backdrop-blur-lg px-6 py-2 pb-safe md:hidden">
+      <div class="max-w-md mx-auto flex justify-between items-center text-xs">
+        <button @click="activeTab = 'home'" :class="activeTab === 'home' ? 'text-[#00F5FF]' : 'text-slate-500'" class="flex flex-col items-center gap-1 py-1 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+          <span class="font-bold text-[10px] tracking-wider uppercase font-mono">Utama</span>
+        </button>
+        <button @click="activeTab = 'folders'" :class="activeTab === 'folders' ? 'text-[#00F5FF]' : 'text-slate-500'" class="flex flex-col items-center gap-1 py-1 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+          <span class="font-bold text-[10px] tracking-wider uppercase font-mono">Folder</span>
+        </button>
+        <button @click="activeTab = 'favorites'" :class="activeTab === 'favorites' ? 'text-[#FF00FF]' : 'text-slate-500'" class="flex flex-col items-center gap-1 py-1 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+          <span class="font-bold text-[10px] tracking-wider uppercase font-mono">Favorit</span>
+        </button>
+        <button @click="activeTab = 'stats'" :class="activeTab === 'stats' ? 'text-[#00F5FF]' : 'text-slate-500'" class="flex flex-col items-center gap-1 py-1 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          <span class="font-bold text-[10px] tracking-wider uppercase font-mono">Sistem</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Modal Form Tambah / Edit Link -->
+    <div v-if="isAddOpen" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div class="bg-[#12122A] border border-[#00F5FF]/40 w-full max-w-lg rounded-t-3xl sm:rounded-3xl p-5 sm:p-6 space-y-4 shadow-[0_0_35px_rgba(0,245,255,0.25)] max-h-[90vh] overflow-y-auto">
+        <div class="flex justify-between items-center sticky top-0 bg-[#12122A] pt-1 pb-2 z-10 border-b border-slate-800">
+          <h3 class="font-bold text-base sm:text-lg text-transparent bg-clip-text bg-gradient-to-r from-[#00F5FF] to-[#FF00FF] font-mono tracking-wider">
+            {{ editingLinkId ? 'EDIT TAUTAN' : 'TAMBAH TAUTAN BARU' }}
+          </h3>
+          <button @click="isAddOpen = false" class="text-slate-500 hover:text-[#00F5FF]">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <form @submit.prevent="saveLink" class="space-y-3 pt-2">
+          <div>
+            <label class="text-xs text-[#00F5FF] font-bold font-mono uppercase">URL *</label>
+            <input type="text" required placeholder="https://example.com" v-model="formData.url" class="w-full bg-[#0A0A1A] border border-slate-800 rounded-xl px-3 py-2 text-xs sm:text-sm text-slate-100 mt-1 focus:outline-none focus:border-[#00F5FF]" />
+          </div>
+
+          <div>
+            <label class="text-xs text-[#00F5FF] font-bold font-mono uppercase">Judul Tautan</label>
+            <input type="text" placeholder="Kosongkan untuk otomatis mengisi domain" v-model="formData.title" class="w-full bg-[#0A0A1A] border border-slate-800 rounded-xl px-3 py-2 text-xs sm:text-sm text-slate-100 mt-1 focus:outline-none focus:border-[#00F5FF]" />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="text-xs text-[#00F5FF] font-bold font-mono uppercase">Folder</label>
+              <select v-model="formData.folderId" class="w-full bg-[#0A0A1A] border border-slate-800 rounded-xl px-3 py-2 text-xs sm:text-sm text-slate-100 mt-1 focus:outline-none focus:border-[#00F5FF]">
+                <option v-for="f in folders" :key="f.id" :value="f.id">{{ f.name }}</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="text-xs text-[#00F5FF] font-bold font-mono uppercase">Tags (Pisah Koma)</label>
+              <input type="text" placeholder="dev, ai, design" v-model="formData.tags" class="w-full bg-[#0A0A1A] border border-slate-800 rounded-xl px-3 py-2 text-xs sm:text-sm text-slate-100 mt-1 focus:outline-none focus:border-[#00F5FF]" />
+            </div>
+          </div>
+
+          <div>
+            <label class="text-xs text-[#00F5FF] font-bold font-mono uppercase">Deskripsi</label>
+            <textarea rows="2" placeholder="Catatan opsional..." v-model="formData.description" class="w-full bg-[#0A0A1A] border border-slate-800 rounded-xl px-3 py-2 text-xs sm:text-sm text-slate-100 mt-1 focus:outline-none focus:border-[#00F5FF]"></textarea>
+          </div>
+
+          <div class="flex items-center gap-2 pt-1">
+            <input type="checkbox" id="fav" v-model="formData.isFavorite" class="rounded bg-[#0A0A1A] border-slate-800 text-[#FF00FF] focus:ring-0" />
+            <label for="fav" class="text-xs sm:text-sm text-slate-300">Tandai Favorit</label>
+          </div>
+
+          <button type="submit" class="w-full bg-[#00F5FF] hover:bg-[#00F5FF]/80 text-black font-extrabold py-2.5 rounded-xl transition mt-4 neon-glow-cyan text-sm font-mono tracking-wider uppercase">
+            {{ editingLinkId ? 'PERBARUI TAUTAN' : 'SIMPAN TAUTAN' }}
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal Form Folder -->
+    <div v-if="isFolderModalOpen" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+      <div class="bg-[#12122A] border border-[#00F5FF]/40 w-full max-w-sm rounded-3xl p-6 space-y-4 shadow-[0_0_35px_rgba(0,245,255,0.25)]">
+        <div class="flex justify-between items-center">
+          <h3 class="font-bold text-base sm:text-lg text-transparent bg-clip-text bg-gradient-to-r from-[#00F5FF] to-[#FF00FF] font-mono tracking-wider">{{ folderForm.id ? 'EDIT FOLDER' : 'FOLDER BARU' }}</h3>
+          <button @click="isFolderModalOpen = false" class="text-slate-500 hover:text-[#00F5FF]">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <form @submit.prevent="saveFolder" class="space-y-4">
+          <div>
+            <label class="text-xs text-[#00F5FF] font-bold font-mono uppercase">Nama Folder *</label>
+            <input type="text" required placeholder="Misal: Kerja, Riset" v-model="folderForm.name" class="w-full bg-[#0A0A1A] border border-slate-800 rounded-xl px-3 py-2 text-xs sm:text-sm text-slate-100 mt-1 focus:outline-none focus:border-[#00F5FF]" />
+          </div>
+
+          <button type="submit" class="w-full bg-[#00F5FF] hover:bg-[#00F5FF]/80 text-black font-extrabold py-2.5 rounded-xl transition neon-glow-cyan text-sm font-mono tracking-wider uppercase">
+            SIMPAN FOLDER
+          </button>
+        </form>
+      </div>
+    </div>
+
   </div>
-  <div class="vehicle-strip">
-    <input type="text" id="vehicleName" placeholder="Nama / plat kendaraan (opsional, mis. Honda Vario B 1234 XYZ)">
-  </div>
-</div>
 
-<div class="tabbar-wrap">
-  <div class="tabbar" role="tablist">
-    <button class="tab-btn active" data-tab="servis" type="button" role="tab">Buku Servis</button>
-    <button class="tab-btn" data-tab="bbm" type="button" role="tab">Catatan BBM</button>
-    <button class="tab-btn" data-tab="dashboard" type="button" role="tab">Dashboard</button>
-  </div>
-</div>
-
-<main>
-
-  <!-- ================= TAB SERVIS ================= -->
-  <section class="view active" id="view-servis">
-    <div class="section-head">
-      <h2>Riwayat servis</h2>
-      <span class="count" id="servisCount">0 catatan</span>
-    </div>
-
-    <button class="btn btn-primary btn-block" id="toggleServisForm" type="button">+ Tambah catatan servis</button>
-
-    <form class="form-card" id="formServis" autocomplete="off">
-      <div class="form-grid">
-        <div class="field">
-          <label for="sTanggal">Tanggal servis</label>
-          <input type="date" id="sTanggal" required="">
-        </div>
-        <div class="field">
-          <label for="sKm">Kilometer (KM)</label>
-          <input type="number" id="sKm" min="0" inputmode="numeric" placeholder="mis. 24500" required="">
-        </div>
-        <div class="field">
-          <label for="sJenis">Jenis servis / perawatan</label>
-          <input type="text" id="sJenis" placeholder="mis. Ganti oli + filter" required="">
-        </div>
-        <div class="field">
-          <label for="sBengkel">Bengkel</label>
-          <input type="text" id="sBengkel" placeholder="mis. Bengkel Jaya Motor">
-        </div>
-        <div class="field">
-          <label for="sBiaya">Biaya (Rp)</label>
-          <input type="number" id="sBiaya" min="0" inputmode="numeric" placeholder="mis. 150000" required="">
-        </div>
-        <div class="field full">
-          <label for="sCatatan">Catatan / keterangan</label>
-          <textarea id="sCatatan" placeholder="Sparepart yang diganti, keluhan, dsb (opsional)"></textarea>
-        </div>
-      </div>
-      <div class="form-actions">
-        <button type="submit" class="btn btn-primary">Simpan catatan</button>
-        <button type="button" class="btn btn-ghost" id="cancelServisForm">Batal</button>
-      </div>
-    </form>
-
-    <div class="ledger" id="servisList"><div class="empty-state"><strong>Belum ada catatan servis</strong>Tambahkan riwayat servis pertama kendaraan Anda.</div></div>
-  </section>
-
-  <!-- ================= TAB BBM ================= -->
-  <section class="view" id="view-bbm">
-    <div class="section-head">
-      <h2>Riwayat pengisian BBM</h2>
-      <span class="count" id="bbmCount">0 catatan</span>
-    </div>
-
-    <button class="btn btn-amber btn-block" id="toggleBbmForm" type="button">+ Tambah catatan BBM</button>
-
-    <form class="form-card" id="formBbm" autocomplete="off">
-      <div class="form-grid">
-        <div class="field">
-          <label for="bTanggal">Tanggal isi BBM</label>
-          <input type="date" id="bTanggal" required="">
-        </div>
-        <div class="field">
-          <label for="bKm">Kilometer (KM) saat ini</label>
-          <input type="number" id="bKm" min="0" inputmode="numeric" placeholder="mis. 24680" required="">
-        </div>
-        <div class="field">
-          <label for="bJenis">Jenis BBM</label>
-          <select id="bJenis">
-            <option>Pertalite</option>
-            <option>Pertamax</option>
-            <option>Pertamax Turbo</option>
-            <option>Solar</option>
-            <option>Dexlite</option>
-            <option>Shell Super</option>
-            <option>Shell V-Power</option>
-            <option>Lainnya</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="bLiter">Jumlah (Liter)</label>
-          <input type="number" id="bLiter" min="0" step="0.01" inputmode="decimal" placeholder="mis. 3.5" required="">
-        </div>
-        <div class="field">
-          <label for="bHarga">Total harga (Rp)</label>
-          <input type="number" id="bHarga" min="0" inputmode="numeric" placeholder="mis. 35000" required="">
-        </div>
-        <div class="field full">
-          <label for="bCatatan">Catatan (opsional)</label>
-          <input type="text" id="bCatatan" placeholder="mis. Isi penuh di SPBU tol">
-        </div>
-      </div>
-      <p class="hint-line">Konsumsi BBM (KM/Liter) dihitung otomatis dari selisih KM dengan catatan sebelumnya.</p>
-      <div class="form-actions">
-        <button type="submit" class="btn btn-amber">Simpan catatan</button>
-        <button type="button" class="btn btn-ghost" id="cancelBbmForm">Batal</button>
-      </div>
-    </form>
-
-    <div class="ledger" id="bbmList"><div class="empty-state"><strong>Belum ada catatan BBM</strong>Tambahkan riwayat pengisian bahan bakar pertama Anda.</div></div>
-  </section>
-
-  <!-- ================= TAB DASHBOARD ================= -->
-  <section class="view" id="view-dashboard">
-    <div class="section-head"><h2>Ringkasan</h2></div>
-
-    <div class="stat-grid">
-      <div class="stat-card">
-        <p class="stat-label">Total pengeluaran servis</p>
-        <p class="stat-value" id="statServisTotal">Rp 0</p>
-      </div>
-      <div class="stat-card">
-        <p class="stat-label">Total pengeluaran BBM</p>
-        <p class="stat-value" id="statBbmTotal">Rp 0</p>
-      </div>
-      <div class="stat-card alt">
-        <p class="stat-label">Rata-rata konsumsi BBM</p>
-        <p class="stat-value" id="statKonsumsi">—</p>
-      </div>
-      <div class="stat-card alt">
-        <p class="stat-label">Total pengeluaran keseluruhan</p>
-        <p class="stat-value" id="statGrandTotal">Rp 0</p>
-      </div>
-    </div>
-
-    <div class="settings-block">
-      <h3>Ekspor data ke Excel</h3>
-      <p>Unduh seluruh riwayat servis dan BBM sebagai satu file .xlsx (dua sheet terpisah) untuk disimpan sebagai cadangan atau dibuka di komputer.</p>
-      <div class="settings-row">
-        <button class="btn btn-primary" id="btnExport" type="button">Unduh Excel (.xlsx)</button>
-      </div>
-    </div>
-
-    <div class="settings-block">
-      <h3>Impor data dari Excel</h3>
-      <p>Pilih file .xlsx hasil ekspor aplikasi ini untuk memuat kembali data. Catatan dengan tanggal, KM, dan jenis yang identik akan dilewati agar tidak dobel.</p>
-      <div class="settings-row">
-        <div class="file-input-wrap">
-          <button class="btn btn-ghost" type="button">Pilih file .xlsx</button>
-          <input type="file" id="fileImport" accept=".xlsx">
-        </div>
-      </div>
-    </div>
-
-    <div class="settings-block">
-      <h3>Reset data</h3>
-      <p>Menghapus seluruh catatan servis dan BBM secara permanen dari perangkat ini. Pastikan sudah mengekspor cadangan bila diperlukan.</p>
-      <div class="settings-row">
-        <button class="btn btn-danger-ghost" id="btnResetAll" type="button">Hapus Semua Data</button>
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<footer class="app-footer">Data hanya tersimpan di perangkat ini (LocalStorage) · berfungsi offline</footer>
-
-<div class="toast" id="toast"></div>
-
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal-box">
-    <h3 id="modalTitle">Konfirmasi</h3>
-    <p id="modalBody">Apakah Anda yakin?</p>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" id="modalCancel" type="button">Batal</button>
-      <button class="btn btn-danger-ghost" id="modalConfirm" type="button">Ya, lanjutkan</button>
-    </div>
-  </div>
-</div>
-
-<script src="./Buku Servis Digital &amp; Catatan BBM_files/xlsx.full.min.js.download"></script>
-<script>
-(function(){
-  "use strict";
-
-  /* ================= Storage ================= */
-  var LS_SERVIS = "bsd_servis_v1";
-  var LS_BBM = "bsd_bbm_v1";
-  var LS_VEHICLE = "bsd_vehicle_v1";
-
-  function load(key){
-    try{
-      var raw = localStorage.getItem(key);
-      return raw ? JSON.parse(raw) : [];
-    }catch(e){ return []; }
-  }
-  function save(key, data){
-    localStorage.setItem(key, JSON.stringify(data));
-  }
-
-  var servisData = load(LS_SERVIS);
-  var bbmData = load(LS_BBM);
-
-  var vehicleInput = document.getElementById("vehicleName");
-  vehicleInput.value = localStorage.getItem(LS_VEHICLE) || "";
-  vehicleInput.addEventListener("input", function(){
-    localStorage.setItem(LS_VEHICLE, vehicleInput.value);
-  });
-
-  function uid(){
-    return Date.now().toString(36) + Math.random().toString(36).slice(2,8);
-  }
-
-  /* ================= Utils ================= */
-  function fmtRupiah(n){
-    n = Number(n) || 0;
-    return "Rp " + n.toLocaleString("id-ID");
-  }
-  function fmtKm(n){
-    return Number(n||0).toLocaleString("id-ID") + " km";
-  }
-  function fmtTanggal(iso){
-    if(!iso) return "-";
-    var d = new Date(iso + "T00:00:00");
-    if(isNaN(d.getTime())) return iso;
-    return d.toLocaleDateString("id-ID", {day:"2-digit", month:"short", year:"numeric"});
-  }
-  function escapeHtml(s){
-    return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
-      return ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c];
-    });
-  }
-  var toastTimer = null;
-  function toast(msg){
-    var el = document.getElementById("toast");
-    el.textContent = msg;
-    el.classList.add("show");
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(function(){ el.classList.remove("show"); }, 2400);
-  }
-
-  /* ================= Confirm modal ================= */
-  var modalOverlay = document.getElementById("modalOverlay");
-  var modalTitle = document.getElementById("modalTitle");
-  var modalBody = document.getElementById("modalBody");
-  var modalConfirm = document.getElementById("modalConfirm");
-  var modalCancel = document.getElementById("modalCancel");
-  var pendingConfirmAction = null;
-
-  function askConfirm(title, body, onConfirm){
-    modalTitle.textContent = title;
-    modalBody.textContent = body;
-    pendingConfirmAction = onConfirm;
-    modalOverlay.classList.add("show");
-  }
-  modalCancel.addEventListener("click", function(){
-    modalOverlay.classList.remove("show");
-    pendingConfirmAction = null;
-  });
-  modalOverlay.addEventListener("click", function(e){
-    if(e.target === modalOverlay){
-      modalOverlay.classList.remove("show");
-      pendingConfirmAction = null;
-    }
-  });
-  modalConfirm.addEventListener("click", function(){
-    var fn = pendingConfirmAction;
-    modalOverlay.classList.remove("show");
-    pendingConfirmAction = null;
-    if(fn) fn();
-  });
-
-  /* ================= Tabs ================= */
-  var tabBtns = document.querySelectorAll(".tab-btn");
-  var views = {
-    servis: document.getElementById("view-servis"),
-    bbm: document.getElementById("view-bbm"),
-    dashboard: document.getElementById("view-dashboard")
-  };
-  tabBtns.forEach(function(btn){
-    btn.addEventListener("click", function(){
-      tabBtns.forEach(function(b){ b.classList.remove("active"); });
-      btn.classList.add("active");
-      Object.keys(views).forEach(function(k){ views[k].classList.remove("active"); });
-      views[btn.dataset.tab].classList.add("active");
-      if(btn.dataset.tab === "dashboard") renderDashboard();
-    });
-  });
-
-  /* ================= Form toggles ================= */
-  var formServis = document.getElementById("formServis");
-  var formBbm = document.getElementById("formBbm");
-
-  document.getElementById("toggleServisForm").addEventListener("click", function(){
-    formServis.classList.toggle("open");
-    if(formServis.classList.contains("open")){
-      document.getElementById("sTanggal").valueAsDate = new Date();
-      document.getElementById("sTanggal").focus();
-    }
-  });
-  document.getElementById("cancelServisForm").addEventListener("click", function(){
-    formServis.reset();
-    formServis.classList.remove("open");
-  });
-  document.getElementById("toggleBbmForm").addEventListener("click", function(){
-    formBbm.classList.toggle("open");
-    if(formBbm.classList.contains("open")){
-      document.getElementById("bTanggal").valueAsDate = new Date();
-      document.getElementById("bTanggal").focus();
-    }
-  });
-  document.getElementById("cancelBbmForm").addEventListener("click", function(){
-    formBbm.reset();
-    formBbm.classList.remove("open");
-  });
-
-  /* ================= Servis: submit & render ================= */
-  formServis.addEventListener("submit", function(e){
-    e.preventDefault();
-    var entry = {
-      id: uid(),
-      tanggal: document.getElementById("sTanggal").value,
-      km: Number(document.getElementById("sKm").value) || 0,
-      jenis: document.getElementById("sJenis").value.trim(),
-      bengkel: document.getElementById("sBengkel").value.trim(),
-      biaya: Number(document.getElementById("sBiaya").value) || 0,
-      catatan: document.getElementById("sCatatan").value.trim()
-    };
-    servisData.push(entry);
-    save(LS_SERVIS, servisData);
-    formServis.reset();
-    formServis.classList.remove("open");
-    renderServis();
-    toast("Catatan servis disimpan");
-  });
-
-  function sortedServis(){
-    return servisData.slice().sort(function(a,b){
-      if(a.tanggal !== b.tanggal) return a.tanggal < b.tanggal ? 1 : -1;
-      return b.km - a.km;
-    });
-  }
-
-  function renderServis(){
-    var list = document.getElementById("servisList");
-    var data = sortedServis();
-    document.getElementById("servisCount").textContent = data.length + " catatan";
-    if(data.length === 0){
-      list.innerHTML = '<div class="empty-state"><strong>Belum ada catatan servis</strong>Tambahkan riwayat servis pertama kendaraan Anda.</div>';
-      return;
-    }
-    list.innerHTML = data.map(function(item){
-      return (
-        '<div class="row" data-id="'+item.id+'">' +
-          '<div class="row-main">' +
-            '<div class="row-top">' +
-              '<span class="row-title">'+escapeHtml(item.jenis)+'</span>' +
-              '<span class="row-date">'+fmtTanggal(item.tanggal)+'</span>' +
-            '</div>' +
-            '<div class="row-meta">' +
-              '<span><b>'+fmtKm(item.km)+'</b></span>' +
-              (item.bengkel ? '<span>'+escapeHtml(item.bengkel)+'</span>' : '') +
-            '</div>' +
-            (item.catatan ? '<div class="row-note">'+escapeHtml(item.catatan)+'</div>' : '') +
-          '</div>' +
-          '<div class="row-actions">' +
-            '<span class="row-cost">'+fmtRupiah(item.biaya)+'</span>' +
-            '<button class="icon-btn" data-del-servis="'+item.id+'" type="button">Hapus</button>' +
-          '</div>' +
-        '</div>'
-      );
-    }).join("");
-  }
-
-  document.getElementById("servisList").addEventListener("click", function(e){
-    var id = e.target.getAttribute("data-del-servis");
-    if(!id) return;
-    askConfirm("Hapus catatan servis?", "Catatan servis ini akan dihapus permanen.", function(){
-      servisData = servisData.filter(function(x){ return x.id !== id; });
-      save(LS_SERVIS, servisData);
-      renderServis();
-      toast("Catatan servis dihapus");
-    });
-  });
-
-  /* ================= BBM: submit & render ================= */
-  formBbm.addEventListener("submit", function(e){
-    e.preventDefault();
-    var entry = {
-      id: uid(),
-      tanggal: document.getElementById("bTanggal").value,
-      km: Number(document.getElementById("bKm").value) || 0,
-      jenis: document.getElementById("bJenis").value,
-      liter: Number(document.getElementById("bLiter").value) || 0,
-      harga: Number(document.getElementById("bHarga").value) || 0,
-      catatan: document.getElementById("bCatatan").value.trim()
-    };
-    bbmData.push(entry);
-    save(LS_BBM, bbmData);
-    formBbm.reset();
-    formBbm.classList.remove("open");
-    renderBbm();
-    toast("Catatan BBM disimpan");
-  });
-
-  // Ascending by KM, used to compute consumption between consecutive fill-ups.
-  function ascendingBbm(){
-    return bbmData.slice().sort(function(a,b){ return a.km - b.km || (a.tanggal < b.tanggal ? -1 : 1); });
-  }
-
-  function consumptionMap(){
-    var asc = ascendingBbm();
-    var map = {};
-    for(var i=1;i<asc.length;i++){
-      var prev = asc[i-1], cur = asc[i];
-      var deltaKm = cur.km - prev.km;
-      if(deltaKm > 0 && cur.liter > 0){
-        map[cur.id] = deltaKm / cur.liter;
+  <!-- ============================================================ -->
+  <!-- PWA ENGINE: Ikon Kustom (Canvas->PNG DataURI), Manifest (Blob), -->
+  <!-- dan pendaftaran Service Worker (best-effort, lihat catatan)     -->
+  <!-- ============================================================ -->
+  <script>
+    (function () {
+      // ---- 1. Helper: gambar ikon "Cyber Vault" (shield + keyhole neon) ----
+      function roundRectPath(ctx, x, y, w, h, r) {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.arcTo(x + w, y, x + w, y + h, r);
+        ctx.arcTo(x + w, y + h, x, y + h, r);
+        ctx.arcTo(x, y + h, x, y, r);
+        ctx.arcTo(x, y, x + w, y, r);
+        ctx.closePath();
       }
-    }
-    return map;
-  }
 
-  function renderBbm(){
-    var list = document.getElementById("bbmList");
-    var cons = consumptionMap();
-    var data = bbmData.slice().sort(function(a,b){
-      if(a.tanggal !== b.tanggal) return a.tanggal < b.tanggal ? 1 : -1;
-      return b.km - a.km;
-    });
-    document.getElementById("bbmCount").textContent = data.length + " catatan";
-    if(data.length === 0){
-      list.innerHTML = '<div class="empty-state"><strong>Belum ada catatan BBM</strong>Tambahkan riwayat pengisian bahan bakar pertama Anda.</div>';
-      return;
-    }
-    list.innerHTML = data.map(function(item){
-      var k = cons[item.id];
-      var konsumsiHtml = k ? '<span class="badge">'+k.toFixed(1)+' km/l</span>' : '';
-      return (
-        '<div class="row bbm" data-id="'+item.id+'">' +
-          '<div class="row-main">' +
-            '<div class="row-top">' +
-              '<span class="row-title">'+escapeHtml(item.jenis)+'</span>' +
-              '<span class="row-date">'+fmtTanggal(item.tanggal)+'</span>' +
-            '</div>' +
-            '<div class="row-meta">' +
-              '<span><b>'+fmtKm(item.km)+'</b></span>' +
-              '<span>'+Number(item.liter).toLocaleString("id-ID")+' liter</span>' +
-              (konsumsiHtml ? '<span>'+konsumsiHtml+'</span>' : '') +
-            '</div>' +
-            (item.catatan ? '<div class="row-note">'+escapeHtml(item.catatan)+'</div>' : '') +
-          '</div>' +
-          '<div class="row-actions">' +
-            '<span class="row-cost">'+fmtRupiah(item.harga)+'</span>' +
-            '<button class="icon-btn" data-del-bbm="'+item.id+'" type="button">Hapus</button>' +
-          '</div>' +
-        '</div>'
-      );
-    }).join("");
-  }
+      function drawVaultIcon(size, maskable) {
+        const canvas = document.createElement('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
 
-  document.getElementById("bbmList").addEventListener("click", function(e){
-    var id = e.target.getAttribute("data-del-bbm");
-    if(!id) return;
-    askConfirm("Hapus catatan BBM?", "Catatan pengisian BBM ini akan dihapus permanen.", function(){
-      bbmData = bbmData.filter(function(x){ return x.id !== id; });
-      save(LS_BBM, bbmData);
-      renderBbm();
-      toast("Catatan BBM dihapus");
-    });
-  });
-
-  /* ================= Dashboard ================= */
-  function renderDashboard(){
-    var totalServis = servisData.reduce(function(s,x){ return s + (Number(x.biaya)||0); }, 0);
-    var totalBbm = bbmData.reduce(function(s,x){ return s + (Number(x.harga)||0); }, 0);
-    document.getElementById("statServisTotal").textContent = fmtRupiah(totalServis);
-    document.getElementById("statBbmTotal").textContent = fmtRupiah(totalBbm);
-    document.getElementById("statGrandTotal").textContent = fmtRupiah(totalServis + totalBbm);
-
-    var cons = consumptionMap();
-    var vals = Object.keys(cons).map(function(k){ return cons[k]; });
-    var avg = vals.length ? (vals.reduce(function(a,b){return a+b;},0) / vals.length) : null;
-    document.getElementById("statKonsumsi").innerHTML = avg
-      ? avg.toFixed(1) + ' <small>km/liter</small>'
-      : '&mdash;';
-  }
-
-  /* ================= Excel export ================= */
-  document.getElementById("btnExport").addEventListener("click", function(){
-    if(typeof XLSX === "undefined"){
-      toast("Perlu koneksi internet sekali untuk memuat pustaka Excel");
-      return;
-    }
-    var wsServisData = [
-      ["Tanggal","KM","Jenis Servis","Bengkel","Biaya","Catatan"]
-    ].concat(sortedServis().slice().reverse().map(function(x){
-      return [x.tanggal, x.km, x.jenis, x.bengkel||"", x.biaya, x.catatan||""];
-    }));
-    var consAsc = consumptionMap();
-    var wsBbmData = [
-      ["Tanggal","KM","Jenis BBM","Liter","Total Harga","Konsumsi (KM/L)","Catatan"]
-    ].concat(ascendingBbm().map(function(x){
-      return [x.tanggal, x.km, x.jenis, x.liter, x.harga, consAsc[x.id] ? Number(consAsc[x.id].toFixed(2)) : "", x.catatan||""];
-    }));
-
-    var wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(wsServisData), "Servis");
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(wsBbmData), "BBM");
-    var namaFile = "buku-servis-" + (new Date().toISOString().slice(0,10)) + ".xlsx";
-    XLSX.writeFile(wb, namaFile);
-    toast("File Excel diunduh");
-  });
-
-  /* ================= Excel import ================= */
-  document.getElementById("fileImport").addEventListener("change", function(e){
-    var file = e.target.files[0];
-    if(!file) return;
-    if(typeof XLSX === "undefined"){
-      toast("Perlu koneksi internet sekali untuk memuat pustaka Excel");
-      e.target.value = "";
-      return;
-    }
-    var reader = new FileReader();
-    reader.onload = function(evt){
-      try{
-        var wb = XLSX.read(evt.target.result, {type:"array"});
-        var addedServis = 0, addedBbm = 0;
-
-        if(wb.SheetNames.indexOf("Servis") !== -1){
-          var rowsS = XLSX.utils.sheet_to_json(wb.Sheets["Servis"], {header:1, raw:false, defval:""});
-          for(var i=1;i<rowsS.length;i++){
-            var r = rowsS[i];
-            if(!r || !r[0]) continue;
-            var tgl = normalizeDate(r[0]);
-            var km = Number(r[1])||0;
-            var jenis = String(r[2]||"").trim();
-            var dup = servisData.some(function(x){ return x.tanggal===tgl && x.km===km && x.jenis===jenis; });
-            if(dup) continue;
-            servisData.push({
-              id: uid(), tanggal: tgl, km: km, jenis: jenis,
-              bengkel: String(r[3]||"").trim(), biaya: Number(r[4])||0, catatan: String(r[5]||"").trim()
-            });
-            addedServis++;
-          }
-          save(LS_SERVIS, servisData);
+        // Background
+        const bgGrad = ctx.createLinearGradient(0, 0, size, size);
+        bgGrad.addColorStop(0, '#0A0A1A');
+        bgGrad.addColorStop(1, '#161638');
+        ctx.fillStyle = bgGrad;
+        if (maskable) {
+          ctx.fillRect(0, 0, size, size);
+        } else {
+          roundRectPath(ctx, 0, 0, size, size, size * 0.22);
+          ctx.fill();
         }
 
-        if(wb.SheetNames.indexOf("BBM") !== -1){
-          var rowsB = XLSX.utils.sheet_to_json(wb.Sheets["BBM"], {header:1, raw:false, defval:""});
-          for(var j=1;j<rowsB.length;j++){
-            var rb = rowsB[j];
-            if(!rb || !rb[0]) continue;
-            var tglB = normalizeDate(rb[0]);
-            var kmB = Number(rb[1])||0;
-            var jenisB = String(rb[2]||"").trim();
-            var dupB = bbmData.some(function(x){ return x.tanggal===tglB && x.km===kmB && x.jenis===jenisB; });
-            if(dupB) continue;
-            bbmData.push({
-              id: uid(), tanggal: tglB, km: kmB, jenis: jenisB,
-              liter: Number(rb[3])||0, harga: Number(rb[4])||0, catatan: String(rb[6]||"").trim()
-            });
-            addedBbm++;
-          }
-          save(LS_BBM, bbmData);
+        // Grid aksen tipis ala UI utama
+        ctx.strokeStyle = 'rgba(0,245,255,0.08)';
+        ctx.lineWidth = Math.max(1, size * 0.004);
+        const step = size / 10;
+        for (let i = 1; i < 10; i++) {
+          ctx.beginPath(); ctx.moveTo(i * step, 0); ctx.lineTo(i * step, size); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(0, i * step); ctx.lineTo(size, i * step); ctx.stroke();
         }
 
-        renderServis();
-        renderBbm();
-        renderDashboard();
-        toast("Impor selesai: " + addedServis + " servis, " + addedBbm + " BBM ditambahkan");
-      }catch(err){
-        toast("Gagal membaca file Excel. Pastikan formatnya sesuai.");
+        // Shield / vault shape
+        const pad = maskable ? size * 0.26 : size * 0.16;
+        const s = size - pad * 2;
+        const cx = size / 2;
+        const topY = pad;
+
+        ctx.save();
+        ctx.translate(cx, topY);
+        const w = s * 0.66;
+
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(w / 2, s * 0.14);
+        ctx.lineTo(w / 2, s * 0.44);
+        ctx.bezierCurveTo(w / 2, s * 0.74, w / 4, s * 0.92, 0, s);
+        ctx.bezierCurveTo(-w / 4, s * 0.92, -w / 2, s * 0.74, -w / 2, s * 0.44);
+        ctx.lineTo(-w / 2, s * 0.14);
+        ctx.closePath();
+
+        const strokeGrad = ctx.createLinearGradient(-w / 2, 0, w / 2, s);
+        strokeGrad.addColorStop(0, '#00F5FF');
+        strokeGrad.addColorStop(1, '#FF00FF');
+
+        ctx.shadowColor = 'rgba(0,245,255,0.9)';
+        ctx.shadowBlur = size * 0.03;
+        ctx.lineWidth = s * 0.05;
+        ctx.strokeStyle = strokeGrad;
+        ctx.stroke();
+
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = 'rgba(0,245,255,0.10)';
+        ctx.fill();
+
+        // Keyhole (lambang vault terkunci)
+        ctx.fillStyle = strokeGrad;
+        ctx.beginPath();
+        ctx.arc(0, s * 0.42, s * 0.10, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.moveTo(-s * 0.05, s * 0.44);
+        ctx.lineTo(s * 0.05, s * 0.44);
+        ctx.lineTo(s * 0.095, s * 0.66);
+        ctx.lineTo(-s * 0.095, s * 0.66);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.restore();
+        return canvas.toDataURL('image/png');
       }
-      e.target.value = "";
-    };
-    reader.readAsArrayBuffer(file);
-  });
 
-  function normalizeDate(v){
-    v = String(v).trim();
-    var m = v.match(/^(\d{4})-(\d{2})-(\d{2})/);
-    if(m) return m[1]+"-"+m[2]+"-"+m[3];
-    var d = new Date(v);
-    if(!isNaN(d.getTime())){
-      return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
-    }
-    return v;
-  }
+      // ---- 2. Generate seluruh ukuran ikon yang dibutuhkan manifest ----
+      const icon192 = drawVaultIcon(192, false);
+      const icon512 = drawVaultIcon(512, false);
+      const iconMaskable192 = drawVaultIcon(192, true);
+      const iconMaskable512 = drawVaultIcon(512, true);
 
-  /* ================= Reset all ================= */
-  document.getElementById("btnResetAll").addEventListener("click", function(){
-    askConfirm(
-      "Hapus semua data?",
-      "Seluruh catatan servis dan BBM akan dihapus permanen dari perangkat ini dan tidak dapat dikembalikan.",
-      function(){
-        servisData = [];
-        bbmData = [];
-        save(LS_SERVIS, servisData);
-        save(LS_BBM, bbmData);
-        renderServis();
-        renderBbm();
-        renderDashboard();
-        toast("Semua data telah dihapus");
+      // Pasang sebagai favicon & apple-touch-icon supaya tidak muncul ikon default/globe
+      document.getElementById('dynamic-favicon').setAttribute('href', icon192);
+      document.getElementById('apple-touch-icon').setAttribute('href', icon192);
+
+      // ---- 3. MANIFEST internal via Blob URL (Data URI JSON) ----
+      const manifestJson = {
+        id: "/cyber-vault",
+        name: "Cyber Vault - Smart Link Manager",
+        short_name: "CyberVault",
+        description: "Manajer tautan, folder & favorit bergaya cyberpunk dengan backup Excel/JSON.",
+        start_url: "./",
+        scope: "./",
+        display: "standalone",
+        orientation: "portrait-primary",
+        background_color: "#0A0A1A",
+        theme_color: "#0A0A1A",
+        categories: ["productivity", "utilities"],
+        icons: [
+          { src: icon192, sizes: "192x192", type: "image/png", purpose: "any" },
+          { src: icon512, sizes: "512x512", type: "image/png", purpose: "any" },
+          { src: iconMaskable192, sizes: "192x192", type: "image/png", purpose: "maskable" },
+          { src: iconMaskable512, sizes: "512x512", type: "image/png", purpose: "maskable" }
+        ]
+      };
+      const manifestBlob = new Blob([JSON.stringify(manifestJson)], { type: 'application/json' });
+      document.getElementById('pwa-manifest').setAttribute('href', URL.createObjectURL(manifestBlob));
+
+      // ---- 4. SERVICE WORKER internal via Blob URL (best-effort) ----
+      // CATATAN JUJUR: spesifikasi W3C Service Worker mewajibkan skema
+      // skrip SW berupa http/https, sehingga blob: akan DITOLAK browser
+      // (Chrome/Firefox/Safari) — ini pembatasan platform, bukan bug kode.
+      // Kita tetap mencoba (siapa tahu ada perubahan kebijakan browser di masa depan),
+      // dan gagal secara diam-diam (silent fallback) tanpa mengganggu aplikasi.
+      // Untungnya, kriteria instalasi PWA Chrome/Edge terbaru TIDAK lagi mewajibkan
+      // Service Worker aktif — cukup manifest valid + HTTPS/localhost — sehingga
+      // tombol "Install" tetap berfungsi normal walau SW ini tidak aktif.
+      if ('serviceWorker' in navigator) {
+        const swSource = `
+          const CACHE_NAME = 'cyber-vault-v1';
+          self.addEventListener('install', (e) => { self.skipWaiting(); });
+          self.addEventListener('activate', (e) => { self.clients.claim(); });
+          self.addEventListener('fetch', (e) => {
+            e.respondWith(
+              caches.open(CACHE_NAME).then(async (cache) => {
+                try {
+                  const fresh = await fetch(e.request);
+                  cache.put(e.request, fresh.clone());
+                  return fresh;
+                } catch (err) {
+                  const cached = await cache.match(e.request);
+                  return cached || Promise.reject(err);
+                }
+              })
+            );
+          });
+        `;
+        try {
+          const swBlob = new Blob([swSource], { type: 'text/javascript' });
+          const swUrl = URL.createObjectURL(swBlob);
+          navigator.serviceWorker.register(swUrl).catch(() => {
+            console.info('[Cyber Vault] Service Worker via Blob URL ditolak browser (dibatasi spesifikasi W3C). Aplikasi tetap berjalan & installable normal via manifest.');
+          });
+        } catch (err) {
+          console.info('[Cyber Vault] Service Worker tidak dapat didaftarkan dari Blob URL:', err);
+        }
       }
-    );
-  });
+    })();
+  </script>
 
-  /* ================= PWA: install prompt ================= */
-  var deferredPrompt = null;
-  var installBtn = document.getElementById("installBtn");
-  window.addEventListener("beforeinstallprompt", function(e){
-    e.preventDefault();
-    deferredPrompt = e;
-    installBtn.classList.add("show");
-  });
-  installBtn.addEventListener("click", function(){
-    if(!deferredPrompt) return;
-    installBtn.classList.add("show");
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.finally(function(){
-      deferredPrompt = null;
-      installBtn.classList.remove("show");
-    });
-  });
-  window.addEventListener("appinstalled", function(){
-    installBtn.classList.remove("show");
-    toast("Aplikasi terinstal di perangkat");
-  });
+  <!-- Script Vue 3 App Logic -->
+  <script>
+    const { createApp, ref, computed, onMounted } = Vue;
 
-  /* ================= PWA: inline Service Worker via Blob ================= */
-  if("serviceWorker" in navigator){
-    var swSource = [
-      'var CACHE_NAME = "bsd-cache-v1";',
-      'self.addEventListener("install", function(event){',
-      '  self.skipWaiting();',
-      '  event.waitUntil(caches.open(CACHE_NAME).then(function(cache){',
-      '    return cache.add(self.registration.scope);',
-      '  }).catch(function(){}));',
-      '});',
-      'self.addEventListener("activate", function(event){',
-      '  event.waitUntil(self.clients.claim());',
-      '});',
-      'self.addEventListener("fetch", function(event){',
-      '  if(event.request.method !== "GET") return;',
-      '  event.respondWith(',
-      '    caches.match(event.request).then(function(cached){',
-      '      var fetchPromise = fetch(event.request).then(function(response){',
-      '        if(response && response.ok){',
-      '          var copy = response.clone();',
-      '          caches.open(CACHE_NAME).then(function(cache){ cache.put(event.request, copy); });',
-      '        }',
-      '        return response;',
-      '      }).catch(function(){ return cached; });',
-      '      return cached || fetchPromise;',
-      '    })',
-      '  );',
-      '});'
-    ].join("\n");
-    var swBlob = new Blob([swSource], {type: "application/javascript"});
-    var swUrl = URL.createObjectURL(swBlob);
-    window.addEventListener("load", function(){
-      navigator.serviceWorker.register(swUrl).catch(function(){ /* offline caching not available */ });
-    });
-  }
+    createApp({
+      setup() {
+        const INITIAL_FOLDERS = [
+          { id: 'general', name: 'General' },
+          { id: 'work', name: 'Work' },
+          { id: 'personal', name: 'Personal' },
+          { id: 'learning', name: 'Learning' },
+          { id: 'tools', name: 'Tools' }
+        ];
 
-  /* ================= Init ================= */
-  renderServis();
-  renderBbm();
-  renderDashboard();
-})();
-</script>
+        const links = ref([]);
+        const folders = ref([]);
+        const activeTab = ref('home');
+        const searchQuery = ref('');
+        const selectedFolder = ref('all');
+        const selectedTag = ref(null);
+        const isAddOpen = ref(false);
+        const isFolderModalOpen = ref(false);
+        const editingLinkId = ref(null);
+        const copiedId = ref(null);
+        const deferredPrompt = ref(null);
 
+        const toast = ref({ show: false, message: '' });
 
-</body></html>
+        const showToast = (msg) => {
+          toast.value.message = msg;
+          toast.value.show = true;
+          setTimeout(() => { toast.value.show = false; }, 2500);
+        };
+
+        const formData = ref({
+          url: '',
+          title: '',
+          description: '',
+          folderId: 'general',
+          tags: '',
+          isFavorite: false
+        });
+
+        const folderForm = ref({ id: null, name: '' });
+
+        const loadData = () => {
+          const savedLinks = localStorage.getItem('cv_links');
+          const savedFolders = localStorage.getItem('cv_folders');
+          links.value = savedLinks ? JSON.parse(savedLinks) : [];
+          folders.value = savedFolders ? JSON.parse(savedFolders) : INITIAL_FOLDERS;
+        };
+
+        const saveData = () => {
+          localStorage.setItem('cv_links', JSON.stringify(links.value));
+          localStorage.setItem('cv_folders', JSON.stringify(folders.value));
+        };
+
+        const sanitizeUrl = (rawUrl) => {
+          let url = rawUrl.trim();
+          if (!/^https?:\/\//i.test(url)) {
+            url = 'https://' + url;
+          }
+          return url;
+        };
+
+        const extractDomain = (url) => {
+          try {
+            const parsed = new URL(sanitizeUrl(url));
+            return parsed.hostname.replace(/^www\./, '');
+          } catch {
+            return 'external-link';
+          }
+        };
+
+        const handleImageError = (e) => {
+          e.target.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="%2300F5FF"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>';
+        };
+
+        const openAddModal = () => {
+          editingLinkId.value = null;
+          formData.value = { url: '', title: '', description: '', folderId: 'general', tags: '', isFavorite: false };
+          isAddOpen.value = true;
+        };
+
+        const editLink = (link) => {
+          editingLinkId.value = link.id;
+          formData.value = {
+            url: link.url,
+            title: link.title,
+            description: link.description || '',
+            folderId: link.folderId,
+            tags: Array.isArray(link.tags) ? link.tags.join(', ') : '',
+            isFavorite: link.isFavorite
+          };
+          isAddOpen.value = true;
+        };
+
+        const saveLink = () => {
+          if (!formData.value.url) return;
+
+          const finalUrl = sanitizeUrl(formData.value.url);
+          const domain = extractDomain(finalUrl);
+          const tagArray = formData.value.tags
+            ? formData.value.tags.split(',').map(t => t.trim().replace(/^#/, '')).filter(Boolean)
+            : [];
+
+          if (editingLinkId.value) {
+            const idx = links.value.findIndex(l => l.id === editingLinkId.value);
+            if (idx !== -1) {
+              links.value[idx] = {
+                ...links.value[idx],
+                url: finalUrl,
+                title: formData.value.title || domain,
+                domain,
+                description: formData.value.description,
+                favicon: `https://www.google.com/s2/favicons?domain=${domain}&sz=64`,
+                folderId: formData.value.folderId || 'general',
+                tags: tagArray,
+                isFavorite: formData.value.isFavorite
+              };
+              showToast('Tautan berhasil diperbarui');
+            }
+          } else {
+            const newLink = {
+              id: 'l_' + Date.now(),
+              url: finalUrl,
+              title: formData.value.title || domain,
+              domain,
+              description: formData.value.description,
+              favicon: `https://www.google.com/s2/favicons?domain=${domain}&sz=64`,
+              folderId: formData.value.folderId || 'general',
+              tags: tagArray,
+              isFavorite: formData.value.isFavorite,
+              isPinned: false,
+              clickCount: 0,
+              createdAt: new Date().toISOString()
+            };
+            links.value.unshift(newLink);
+            showToast('Tautan baru ditambahkan');
+          }
+
+          saveData();
+          isAddOpen.value = false;
+        };
+
+        const togglePin = (id) => {
+          const link = links.value.find(l => l.id === id);
+          if (link) {
+            link.isPinned = !link.isPinned;
+            saveData();
+            showToast(link.isPinned ? 'Tautan disematkan' : 'Sematkan dilepas');
+          }
+        };
+
+        const toggleFavorite = (id) => {
+          const link = links.value.find(l => l.id === id);
+          if (link) {
+            link.isFavorite = !link.isFavorite;
+            saveData();
+          }
+        };
+
+        const deleteLink = (id) => {
+          links.value = links.value.filter(l => l.id !== id);
+          saveData();
+          showToast('Tautan dihapus');
+        };
+
+        const openLink = (link) => {
+          link.clickCount = (link.clickCount || 0) + 1;
+          saveData();
+          window.open(link.url, '_blank', 'noopener,noreferrer');
+        };
+
+        const copyUrl = (link) => {
+          navigator.clipboard.writeText(link.url);
+          copiedId.value = link.id;
+          showToast('URL Disalin ke Clipboard');
+          setTimeout(() => copiedId.value = null, 2000);
+        };
+
+        const shareLink = async (link) => {
+          if (navigator.share) {
+            try {
+              await navigator.share({ title: link.title, url: link.url });
+            } catch (e) {}
+          } else {
+            copyUrl(link);
+          }
+        };
+
+        const openAddFolderModal = () => {
+          folderForm.value = { id: null, name: '' };
+          isFolderModalOpen.value = true;
+        };
+
+        const openEditFolderModal = (folder) => {
+          folderForm.value = { id: folder.id, name: folder.name };
+          isFolderModalOpen.value = true;
+        };
+
+        const saveFolder = () => {
+          if (!folderForm.value.name.trim()) return;
+
+          if (folderForm.value.id) {
+            const f = folders.value.find(item => item.id === folderForm.value.id);
+            if (f) f.name = folderForm.value.name.trim();
+          } else {
+            folders.value.push({ id: 'f_' + Date.now(), name: folderForm.value.name.trim() });
+          }
+
+          saveData();
+          isFolderModalOpen.value = false;
+          showToast('Folder tersimpan');
+        };
+
+        const deleteFolder = (folder) => {
+          if (folder.id === 'general') return;
+          if (confirm(`Hapus folder "${folder.name}"? Tautan di dalamnya akan dipindah ke General.`)) {
+            links.value.forEach(l => { if (l.folderId === folder.id) l.folderId = 'general'; });
+            folders.value = folders.value.filter(f => f.id !== folder.id);
+            if (selectedFolder.value === folder.id) selectedFolder.value = 'all';
+            saveData();
+            showToast('Folder dihapus');
+          }
+        };
+
+        const clearAllData = () => {
+          if (confirm("Reset seluruh data aplikasi? Tindakan tidak bisa dibatalkan.")) {
+            localStorage.removeItem('cv_links');
+            localStorage.removeItem('cv_folders');
+            links.value = [];
+            folders.value = [...INITIAL_FOLDERS];
+            saveData();
+            showToast('Seluruh data berhasil dihapus');
+          }
+        };
+
+        const exportExcel = () => {
+          if (typeof XLSX === 'undefined') {
+            showToast('Library Excel gagal dimuat');
+            return;
+          }
+
+          const data = links.value.map((l, i) => ({
+            'No': i + 1,
+            'Judul': l.title,
+            'URL': l.url,
+            'Domain': l.domain,
+            'Folder': getFolderName(l.folderId),
+            'Tags': Array.isArray(l.tags) ? l.tags.join(', ') : '',
+            'Favorit': l.isFavorite ? 'Ya' : 'Tidak',
+            'Klik': l.clickCount || 0,
+            'Deskripsi': l.description || ''
+          }));
+
+          const ws = XLSX.utils.json_to_sheet(data);
+          const wb = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, ws, "Links");
+          XLSX.writeFile(wb, `CyberVault_Export_${new Date().toISOString().slice(0,10)}.xlsx`);
+          showToast('Export Excel berhasil');
+        };
+
+        const importExcel = (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          if (typeof XLSX === 'undefined') {
+            showToast('Library Excel gagal dimuat');
+            return;
+          }
+          const reader = new FileReader();
+          reader.onload = (evt) => {
+            try {
+              const wb = XLSX.read(evt.target.result, { type: 'array' });
+              const sheet = wb.Sheets[wb.SheetNames[0]];
+              const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
+
+              let importedCount = 0;
+              rows.forEach((row) => {
+                const rawUrl = String(row['URL'] || '').trim();
+                if (!rawUrl) return;
+
+                const finalUrl = sanitizeUrl(rawUrl);
+                const domain = String(row['Domain'] || '').trim() || extractDomain(finalUrl);
+                const folderName = String(row['Folder'] || 'General').trim() || 'General';
+
+                let folder = folders.value.find(f => f.name.toLowerCase() === folderName.toLowerCase());
+                if (!folder) {
+                  folder = { id: 'f_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6), name: folderName };
+                  folders.value.push(folder);
+                }
+
+                const tagsRaw = String(row['Tags'] || '');
+                const tagArray = tagsRaw ? tagsRaw.split(',').map(t => t.trim().replace(/^#/, '')).filter(Boolean) : [];
+                const isFavorite = String(row['Favorit'] || '').trim().toLowerCase() === 'ya';
+                const clickCount = parseInt(row['Klik'], 10) || 0;
+
+                links.value.push({
+                  id: 'l_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8),
+                  url: finalUrl,
+                  title: String(row['Judul'] || '').trim() || domain,
+                  domain,
+                  description: String(row['Deskripsi'] || ''),
+                  favicon: `https://www.google.com/s2/favicons?domain=${domain}&sz=64`,
+                  folderId: folder.id,
+                  tags: tagArray,
+                  isFavorite,
+                  isPinned: false,
+                  clickCount,
+                  createdAt: new Date().toISOString()
+                });
+                importedCount++;
+              });
+
+              saveData();
+              showToast(importedCount > 0 ? `${importedCount} tautan berhasil diimport dari Excel` : 'Tidak ada data valid ditemukan di file Excel');
+            } catch (err) {
+              showToast('Gagal membaca file Excel. Pastikan formatnya sesuai hasil Export.');
+            } finally {
+              e.target.value = '';
+            }
+          };
+          reader.readAsArrayBuffer(file);
+        };
+
+        const exportJSON = () => {
+          const blob = new Blob([JSON.stringify({ links: links.value, folders: folders.value }, null, 2)], { type: 'application/json' });
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = `cybervault_backup_${Date.now()}.json`;
+          a.click();
+          showToast('Backup JSON diunduh');
+        };
+
+        const importJSON = (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = (evt) => {
+            try {
+              const res = JSON.parse(evt.target.result);
+              if (res.links && res.folders) {
+                links.value = res.links;
+                folders.value = res.folders;
+                saveData();
+                showToast('Import JSON Berhasil');
+              }
+            } catch {
+              showToast('Format JSON tidak valid');
+            }
+          };
+          reader.readAsText(file);
+        };
+
+        const installPWA = () => {
+          if (deferredPrompt.value) {
+            deferredPrompt.value.prompt();
+            deferredPrompt.value = null;
+          }
+        };
+
+        const getFolderName = (fId) => (folders.value.find(f => f.id === fId) || {}).name || 'General';
+        const getLinkCountByFolder = (fId) => links.value.filter(l => l.folderId === fId).length;
+
+        const allTags = computed(() => Array.from(new Set(links.value.flatMap(l => l.tags || []))));
+        const favoriteCount = computed(() => links.value.filter(l => l.isFavorite).length);
+        const favoriteLinks = computed(() => links.value.filter(l => l.isFavorite));
+        const totalClicks = computed(() => links.value.reduce((acc, l) => acc + (l.clickCount || 0), 0));
+
+        const filteredLinks = computed(() => {
+          return links.value
+            .filter(link => {
+              const q = searchQuery.value.toLowerCase();
+              const matchesSearch = link.title.toLowerCase().includes(q) ||
+                link.url.toLowerCase().includes(q) ||
+                (link.tags && link.tags.some(t => t.toLowerCase().includes(q)));
+
+              const matchesFolder = selectedFolder.value === 'all' || link.folderId === selectedFolder.value;
+              const matchesTag = !selectedTag.value || (link.tags && link.tags.includes(selectedTag.value));
+
+              return matchesSearch && matchesFolder && matchesTag;
+            })
+            .sort((a, b) => (b.isPinned ? 1 : 0) - (a.isPinned ? 1 : 0));
+        });
+
+        onMounted(() => {
+          loadData();
+          window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt.value = e;
+          });
+        });
+
+        return {
+          links, folders, activeTab, searchQuery, selectedFolder, selectedTag,
+          isAddOpen, isFolderModalOpen, editingLinkId, copiedId, deferredPrompt,
+          formData, folderForm, toast, allTags, favoriteCount, favoriteLinks, totalClicks, filteredLinks,
+          openAddModal, editLink, saveLink, togglePin, toggleFavorite, deleteLink, openLink, copyUrl, shareLink,
+          openAddFolderModal, openEditFolderModal, saveFolder, deleteFolder, clearAllData,
+          exportExcel, importExcel, exportJSON, importJSON, installPWA, getFolderName, getLinkCountByFolder, handleImageError
+        };
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
