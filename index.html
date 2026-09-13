@@ -1,66 +1,227 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>GarasiKu Premium Pro</title>
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <style>
-/* Soft Premium Blue & Slate Dark Mode Palette */
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="theme-color" content="#12151b">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>GarasiKu Pro — Buku Servis & BBM Digital</title>
+<link rel="icon" id="pwaFaviconLink" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%23ff7a1f'/%3E%3Cpath d='M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2' stroke='%2312151b' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='7' cy='17' r='2' fill='%2312151b'/%3E%3Ccircle cx='17' cy='17' r='2' fill='%2312151b'/%3E%3C/svg%3E">
+<!-- ===== PWA: manifest & ikon dipasang secara dinamis via Blob URL (lihat script bootstrap di bawah) ===== -->
+<link rel="manifest" id="pwaManifestLink">
+<link rel="apple-touch-icon" id="pwaAppleTouchIcon">
+<meta name="apple-mobile-web-app-title" content="GarasiKu">
+<meta name="application-name" content="GarasiKu">
+<script>
+/* ============================================================
+   GarasiKu PWA Bootstrap
+   - Manifest internal dibangun sebagai Data URI JSON lalu di-serve via Blob URL
+   - Ikon kustom (SVG asli GarasiKu) dikonversi ke PNG 192x192 & 512x512 secara internal (canvas), tanpa file eksternal
+   - Service Worker internal (kode JS dibangun sebagai string) diserve via Blob URL
+   Catatan teknis: spesifikasi Service Worker mengharuskan scriptURL bersskema http/https,
+   sehingga sebagian browser modern (Chrome/Firefox) menolak registrasi SW lewat blob: (TypeError).
+   Kode di bawah tetap mencoba mendaftarkannya (sesuai permintaan), dan akan gagal secara "graceful"
+   di browser yang menerapkan pembatasan tsb — instalasi PWA lewat manifest TETAP berjalan normal.
+   ============================================================ */
+(function () {
+    window.__pwaDeferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', function (e) {
+        e.preventDefault();
+        window.__pwaDeferredPrompt = e;
+    });
+    window.addEventListener('appinstalled', function () {
+        window.__pwaDeferredPrompt = null;
+        var btn = document.getElementById('installAppBtn');
+        if (btn) btn.style.display = 'none';
+    });
+
+    var ICON_SVG = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='6' fill='#ff7a1f'/><path d='M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2' stroke='#12151b' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/><circle cx='7' cy='17' r='2' fill='#12151b'/><circle cx='17' cy='17' r='2' fill='#12151b'/></svg>";
+    var ICON_SVG_URI = 'data:image/svg+xml;base64,' + btoa(ICON_SVG);
+
+    function svgKePng(size) {
+        return new Promise(function (resolve) {
+            var img = new Image();
+            img.onload = function () {
+                try {
+                    var canvas = document.createElement('canvas');
+                    canvas.width = size; canvas.height = size;
+                    var ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, size, size);
+                    resolve(canvas.toDataURL('image/png'));
+                } catch (err) {
+                    resolve(ICON_SVG_URI);
+                }
+            };
+            img.onerror = function () { resolve(ICON_SVG_URI); };
+            img.src = ICON_SVG_URI;
+        });
+    }
+
+    function pasangServiceWorker() {
+        if (!('serviceWorker' in navigator)) return;
+        var swSource = [
+            "const CACHE_NAME = 'garasiku-cache-v1';",
+            "self.addEventListener('install', function (e) { self.skipWaiting(); });",
+            "self.addEventListener('activate', function (e) { e.waitUntil(self.clients.claim()); });",
+            "self.addEventListener('fetch', function (e) {",
+            "  if (e.request.method !== 'GET') return;",
+            "  e.respondWith(",
+            "    caches.match(e.request).then(function (cached) {",
+            "      const jaringan = fetch(e.request).then(function (res) {",
+            "        if (res && res.status === 200) {",
+            "          const salinan = res.clone();",
+            "          caches.open(CACHE_NAME).then(function (cache) { cache.put(e.request, salinan); });",
+            "        }",
+            "        return res;",
+            "      }).catch(function () { return cached; });",
+            "      return cached || jaringan;",
+            "    })",
+            "  );",
+            "});"
+        ].join('\n');
+        var swBlob = new Blob([swSource], { type: 'text/javascript' });
+        var swURL = URL.createObjectURL(swBlob);
+        navigator.serviceWorker.register(swURL).then(function (reg) {
+            console.log('[GarasiKu] Service Worker (Blob URL) berhasil terdaftar, scope:', reg.scope);
+        }).catch(function (err) {
+            console.info('[GarasiKu] Registrasi Service Worker via Blob URL ditolak browser ini (batasan spesifikasi keamanan: scriptURL wajib http/https). Instalasi PWA via manifest tetap berfungsi normal.', err);
+        });
+    }
+
+    function pasangManifestDanIkon() {
+        return Promise.all([svgKePng(192), svgKePng(512)]).then(function (hasil) {
+            var icon192 = hasil[0], icon512 = hasil[1];
+            var baseUrl = location.href.split('#')[0].split('?')[0];
+            var scopeUrl = baseUrl.substring(0, baseUrl.lastIndexOf('/') + 1) || baseUrl;
+
+            var manifest = {
+                name: 'GarasiKu Pro — Buku Servis & BBM Digital',
+                short_name: 'GarasiKu',
+                description: 'Catat servis kendaraan dan pengisian BBM secara digital, praktis, dan rapi.',
+                start_url: baseUrl,
+                id: baseUrl,
+                scope: scopeUrl,
+                display: 'standalone',
+                orientation: 'portrait-primary',
+                background_color: '#12151b',
+                theme_color: '#12151b',
+                icons: [
+                    { src: icon192, sizes: '192x192', type: 'image/png', purpose: 'any' },
+                    { src: icon512, sizes: '512x512', type: 'image/png', purpose: 'any' },
+                    { src: icon512, sizes: '512x512', type: 'image/png', purpose: 'maskable' }
+                ]
+            };
+
+            var manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+            var manifestURL = URL.createObjectURL(manifestBlob);
+
+            var linkManifest = document.getElementById('pwaManifestLink');
+            if (linkManifest) linkManifest.setAttribute('href', manifestURL);
+
+            var linkAppleIcon = document.getElementById('pwaAppleTouchIcon');
+            if (linkAppleIcon) linkAppleIcon.setAttribute('href', icon192);
+
+            var linkFavicon = document.getElementById('pwaFaviconLink');
+            if (linkFavicon) linkFavicon.setAttribute('href', icon192);
+        });
+    }
+
+    function mulaiPWA() {
+        pasangManifestDanIkon();
+        pasangServiceWorker();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', mulaiPWA);
+    } else {
+        mulaiPWA();
+    }
+})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+/* ============================================================
+   GarasiKu Pro — Buku Servis & BBM Digital (UI/UX Refined)
+   ============================================================ */
 :root {
-    --bg-main: #F8FAFC;
-    --bg-container: #FFFFFF;
-    --bg-card: #FFFFFF;
-    --bg-input: #F1F5F9;
-    --primary: #2563EB;
-    --primary-glow: rgba(37, 99, 235, 0.08);
-    --secondary: #3B82F6;
-    --success: #10B981;
-    --warning: #F59E0B;
-    --danger: #EF4444;
-    --text-main: #0F172A;
-    --text-muted: #64748B;
-    --border: #E2E8F0;
-    --accent: #2563EB;
-    --header-bg: rgba(255, 255, 255, 0.85);
-    --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.05);
-    --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.05);
-    --hero-bg: linear-gradient(135deg, #1E40AF 0%, #2563EB 100%);
-    --hero-text: #FFFFFF;
-    --badge-bg: rgba(255, 255, 255, 0.18);
-    --badge-text: #FFFFFF;
-    --node-border: #F1F5F9;
+    --bg: #12151b;
+    --bg-alt: #171b23;
+    --surface: #1c212b;
+    --surface-2: #232935;
+    --surface-hover: #2a3140;
+    --ink: #f5f2ea;
+    --ink-dim: #a7adb8;
+    --ink-faint: #6b7280;
+    --line: #2a303c;
+    --line-strong: #394152;
+    --accent: #ff7a1f;
+    --accent-ink: #191008;
+    --accent-soft: rgba(255, 122, 31, 0.14);
+    --accent-2: #2dd4bf;
+    --accent-2-ink: #06221f;
+    --accent-2-soft: rgba(45, 212, 191, 0.14);
+    --good: #4ade80;
+    --warn: #fbbf24;
+    --danger: #fb5a5a;
+    --danger-soft: rgba(251, 90, 90, 0.12);
+    --plate-bg: #14171d;
+    --plate-ink: #f4e2a6;
+    --plate-border: #454b57;
+    --radius-sm: 10px;
+    --radius-md: 16px;
+    --radius-lg: 22px;
+    --shadow-1: 0 1px 2px rgba(0,0,0,.35);
+    --shadow-2: 0 14px 30px -12px rgba(0,0,0,.55);
+    --header-bg: rgba(18, 21, 27, 0.85);
+    --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    --font-mono: 'JetBrains Mono', "SFMono-Regular", Consolas, monospace;
 }
 
-[data-theme="dark"] {
-    --bg-main: #090D16;
-    --bg-container: #0F172A;
-    --bg-card: #1E293B;
-    --bg-input: #0F172A;
-    --primary: #3B82F6;
-    --primary-glow: rgba(59, 130, 246, 0.15);
-    --secondary: #60A5FA;
-    --success: #34D399;
-    --warning: #FBBF24;
-    --danger: #F87171;
-    --text-main: #F8FAFC;
-    --text-muted: #94A3B8;
-    --border: #334155;
-    --accent: #3B82F6;
-    --header-bg: rgba(15, 23, 42, 0.85);
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
-    --hero-bg: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
-    --hero-text: #F8FAFC;
-    --badge-bg: rgba(255, 255, 255, 0.1);
-    --badge-text: #F8FAFC;
-    --node-border: #334155;
+[data-theme="light"] {
+    --bg: #f1ebdc;
+    --bg-alt: #ebe3cd;
+    --surface: #fffcf5;
+    --surface-2: #f7f0dd;
+    --surface-hover: #efe5c9;
+    --ink: #211d15;
+    --ink-dim: #6c6353;
+    --ink-faint: #948a72;
+    --line: #ddd0ab;
+    --line-strong: #c9b98a;
+    --accent: #d9540a;
+    --accent-ink: #fff9ee;
+    --accent-soft: rgba(217, 84, 10, 0.10);
+    --accent-2: #0f7a72;
+    --accent-2-ink: #f2fbf9;
+    --accent-2-soft: rgba(15, 122, 114, 0.10);
+    --good: #15803d;
+    --warn: #b45309;
+    --danger: #c0392b;
+    --danger-soft: rgba(192, 57, 43, 0.08);
+    --plate-bg: #1d1a12;
+    --plate-ink: #f7e7ac;
+    --plate-border: #3a3428;
+    --header-bg: rgba(241, 235, 220, 0.88);
+    --shadow-1: 0 1px 2px rgba(60,50,20,.08);
+    --shadow-2: 0 16px 34px -14px rgba(60,50,20,.20);
 }
+
+* { box-sizing: border-box; }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
-    background-color: var(--bg-main);
-    color: var(--text-main);
+    font-family: var(--font-body);
+    background-color: var(--bg);
+    background-image:
+        radial-gradient(circle at 12% 0%, var(--accent-soft), transparent 40%),
+        radial-gradient(circle at 90% 8%, var(--accent-2-soft), transparent 35%);
+    background-attachment: fixed;
+    color: var(--ink);
     margin: 0;
     padding: 0;
     display: flex;
@@ -68,22 +229,23 @@ body {
     min-height: 100vh;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 .app-container {
     width: 100%;
-    max-width: 1024px;
-    background: var(--bg-container);
+    max-width: 1040px;
+    background: var(--bg-alt);
     min-height: 100vh;
-    padding-bottom: 90px;
+    padding-bottom: 100px;
     box-sizing: border-box;
     position: relative;
-    box-shadow: var(--shadow-md);
-    transition: background-color 0.3s ease;
+    box-shadow: var(--shadow-2);
+    transition: background-color 0.25s ease;
     margin: 0 auto;
 }
 
+/* ---------- Header ---------- */
 header {
     padding: 16px 20px;
     display: flex;
@@ -91,45 +253,73 @@ header {
     align-items: center;
     position: sticky;
     top: 0;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
     background: var(--header-bg);
-    z-index: 10;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+    z-index: 20;
+    border-bottom: 1px solid var(--line);
+    transition: background-color 0.25s ease, border-color 0.25s ease;
 }
 
-header h1 {
-    font-size: 20px;
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: linear-gradient(155deg, var(--accent), #c85c0f);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 6px 16px -6px var(--accent);
+}
+
+.brand-icon svg { width: 22px; height: 22px; stroke: var(--accent-ink); }
+
+.brand-text h1 {
+    font-family: var(--font-display);
+    font-size: 19px;
     font-weight: 700;
     margin: 0;
-    letter-spacing: -0.5px;
-    color: var(--text-main);
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    letter-spacing: -0.2px;
+    color: var(--ink);
+    line-height: 1.1;
 }
 
-header h1 span {
-    font-weight: 400;
-    color: var(--secondary);
+.brand-text h1 em {
+    font-style: normal;
+    color: var(--accent);
 }
 
-.header-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+.brand-text small {
+    display: block;
+    font-size: 10.5px;
+    color: var(--ink-faint);
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    margin-top: 2px;
 }
 
+/* Desktop Nav Header */
 .desktop-nav {
     display: none;
     gap: 6px;
-    margin-right: 12px;
+    background: var(--surface);
+    padding: 5px;
+    border-radius: 14px;
+    border: 1px solid var(--line);
 }
 
 .desktop-nav-item {
     background: transparent;
     border: none;
-    color: var(--text-muted);
+    color: var(--ink-dim);
+    font-family: var(--font-display);
     font-size: 13px;
     font-weight: 600;
     padding: 8px 16px;
@@ -138,225 +328,279 @@ header h1 span {
     transition: all 0.2s ease;
 }
 
-.desktop-nav-item:hover, .desktop-nav-item.active {
-    background: var(--primary-glow);
-    color: var(--primary);
-}
+.desktop-nav-item:hover { color: var(--ink); }
+.desktop-nav-item.active { background: var(--accent); color: var(--accent-ink); }
 
-.icon-btn {
-    background: transparent;
-    border: none;
-    color: var(--text-main);
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    padding: 0;
-    position: relative;
-}
-
-.icon-btn:hover {
-    background: var(--primary-glow);
-}
-
-.icon-btn svg {
-    width: 20px;
-    height: 20px;
-    stroke: var(--text-main);
-    fill: none;
-    transition: transform 0.2s ease;
-}
-
-.icon-btn:active svg {
-    transform: scale(0.95);
-}
-
-.menu-dropdown-wrapper {
-    position: relative;
-}
-
-.menu-dropdown-content {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 48px;
-    background-color: var(--bg-card);
-    min-width: 220px;
-    box-shadow: var(--shadow-md);
-    border-radius: 16px;
-    border: 1px solid var(--border);
-    z-index: 1000;
-    overflow: hidden;
-    padding: 6px 0;
-}
-
-.menu-dropdown-wrapper.show .menu-dropdown-content {
-    display: block;
-    animation: fadeIn 0.2s ease-out;
-}
-
-.dropdown-item {
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-main);
-    cursor: pointer;
-    transition: background 0.2s ease;
-    background: transparent;
-    border: none;
-    width: 100%;
-    text-align: left;
-    box-sizing: border-box;
-}
-
-.dropdown-item:hover {
-    background: var(--primary-glow);
-    color: var(--primary);
-}
-
-.dropdown-item svg {
-    width: 18px;
-    height: 18px;
-    stroke: currentColor;
-    fill: none;
-}
-
+/* ---------- Tabs ---------- */
 .tab-content {
-    padding: 20px;
+    padding: 18px;
     display: none;
-    animation: cubic-bezier(0.4, 0, 0.2, 1) fadeIn 0.3s forwards;
 }
 
 .tab-content.active {
     display: block;
+    animation: riseIn 0.28s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
+@keyframes riseIn {
+    from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-.card-modern {
-    background: var(--bg-card);
-    border-radius: 20px;
-    padding: 24px;
-    border: 1px solid var(--border);
-    margin-bottom: 20px;
-    transition: background-color 0.3s ease;
+/* ---------- Ringkasan hero ---------- */
+.ringkasan-hero {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-bottom: 18px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-1);
 }
 
-.filter-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 12px 16px;
-    margin-bottom: 16px;
-    box-shadow: var(--shadow-sm);
+.ringkasan-hero::before {
+    content: "";
+    position: absolute;
+    top: -40%;
+    right: -10%;
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, var(--accent-soft), transparent 70%);
+    pointer-events: none;
 }
+
+.ringkasan-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    position: relative;
+}
+
+.ringkasan-label {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--ink-faint);
+    margin: 0 0 6px 0;
+}
+
+.ringkasan-value {
+    font-family: var(--font-mono);
+    font-size: 27px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+}
+
+.ringkasan-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-radius: 10px;
+    padding: 6px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+.ringkasan-badge svg { width: 14px; height: 14px; stroke: currentColor; }
+
+.ringkasan-split {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    position: relative;
+}
+
+.ringkasan-chip {
+    flex: 1;
+    background: var(--bg-alt);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+}
+
+.ringkasan-chip .rc-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--ink-faint);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.ringkasan-chip .rc-label svg { width: 12px; height: 12px; stroke: currentColor; }
+.ringkasan-chip .rc-value {
+    font-family: var(--font-mono);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-top: 4px;
+}
+
+/* ---------- Filter toolbar ---------- */
+.filter-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 12px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-1);
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filter-group { flex: 1; min-width: 140px; }
 
 .filter-card label {
+    display: block;
     text-align: left;
     margin-bottom: 6px;
     font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
     font-weight: 700;
+    color: var(--ink-faint);
 }
 
+/* ---------- Summary banner ---------- */
 .summary-banner {
     display: flex;
-    gap: 12px;
-    margin-bottom: 20px;
+    gap: 10px;
+    margin-bottom: 18px;
 }
 
 .summary-card {
     flex: 1;
-    background: var(--bg-input);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 16px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
     box-sizing: border-box;
+    transition: all 0.2s ease;
 }
 
+.summary-card:hover { border-color: var(--accent); }
+
 .summary-card .s-label {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--ink-faint);
 }
 
 .summary-card .s-value {
-    font-size: 18px;
+    font-family: var(--font-mono);
+    font-size: 17px;
     font-weight: 700;
-    color: var(--primary);
-    margin-top: 4px;
+    color: var(--accent);
+    margin-top: 5px;
 }
 
-.form-group {
+#tabFuelHistory .summary-card .s-value { color: var(--accent-2); }
+
+/* ---------- Cards / forms ---------- */
+.card-modern {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: 22px;
+    border: 1px solid var(--line);
     margin-bottom: 18px;
+    box-shadow: var(--shadow-1);
 }
+
+.form-heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    padding-bottom: 16px;
+    border-bottom: 1px dashed var(--line-strong);
+}
+
+.form-heading-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--accent-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.form-heading-icon svg { width: 18px; height: 18px; stroke: var(--accent); }
+#tabFuelForm .form-heading-icon { background: var(--accent-2-soft); }
+#tabFuelForm .form-heading-icon svg { stroke: var(--accent-2); }
+
+.form-heading h2 {
+    font-family: var(--font-display);
+    font-size: 16px;
+    margin: 0;
+    color: var(--ink);
+}
+.form-heading p {
+    margin: 2px 0 0 0;
+    font-size: 12px;
+    color: var(--ink-faint);
+}
+
+.form-group { margin-bottom: 16px; }
 
 label {
     display: block;
     font-size: 12px;
-    color: var(--text-muted);
-    margin-bottom: 8px;
-    letter-spacing: 0.2px;
-    font-weight: 600;
+    color: var(--ink-dim);
+    margin-bottom: 7px;
+    font-weight: 700;
     text-align: left;
 }
 
 input, textarea, select {
     width: 100%;
     padding: 12px 14px;
-    background: var(--bg-input);
-    border: 1px solid var(--border);
+    background: var(--bg-alt);
+    border: 1.5px solid var(--line);
     border-radius: 12px;
-    color: var(--text-main);
+    color: var(--ink);
     font-size: 14px;
+    font-family: var(--font-body);
     box-sizing: border-box;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
     font-weight: 500;
 }
 
 input:focus, textarea:focus, select:focus {
     outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px var(--primary-glow);
-    background: var(--bg-card);
+    border-color: var(--accent);
+    background: var(--surface);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+#tabFuelForm input:focus, #tabFuelForm select:focus {
+    border-color: var(--accent-2);
+    box-shadow: 0 0 0 3px var(--accent-2-soft);
 }
 
 input[readonly] {
-    opacity: 0.6;
-    background: var(--border);
+    opacity: 1;
+    background: var(--surface-2);
+    color: var(--ink-dim);
     cursor: not-allowed;
+    border-style: dashed;
 }
 
-.flex-group {
-    display: flex;
-    gap: 12px;
-}
-
-.flex-item {
-    flex: 1;
-}
+.flex-group { display: flex; gap: 12px; }
+.flex-item { flex: 1; }
 
 .btn-primary {
-    background: var(--primary);
-    color: #FFFFFF;
+    background: var(--accent);
+    color: var(--accent-ink);
     border: none;
-    padding: 14px;
-    border-radius: 12px;
+    padding: 15px;
+    border-radius: 13px;
     font-size: 14px;
-    font-weight: 600;
+    font-family: var(--font-display);
+    font-weight: 700;
     cursor: pointer;
     width: 100%;
     display: flex;
@@ -364,35 +608,67 @@ input[readonly] {
     justify-content: center;
     gap: 8px;
     transition: all 0.2s ease;
+    box-shadow: 0 10px 24px -10px var(--accent);
 }
 
-.btn-primary:hover {
-    background: var(--secondary);
+#tabFuelForm .btn-primary {
+    background: var(--accent-2);
+    color: var(--accent-2-ink);
+    box-shadow: 0 10px 24px -10px var(--accent-2);
 }
 
-.btn-primary:active {
-    transform: scale(0.98);
-}
+.btn-primary:hover { filter: brightness(1.06); transform: translateY(-1px); }
+.btn-primary:active { transform: scale(0.98); }
 
+.btn-ghost {
+    background: var(--surface-2);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: var(--font-display);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.btn-ghost:hover { background: var(--surface-hover); }
+
+.btn-danger {
+    background: var(--danger);
+    color: #fff;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: var(--font-display);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.btn-danger:hover { filter: brightness(1.08); }
+
+/* ---------- Vehicle service card ("kartu servis") ---------- */
 .vehicle-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    margin-bottom: 20px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    margin-bottom: 18px;
     overflow: hidden;
-    box-shadow: var(--shadow-sm);
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+    box-shadow: var(--shadow-1);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
+.vehicle-card:hover { box-shadow: var(--shadow-2); }
 
 .vehicle-hero {
-    padding: 16px 20px;
-    background: var(--hero-bg);
-    color: var(--hero-text);
+    padding: 16px 18px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     gap: 10px;
+    background: var(--surface-2);
+    border-bottom: 1px dashed var(--line-strong);
 }
 
 .v-info-group {
@@ -405,122 +681,126 @@ input[readonly] {
 
 .v-meta-title {
     margin: 0;
-    font-size: 16px;
+    font-family: var(--font-display);
+    font-size: 15.5px;
     font-weight: 700;
-    letter-spacing: -0.2px;
+    letter-spacing: -0.1px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: #FFFFFF;
+    color: var(--ink);
 }
 
 .v-badge {
-    background: var(--badge-bg);
-    backdrop-filter: blur(8px);
-    color: var(--badge-text);
-    padding: 4px 10px;
-    border-radius: 8px;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: var(--plate-bg);
+    color: var(--plate-ink);
+    padding: 4px 9px;
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    border: 1.5px solid var(--plate-border);
     white-space: nowrap;
 }
 
 .v-badge-year {
-    background: rgba(245, 158, 11, 0.2);
-    color: #FDE68A;
-    border: 1px solid rgba(245, 158, 11, 0.3);
+    background: var(--accent-2-soft);
+    color: var(--accent-2);
+    font-family: var(--font-body);
+    border: 1px solid transparent;
+    letter-spacing: 0.2px;
+    font-size: 11px;
 }
 
-.v-total-cost {
-    text-align: right;
-    flex-shrink: 0;
-}
-
-.v-total-cost div {
-    font-size: 10px;
-    color: rgba(255, 255, 255, 0.8);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
+.v-total-cost { text-align: right; flex-shrink: 0; }
+.v-total-cost div { font-size: 10px; color: var(--ink-faint); font-weight: 700; }
 
 .v-total-cost font {
-    font-size: 15px;
+    font-family: var(--font-mono);
+    font-size: 15.5px;
     font-weight: 700;
-    color: #FFFFFF;
+    color: var(--accent);
     display: block;
     margin-top: 2px;
 }
+#fuelHistoryContainer .v-total-cost font { color: var(--accent-2); }
 
-.history-list {
-    padding: 8px 20px;
-}
+.history-list { padding: 4px 18px 4px; }
 
 .history-node {
-    padding: 14px 0;
-    border-bottom: 1px solid var(--node-border);
+    padding: 13px 0;
+    border-bottom: 1px dashed var(--line);
 }
-
-.history-node:last-child {
-    border-bottom: none;
-}
+.history-node:last-child { border-bottom: none; }
 
 .node-top {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    font-weight: 600;
-    font-size: 14px;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 13.5px;
+    color: var(--ink);
+}
+.node-top > span:last-child {
+    font-family: var(--font-mono);
+    flex-shrink: 0;
 }
 
 .node-sub {
-    font-size: 12px;
-    color: var(--text-muted);
-    margin: 6px 0;
+    font-size: 11.5px;
+    color: var(--ink-faint);
+    margin: 6px 0 0;
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
+    font-weight: 600;
+    font-family: var(--font-mono);
 }
 
 .node-notes {
     font-size: 12px;
-    background: var(--bg-input);
+    background: var(--bg-alt);
     padding: 8px 12px;
     border-radius: 10px;
-    margin-top: 6px;
-    color: var(--text-main);
+    margin-top: 8px;
+    color: var(--ink-dim);
     display: block;
-    border: 1px solid var(--border);
+    border: 1px solid var(--line);
+    font-weight: 500;
+    font-family: var(--font-body);
 }
 
 .node-actions {
     display: flex;
-    gap: 16px;
+    gap: 14px;
     margin-top: 10px;
 }
 
 .action-link {
-    font-size: 12px;
-    font-weight: 600;
+    font-size: 11.5px;
+    font-weight: 700;
+    font-family: var(--font-display);
     cursor: pointer;
     background: none;
     border: none;
-    padding: 0;
+    padding: 4px 0;
     display: flex;
     align-items: center;
     gap: 4px;
+    transition: opacity 0.15s ease;
 }
-
-.action-edit { color: var(--warning); }
+.action-link:hover { opacity: 0.72; }
+.action-edit { color: var(--warn); }
 .action-delete { color: var(--danger); }
 
+/* ---------- Checkbox / chip grid ---------- */
 .checkbox-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    max-height: 250px;
+    gap: 9px;
+    max-height: 260px;
     overflow-y: auto;
     padding: 2px;
 }
@@ -529,228 +809,439 @@ input[readonly] {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 12px;
-    color: var(--text-muted);
-    font-weight: 500;
-    background: var(--bg-input);
-    border: 1px solid var(--border);
+    font-size: 12.5px;
+    color: var(--ink-dim);
+    font-weight: 600;
+    background: var(--bg-alt);
+    border: 1.5px solid var(--line);
     padding: 10px 12px;
-    border-radius: 12px;
+    border-radius: 11px;
     cursor: pointer;
     user-select: none;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
     text-align: left;
 }
 
 .checkbox-label:has(input:checked) {
-    background: var(--primary-glow);
-    border-color: var(--primary);
-    color: var(--primary);
-    font-weight: 600;
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent);
+    font-weight: 700;
+}
+#tabFuelForm .checkbox-label:has(input:checked) {
+    background: var(--accent-2-soft);
+    border-color: var(--accent-2);
+    color: var(--accent-2);
 }
 
 .checkbox-label input[type="checkbox"],
 .checkbox-label input[type="radio"] {
     width: 16px;
     height: 16px;
-    accent-color: var(--primary);
+    accent-color: var(--accent);
     margin: 0;
     cursor: pointer;
+    flex-shrink: 0;
 }
+#tabFuelForm .checkbox-label input[type="radio"] { accent-color: var(--accent-2); }
 
+/* ---------- Bottom Navigation & Floating FAB ---------- */
 .bottom-nav {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: 64px;
+    bottom: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 24px);
+    max-width: 440px;
+    height: 68px;
     background: var(--header-bg);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--line);
+    border-radius: 24px;
     display: flex;
     justify-content: space-around;
     align-items: center;
     z-index: 100;
-    padding-bottom: 4px;
+    box-shadow: var(--shadow-2);
+    padding: 0 10px;
     box-sizing: border-box;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .nav-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: var(--text-muted);
+    justify-content: center;
+    color: var(--ink-faint);
     cursor: pointer;
-    font-size: 10px;
-    font-weight: 600;
+    font-size: 10.5px;
+    font-weight: 700;
+    font-family: var(--font-display);
     background: none;
     border: none;
     gap: 3px;
     transition: all 0.2s ease;
-    padding: 4px 8px;
+    padding: 8px 12px;
+    border-radius: 14px;
+    flex: 1;
 }
 
-.nav-item.active {
-    color: var(--primary);
-}
+.nav-item.active { color: var(--accent); }
+.nav-item[data-tab="fuelHistory"].active { color: var(--accent-2); }
+.nav-item[data-tab="settings"].active { color: var(--ink); }
 
 .nav-icon svg {
     width: 20px;
     height: 20px;
-    stroke: var(--text-muted);
+    stroke: currentColor;
     transition: all 0.2s ease;
     fill: none;
 }
 
-.nav-item.active .nav-icon svg {
-    stroke: var(--primary);
+/* Standalone Floating FAB Button */
+.fab-wrapper {
+    position: relative;
+    top: -16px;
+    flex: 0 0 auto;
 }
 
+.fab-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), #e05e07);
+    color: var(--accent-ink);
+    border: 4px solid var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 10px 22px -4px rgba(255, 122, 31, 0.6);
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.fab-btn.fab-fuel {
+    background: linear-gradient(135deg, var(--accent-2), #0fa392);
+    color: var(--accent-2-ink);
+    box-shadow: 0 10px 22px -4px rgba(45, 212, 191, 0.6);
+}
+
+.fab-btn svg { width: 26px; height: 26px; stroke: currentColor; fill: none; }
+.fab-btn:hover { transform: scale(1.08); }
+.fab-btn:active { transform: scale(0.92); }
+
+/* ---------- Setting Bottom Sheet Modal ---------- */
+.setting-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 8, 12, 0.65);
+    backdrop-filter: blur(4px);
+    z-index: 2000;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+
+.setting-modal-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.setting-modal-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-top-left-radius: 28px;
+    border-top-right-radius: 28px;
+    width: 100%;
+    max-width: 500px;
+    padding: 24px;
+    box-shadow: var(--shadow-2);
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+.setting-modal-overlay.show .setting-modal-card {
+    transform: translateY(0);
+}
+
+.setting-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+}
+
+.setting-header h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 18px;
+    color: var(--ink);
+}
+
+.close-btn {
+    background: var(--surface-2);
+    border: none;
+    color: var(--ink-dim);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.dropdown-item {
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13.5px;
+    font-weight: 600;
+    font-family: var(--font-body);
+    color: var(--ink);
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+    background: var(--bg-alt);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    width: 100%;
+    text-align: left;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+.dropdown-item:hover { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+.dropdown-item svg { width: 19px; height: 19px; stroke: currentColor; fill: none; flex-shrink: 0; }
+.dropdown-item.danger-item { color: var(--danger); }
+.dropdown-item.danger-item:hover { background: var(--danger-soft); border-color: var(--danger); }
+
+/* ---------- Empty state ---------- */
 .empty-state {
     text-align: center;
-    padding: 60px 20px;
-    color: var(--text-muted);
+    padding: 56px 20px;
+    color: var(--ink-faint);
+    background: var(--surface);
+    border: 1px dashed var(--line-strong);
+    border-radius: var(--radius-lg);
 }
 
 .empty-state svg {
-    width: 44px;
-    height: 44px;
-    stroke: var(--text-muted);
+    width: 42px;
+    height: 42px;
+    stroke: var(--ink-faint);
     margin-bottom: 12px;
 }
+.empty-state h3 { font-family: var(--font-display); color: var(--ink-dim); }
 
 .new-plate-container {
     display: none;
     margin-top: 12px;
-    animation: fadeIn 0.3s ease-out;
+    animation: riseIn 0.25s ease-out;
 }
 
+/* ---------- Toasts ---------- */
+#toastContainer {
+    position: fixed;
+    bottom: 96px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3000;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: calc(100% - 32px);
+    max-width: 380px;
+    pointer-events: none;
+}
+
+.toast {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--accent);
+    color: var(--ink);
+    padding: 12px 14px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: var(--shadow-2);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.25s ease;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast-success { border-left-color: var(--good); }
+.toast-error { border-left-color: var(--danger); }
+.toast-info { border-left-color: var(--accent-2); }
+
+/* ---------- Confirm modal ---------- */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 8, 12, 0.6);
+    backdrop-filter: blur(3px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 4000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    padding: 20px;
+}
+.modal-overlay.show { opacity: 1; pointer-events: auto; }
+
+.modal-box {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    max-width: 340px;
+    width: 100%;
+    box-shadow: var(--shadow-2);
+    transform: scale(0.94);
+    transition: transform 0.2s ease;
+    text-align: center;
+}
+.modal-overlay.show .modal-box { transform: scale(1); }
+
+.modal-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--danger-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+}
+.modal-icon svg { width: 22px; height: 22px; stroke: var(--danger); }
+
+.modal-text {
+    font-size: 14px;
+    color: var(--ink);
+    font-weight: 600;
+    line-height: 1.4;
+    margin: 0 0 20px;
+}
+
+.modal-actions { display: flex; gap: 10px; }
+.modal-actions button { flex: 1; }
+
+/* ---------- Responsive Desktop ---------- */
 @media (max-width: 480px) {
-    .flex-group {
-        flex-direction: column;
-        gap: 0;
-    }
-    .checkbox-container {
-        grid-template-columns: 1fr;
-    }
-    .tab-content {
-        padding: 16px;
-    }
+    .flex-group { flex-direction: column; gap: 0; }
+    .checkbox-container { grid-template-columns: 1fr; }
+    .tab-content { padding: 16px; }
+    .ringkasan-split { flex-direction: column; }
 }
 
 @media (min-width: 768px) {
-    body {
-        padding: 30px 0;
-    }
-    
+    body { padding: 30px 0; }
     .app-container {
         min-height: calc(100vh - 60px);
-        border-radius: 24px;
-        border: 1px solid var(--border);
-        padding-bottom: 30px;
+        border-radius: 26px;
+        border: 1px solid var(--line);
+        padding-bottom: 34px;
     }
-
-    header {
-        border-top-left-radius: 24px;
-        border-top-right-radius: 24px;
-        padding: 20px 32px;
-    }
-
-    .tab-content {
-        padding: 32px;
-    }
-
-    .bottom-nav {
-        display: none;
-    }
-
-    .desktop-nav {
-        display: flex;
-    }
-
-    .checkbox-container {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    .summary-banner {
-        gap: 20px;
-    }
-
-    .summary-card {
-        padding: 20px;
-    }
-
-    .summary-card .s-value {
-        font-size: 22px;
-    }
+    header { border-top-left-radius: 26px; border-top-right-radius: 26px; padding: 18px 30px; }
+    .tab-content { padding: 30px; }
+    .bottom-nav { display: none; }
+    .desktop-nav { display: flex; }
+    .checkbox-container { grid-template-columns: repeat(3, 1fr); }
+    .summary-banner { gap: 16px; }
+    .summary-card { padding: 18px; }
+    .summary-card .s-value { font-size: 20px; }
+    .ringkasan-value { font-size: 32px; }
 }
-    </style>
+</style>
 </head>
 <body>
 
 <div class="app-container">
+    <!-- Header Tanpa Dropdown Setting -->
     <header>
-        <h1>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 22px; height: 22px; stroke: var(--primary);"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
-            Garasi<span>Ku</span> Pro
-        </h1>
-        
-        <div class="header-actions">
-            <nav class="desktop-nav">
-                <button class="desktop-nav-item" data-tab="dashboard" onclick="switchTab('dashboard')">Servis</button>
-                <button class="desktop-nav-item" data-tab="form" onclick="switchTab('form')">+ Servis</button>
-                <button class="desktop-nav-item" data-tab="fuelHistory" onclick="switchTab('fuelHistory')">BBM</button>
-                <button class="desktop-nav-item" data-tab="fuelForm" onclick="switchTab('fuelForm')">+ BBM</button>
-            </nav>
+        <div class="brand">
+            <div class="brand-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
+            </div>
+            <div class="brand-text">
+                <h1>Garasi<em>Ku</em> Pro</h1>
+                <small>Buku Servis & BBM Digital</small>
+            </div>
+        </div>
 
-            <div class="menu-dropdown-wrapper" id="menuDropdownWrapper">
-                <button type="button" class="icon-btn" id="menuToggleBtn" aria-label="Opsi Lainnya" title="Menu">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a0.75 0.75 0 110-1.5 0.75 0.75 0 010 1.5zM12 12.75a0.75 0.75 0 110-1.5 0.75 0.75 0 010 1.5zM12 18.75a0.75 0.75 0 110-1.5 0.75 0.75 0 010 1.5z" />
-                    </svg>
-                </button>
-                <div class="menu-dropdown-content">
-                    <label class="dropdown-item" style="margin: 0; cursor: pointer;">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
-                        <span>Impor Data (JSON)</span>
-                        <input type="file" id="importFile" accept=".json" style="display: none;">
-                    </label>
-                    <button type="button" class="dropdown-item" id="exportBtn">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" /></svg>
-                        <span>Ekspor Data (JSON)</span>
-                    </button>
-                    <button type="button" class="dropdown-item" id="exportExcelBtn">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9z" /></svg>
-                        <span>Ekspor Laporan (.xlsx)</span>
-                    </button>
-                    <button type="button" class="dropdown-item" id="themeToggleBtn">
-                        <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                        </svg>
-                        <span id="themeLabel">Ubah Tema</span>
-                    </button>
+        <!-- Desktop Mode Navigation Header -->
+        <nav class="desktop-nav">
+            <button class="desktop-nav-item active" data-tab="dashboard" onclick="switchTab('dashboard')">Servis</button>
+            <button class="desktop-nav-item" data-tab="form" onclick="switchTab('form')">+ Servis</button>
+            <button class="desktop-nav-item" data-tab="fuelHistory" onclick="switchTab('fuelHistory')">BBM</button>
+            <button class="desktop-nav-item" data-tab="fuelForm" onclick="switchTab('fuelForm')">+ BBM</button>
+            <button class="desktop-nav-item" onclick="bukaModalSetting()">⚙️ Pengaturan</button>
+        </nav>
+    </header>
+
+    <!-- Tab Servis / Dashboard -->
+    <div id="tabDashboard" class="tab-content active">
+        <div class="ringkasan-hero">
+            <div class="ringkasan-top">
+                <div>
+                    <p class="ringkasan-label">Total Pengeluaran Garasi</p>
+                    <div class="ringkasan-value" id="ringkasanTotal">Rp 0</div>
+                </div>
+                <div class="ringkasan-badge">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8v8m-4-5v5m-4-2v2M3 20h18M4 20V10.5L12 4l8 6.5V20"/></svg>
+                    <span>Servis + BBM</span>
+                </div>
+            </div>
+            <div class="ringkasan-split">
+                <div class="ringkasan-chip">
+                    <div class="rc-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 0h-12" /></svg>
+                        Kendaraan Terdaftar
+                    </div>
+                    <div class="rc-value" id="ringkasanKendaraan">0</div>
+                </div>
+                <div class="ringkasan-chip">
+                    <div class="rc-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" /></svg>
+                        Servis Bulan Ini
+                    </div>
+                    <div class="rc-value" id="ringkasanBulanIni">0</div>
                 </div>
             </div>
         </div>
-    </header>
 
-    <div id="tabDashboard" class="tab-content">
         <div class="filter-card">
-            <label for="filterServiceVehicle">Filter Kendaraan</label>
-            <select id="filterServiceVehicle" onchange="tampilkanRiwayat()">
-                <option value="ALL">Semua Kendaraan</option>
-            </select>
+            <div class="filter-group">
+                <label for="filterServiceVehicle">Filter Kendaraan</label>
+                <select id="filterServiceVehicle" onchange="tampilkanRiwayat()">
+                    <option value="ALL">Semua Kendaraan</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filterServiceMonth">Filter Bulan</label>
+                <select id="filterServiceMonth" onchange="tampilkanRiwayat()">
+                    <option value="ALL">Semua Bulan</option>
+                </select>
+            </div>
         </div>
 
         <div class="summary-banner">
             <div class="summary-card">
-                <div class="s-label">Total Biaya</div>
+                <div class="s-label">Total Biaya Servis</div>
                 <div class="s-value" id="summaryTotalCost">Rp 0</div>
             </div>
             <div class="summary-card">
-                <div class="s-label">Total Servis</div>
+                <div class="s-label">Total Riwayat</div>
                 <div class="s-value" id="summaryTotalCount">0 Log</div>
             </div>
         </div>
@@ -758,15 +1249,25 @@ input[readonly] {
         <div id="historyContainer"></div>
     </div>
 
+    <!-- Tab Form Servis -->
     <div id="tabForm" class="tab-content">
         <div class="card-modern">
+            <div class="form-heading">
+                <div class="form-heading-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.67 2.67 0 0 0 21 17.25l-5.83-5.83M11.42 15.17l-4.66-4.66m4.66 4.66 6.11-6.11a2.67 2.67 0 0 0-3.77-3.77l-6.11 6.11m0 0L3 11.42A2.67 2.67 0 0 0 6.75 15.17l4.67-4.67" /></svg>
+                </div>
+                <div>
+                    <h2>Catat Servis Baru</h2>
+                    <p>Isi detail perawatan kendaraan Anda</p>
+                </div>
+            </div>
             <form id="serviceForm">
                 <input type="hidden" id="editId" value="">
 
                 <div class="form-group">
                     <label for="plateSelect">Identitas Kendaraan</label>
                     <select id="plateSelect" class="plate-dropdown" required></select>
-                    
+
                     <div id="newPlateContainer" class="new-plate-container">
                         <label for="newPlateNumber">Ketik Plat Nomor Baru</label>
                         <input type="text" id="newPlateNumber" style="text-transform: uppercase;" placeholder="B 1234 ABC">
@@ -803,40 +1304,40 @@ input[readonly] {
                         <input type="text" inputmode="numeric" id="odometer" placeholder="0" required>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <label>Tindakan Perawatan (Pilih Item)</label>
                     <div class="checkbox-container">
-                        <label class="checkbox-label"><input type="checkbox" name="serviceItems" value="Saringan Udara"> Saringan Udara</label>
+                        <label class="checkbox-label"><input type="checkbox" name="serviceItems" value="Filter Udara"> Filter Udara</label>
                         <label class="checkbox-label"><input type="checkbox" name="serviceItems" value="Busi"> Busi</label>
                         <label class="checkbox-label"><input type="checkbox" name="serviceItems" value="Oli Mesin"> Oli Mesin</label>
-                        <label class="checkbox-label"><input type="checkbox" name="serviceItems" value="Cairan Pendingin Radiator"> Cairan Radiator</label>
+                        <label class="checkbox-label"><input type="checkbox" name="serviceItems" value="Air Radiator"> Air Radiator</label>
                         <label class="checkbox-label"><input type="checkbox" name="serviceItems" value="Drive Belt"> Drive Belt</label>
-                        <label class="checkbox-label"><input type="checkbox" name="serviceItems" value="Oli Final Drive"> Oli Final Drive</label>
+                        <label class="checkbox-label"><input type="checkbox" name="serviceItems" value="Oli Gardan"> Oli Gardan</label>
                         <label class="checkbox-label"><input type="checkbox" name="serviceItems" value="Minyak Rem"> Minyak Rem</label>
                         <label class="checkbox-label"><input type="checkbox" name="serviceItems" value="Baterai"> Baterai / Aki</label>
                         <label class="checkbox-label"><input type="checkbox" name="serviceItems" value="Kampas Rem"> Kampas Rem</label>
                         <label class="checkbox-label"><input type="checkbox" name="serviceItems" value="Kelistrikan"> Kelistrikan / Lampu</label>
                         <label class="checkbox-label"><input type="checkbox" name="serviceItems" value="Ban"> Ban</label>
                         <label class="checkbox-label"><input type="checkbox" name="serviceItems" value="Filter Oli"> Filter Oli</label>
-                        
+
                         <label class="checkbox-label" id="otherServiceLabel">
                             <input type="checkbox" id="otherServiceCheckbox">
                             <input type="text" id="otherServiceInput" placeholder="Lainnya..." style="padding: 4px 8px; font-size: 12px; border-radius: 6px; margin: 0; width: 100%;">
                         </label>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="cost">Rincian Total Biaya (Rp)</label>
                     <input type="text" inputmode="numeric" id="cost" placeholder="0" required>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="notes">Catatan Tambahan (Opsional)</label>
                     <textarea id="notes" rows="2" placeholder="Tulis catatan sparepart atau merek oli di sini..."></textarea>
                 </div>
-                
+
                 <button type="submit" id="submitBtn" class="btn-primary">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 18px; height: 18px;"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
                     Simpan Log Aktivitas
@@ -845,12 +1346,21 @@ input[readonly] {
         </div>
     </div>
 
+    <!-- Tab BBM / History BBM -->
     <div id="tabFuelHistory" class="tab-content">
         <div class="filter-card">
-            <label for="filterFuelVehicle">Filter Kendaraan</label>
-            <select id="filterFuelVehicle" onchange="tampilkanRiwayatBBM()">
-                <option value="ALL">Semua Kendaraan</option>
-            </select>
+            <div class="filter-group">
+                <label for="filterFuelVehicle">Filter Kendaraan</label>
+                <select id="filterFuelVehicle" onchange="tampilkanRiwayatBBM()">
+                    <option value="ALL">Semua Kendaraan</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filterFuelMonth">Filter Bulan</label>
+                <select id="filterFuelMonth" onchange="tampilkanRiwayatBBM()">
+                    <option value="ALL">Semua Bulan</option>
+                </select>
+            </div>
         </div>
 
         <div class="summary-banner">
@@ -867,15 +1377,25 @@ input[readonly] {
         <div id="fuelHistoryContainer"></div>
     </div>
 
+    <!-- Tab Form BBM -->
     <div id="tabFuelForm" class="tab-content">
         <div class="card-modern">
+            <div class="form-heading">
+                <div class="form-heading-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 1 9 3.603e-4a1 1 0 0 1 1.2 1.488 6.25 6.25 0 0 0 1.8 11.262 1 1 0 0 0 1.2-1.488c-.687-.825-1.2-1.83-1.2-2.925a1 1 0 0 1 1.707-.707c1.55 1.55 2.655 3.5 2.655 5.576Z" /></svg>
+                </div>
+                <div>
+                    <h2>Catat Pengisian BBM</h2>
+                    <p>Simpan riwayat konsumsi bahan bakar</p>
+                </div>
+            </div>
             <form id="fuelForm">
                 <input type="hidden" id="editFuelId" value="">
 
                 <div class="form-group">
                     <label for="fuelPlateSelect">Identitas Kendaraan</label>
                     <select id="fuelPlateSelect" class="plate-dropdown" required></select>
-                    
+
                     <div id="newFuelPlateContainer" class="new-plate-container">
                         <label for="newFuelPlateNumber">Ketik Plat Nomor Baru</label>
                         <input type="text" id="newFuelPlateNumber" style="text-transform: uppercase;" placeholder="B 1234 ABC">
@@ -926,7 +1446,7 @@ input[readonly] {
 
                 <div class="form-group flex-item">
                     <label for="fuelLiters">Jumlah Liter (L)</label>
-                    <input type="number" step="0.01" min="0.01" id="fuelLiters" placeholder="0.0" required>
+                    <input type="number" step="0.01" id="fuelLiters" placeholder="0.0" required>
                 </div>
 
                 <div class="form-group">
@@ -934,9 +1454,13 @@ input[readonly] {
                     <div class="checkbox-container">
                         <label class="checkbox-label"><input type="radio" name="fuelBrand" value="Pertalite" checked> Pertalite</label>
                         <label class="checkbox-label"><input type="radio" name="fuelBrand" value="Pertamax"> Pertamax</label>
+                        <label class="checkbox-label"><input type="radio" name="fuelBrand" value="Pertamax Turbo"> Pertamax Turbo</label>
+                        <label class="checkbox-label"><input type="radio" name="fuelBrand" value="Solar/Dex"> Solar / Dex</label>
+                        <label class="checkbox-label"><input type="radio" name="fuelBrand" value="Shell"> Shell</label>
+                        <label class="checkbox-label"><input type="radio" name="fuelBrand" value="BP"> BP AKR</label>
                     </div>
                 </div>
-                
+
                 <button type="submit" id="submitFuelBtn" class="btn-primary">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 18px; height: 18px;"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
                     Simpan Catatan BBM
@@ -945,36 +1469,168 @@ input[readonly] {
         </div>
     </div>
 
+    <!-- Navigasi Bawah Modern dengan FAB Melayang Otomatis -->
     <nav class="bottom-nav">
-        <button class="nav-item" data-tab="dashboard" onclick="switchTab('dashboard')">
+        <!-- Menu 1: Servis -->
+        <button class="nav-item active" data-tab="dashboard" onclick="switchTab('dashboard')">
             <span class="nav-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.67 2.67 0 0 0 21 17.25l-5.83-5.83M11.42 15.17l-4.66-4.66m4.66 4.66 6.11-6.11a2.67 2.67 0 0 0-3.77-3.77l-6.11 6.11m0 0L3 11.42A2.67 2.67 0 0 0 6.75 15.17l4.67-4.67" /></svg>
             </span>
             <span>Servis</span>
         </button>
-        <button class="nav-item" data-tab="form" onclick="switchTab('form')">
-            <span class="nav-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-            </span>
-            <span>+ Servis</span>
-        </button>
+
+        <!-- Dynamic Standalone Floating FAB -->
+        <div class="fab-wrapper">
+            <button class="fab-btn" id="dynamicFabBtn" onclick="handleFabClick()" title="Tambah Data">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+            </button>
+        </div>
+
+        <!-- Menu 2: BBM -->
         <button class="nav-item" data-tab="fuelHistory" onclick="switchTab('fuelHistory')">
             <span class="nav-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 1 9 3.603e-4a1 1 0 0 1 1.2 1.488 6.25 6.25 0 0 0 1.8 11.262 1 1 0 0 0 1.2-1.488c-.687-.825-1.2-1.83-1.2-2.925a1 1 0 0 1 1.707-.707c1.55 1.55 2.655 3.5 2.655 5.576Z" /></svg>
             </span>
             <span>BBM</span>
         </button>
-        <button class="nav-item" data-tab="fuelForm" onclick="switchTab('fuelForm')">
+
+        <!-- Menu 3: Setting -->
+        <button class="nav-item" data-tab="settings" onclick="bukaModalSetting()">
             <span class="nav-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 0 1 0 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 0 1 0-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.28z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                </svg>
             </span>
-            <span>+ BBM</span>
+            <span>Setting</span>
         </button>
     </nav>
 </div>
 
+<!-- Modal Setting Bottom Sheet -->
+<div class="setting-modal-overlay" id="settingModalOverlay" onclick="tutupModalSettingPadaOverlay(event)">
+    <div class="setting-modal-card">
+        <div class="setting-header">
+            <h3>⚙️ Pengaturan & Data</h3>
+            <button class="close-btn" onclick="tutupModalSetting()">✕</button>
+        </div>
+        <div class="setting-content">
+            <button type="button" class="dropdown-item" id="themeToggleBtn">
+                <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <span id="themeLabel">Tema Terang</span>
+            </button>
+
+            <button type="button" class="dropdown-item" id="installAppBtn" style="display:none;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13m0 0-4.5-4.5M12 16l4.5-4.5"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+                <span>Instal Aplikasi ke Perangkat</span>
+            </button>
+
+            <label class="dropdown-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+                <span>Impor Data (Excel / JSON)</span>
+                <input type="file" id="importFile" accept=".xlsx,.xls,.json" style="display: none;">
+            </label>
+
+            <button type="button" class="dropdown-item" id="exportExcelBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9z" /></svg>
+                <span>Ekspor Laporan (.xlsx)</span>
+            </button>
+
+            <button type="button" class="dropdown-item" id="exportBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" /></svg>
+                <span>Ekspor Backup (.json)</span>
+            </button>
+
+            <button type="button" class="dropdown-item danger-item" id="deleteAllDataBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
+                <span>Hapus Semua Data Garasi</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="toastContainer"></div>
+
+<!-- Modal Konfirmasi Hapus -->
+<div class="modal-overlay" id="confirmModalOverlay">
+    <div class="modal-box">
+        <div class="modal-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7l-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-6v6M3 7h18M8 7V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v3"/></svg>
+        </div>
+        <p class="modal-text" id="confirmModalText">Apakah Anda yakin?</p>
+        <div class="modal-actions">
+            <button type="button" class="btn-ghost" id="confirmNoBtn">Batal</button>
+            <button type="button" class="btn-danger" id="confirmYesBtn">Hapus</button>
+        </div>
+    </div>
+</div>
+
 <script>
-/* Theme Engine */
+function escapeHTML(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+/* ---------- Toast & Confirm Modal ---------- */
+const toastContainer = document.getElementById('toastContainer');
+function tampilkanToast(pesan, tipe) {
+    tipe = tipe || 'info';
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${tipe}`;
+    toast.textContent = pesan;
+    toastContainer.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add('show'));
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3200);
+}
+
+const confirmModalOverlay = document.getElementById('confirmModalOverlay');
+const confirmModalText = document.getElementById('confirmModalText');
+const confirmYesBtn = document.getElementById('confirmYesBtn');
+const confirmNoBtn = document.getElementById('confirmNoBtn');
+
+function konfirmasiHapus(pesan) {
+    return new Promise((resolve) => {
+        confirmModalText.textContent = pesan;
+        confirmModalOverlay.classList.add('show');
+        const selesai = (hasil) => {
+            confirmModalOverlay.classList.remove('show');
+            confirmYesBtn.onclick = null;
+            confirmNoBtn.onclick = null;
+            resolve(hasil);
+        };
+        confirmYesBtn.onclick = () => selesai(true);
+        confirmNoBtn.onclick = () => selesai(false);
+    });
+}
+confirmModalOverlay.addEventListener('click', (e) => {
+    if (e.target === confirmModalOverlay) confirmModalOverlay.classList.remove('show');
+});
+
+/* ---------- Modal Setting Bottom Sheet ---------- */
+const settingModalOverlay = document.getElementById('settingModalOverlay');
+function bukaModalSetting() {
+    settingModalOverlay.classList.add('show');
+}
+function tutupModalSetting() {
+    settingModalOverlay.classList.remove('show');
+}
+function tutupModalSettingPadaOverlay(e) {
+    if (e.target === settingModalOverlay) {
+        tutupModalSetting();
+    }
+}
+
+/* ---------- Tema Switcher ---------- */
 const themeToggleBtn = document.getElementById('themeToggleBtn');
 const themeIcon = document.getElementById('themeIcon');
 const themeLabel = document.getElementById('themeLabel');
@@ -983,46 +1639,36 @@ const moonIconPath = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z">
 const sunIconPath = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
 
 function aturTema(isDark) {
-    try {
-        if (isDark) {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            themeIcon.innerHTML = sunIconPath;
-            if (themeLabel) themeLabel.textContent = 'Tema Terang';
-            localStorage.setItem('garasi_theme', 'dark');
-        } else {
-            document.documentElement.removeAttribute('data-theme');
-            themeIcon.innerHTML = moonIconPath;
-            if (themeLabel) themeLabel.textContent = 'Tema Gelap';
-            localStorage.setItem('garasi_theme', 'light');
-        }
-    } catch(e) { console.warn("Penyimpanan lokal tidak tersedia untuk tema."); }
+    if (isDark) {
+        document.documentElement.removeAttribute('data-theme');
+        themeIcon.innerHTML = sunIconPath;
+        if (themeLabel) themeLabel.textContent = 'Tema Terang';
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', '#12151b');
+        localStorage.setItem('garasi_theme', 'dark');
+    } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        themeIcon.innerHTML = moonIconPath;
+        if (themeLabel) themeLabel.textContent = 'Tema Gelap';
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f1ebdc');
+        localStorage.setItem('garasi_theme', 'light');
+    }
 }
 
-const savedTheme = (() => { try { return localStorage.getItem('garasi_theme'); } catch(e) { return null; } })();
-const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-aturTema(savedTheme === 'dark' || (!savedTheme && prefersDark));
+const savedTheme = localStorage.getItem('garasi_theme');
+aturTema(savedTheme !== 'light');
 
 themeToggleBtn.addEventListener('click', (e) => {
     e.stopPropagation();
-    aturTema(document.documentElement.getAttribute('data-theme') !== 'dark');
+    const isCurrentDark = document.documentElement.getAttribute('data-theme') !== 'light';
+    aturTema(!isCurrentDark);
 });
 
-/* Menu Dropdown Control */
-const menuDropdownWrapper = document.getElementById('menuDropdownWrapper');
-const menuToggleBtn = document.getElementById('menuToggleBtn');
+function setHariIni() {
+    const today = new Date().toISOString().substring(0, 10);
+    document.getElementById('date').value = today;
+    document.getElementById('fuelDate').value = today;
+}
 
-menuToggleBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    menuDropdownWrapper.classList.toggle('show');
-});
-
-document.addEventListener('click', (e) => {
-    if (!menuDropdownWrapper.contains(e.target)) {
-        menuDropdownWrapper.classList.remove('show');
-    }
-});
-
-/* DOM Referensi */
 const serviceForm = document.getElementById('serviceForm');
 const fuelForm = document.getElementById('fuelForm');
 const historyContainer = document.getElementById('historyContainer');
@@ -1034,8 +1680,11 @@ const editFuelIdInput = document.getElementById('editFuelId');
 const exportBtn = document.getElementById('exportBtn');
 const exportExcelBtn = document.getElementById('exportExcelBtn');
 const importFile = document.getElementById('importFile');
+const deleteAllDataBtn = document.getElementById('deleteAllDataBtn');
 const filterServiceVehicle = document.getElementById('filterServiceVehicle');
 const filterFuelVehicle = document.getElementById('filterFuelVehicle');
+const filterServiceMonth = document.getElementById('filterServiceMonth');
+const filterFuelMonth = document.getElementById('filterFuelMonth');
 
 const plateSelect = document.getElementById('plateSelect');
 const newPlateContainer = document.getElementById('newPlateContainer');
@@ -1057,39 +1706,31 @@ const fuelLitersInput = document.getElementById('fuelLiters');
 const fuelUnitPriceInput = document.getElementById('fuelUnitPrice');
 const fuelCostInput = document.getElementById('fuelCost');
 
-/* Storage Data Access Layer */
+const otherServiceCheckbox = document.getElementById('otherServiceCheckbox');
+const otherServiceInput = document.getElementById('otherServiceInput');
+
+otherServiceInput.addEventListener('input', () => {
+    otherServiceCheckbox.checked = otherServiceInput.value.trim() !== '';
+});
+
 let dataServis = [];
 let dataBBM = [];
+let activeTabGlobal = 'dashboard';
 
-function muatData() {
-    try {
-        dataServis = JSON.parse(localStorage.getItem('dataServis_v2')) || [];
-        dataBBM = JSON.parse(localStorage.getItem('dataBBM_v1')) || [];
-    } catch (e) {
-        dataServis = [];
-        dataBBM = [];
-    }
+try {
+    dataServis = JSON.parse(localStorage.getItem('dataServis_v2')) || [];
+} catch (e) {
+    dataServis = [];
 }
 
-function simpanKeBrowser() {
-    try {
-        localStorage.setItem('dataServis_v2', JSON.stringify(dataServis));
-        localStorage.setItem('dataBBM_v1', JSON.stringify(dataBBM));
-    } catch(e) {
-        alert("Gagal menyimpan data ke penyimpanan lokal browser.");
-    }
+try {
+    dataBBM = JSON.parse(localStorage.getItem('dataBBM_v1')) || [];
+} catch (e) {
+    dataBBM = [];
 }
 
-muatData();
-
-function setHariIni() {
-    const today = new Date().toISOString().substring(0, 10);
-    document.getElementById('date').value = today;
-    document.getElementById('fuelDate').value = today;
-}
 setHariIni();
 
-/* Formatter & Sanitizer */
 function formatRibuan(angka) {
     if (!angka && angka !== 0) return '';
     const cleanNumber = String(angka).replace(/\D/g, '');
@@ -1106,7 +1747,9 @@ function attachThousandSeparator(inputElement, onInputCallback) {
     inputElement.addEventListener('input', function(e) {
         const valNumeric = parseRibuan(e.target.value);
         e.target.value = valNumeric ? formatRibuan(valNumeric) : '';
-        if (typeof onInputCallback === 'function') onInputCallback();
+        if (typeof onInputCallback === 'function') {
+            onInputCallback();
+        }
     });
 }
 
@@ -1114,7 +1757,6 @@ attachThousandSeparator(odometerInput);
 attachThousandSeparator(costInput);
 attachThousandSeparator(fuelOdometerInput);
 
-/* Kalkulasi BBM Mandiri */
 function hitungTotalBBM() {
     const liter = parseFloat(fuelLitersInput.value);
     const hargaPerLiter = parseRibuan(fuelUnitPriceInput.value);
@@ -1147,7 +1789,67 @@ fuelLitersInput.addEventListener('input', hitungTotalBBM);
 attachThousandSeparator(fuelUnitPriceInput, hitungPadaPerubahanHarga);
 attachThousandSeparator(fuelCostInput, hitungLiterDariTotal);
 
-/* Pengelolaan Kendaraan & Dropdown */
+function simpanKeBrowser() {
+    localStorage.setItem('dataServis_v2', JSON.stringify(dataServis));
+    localStorage.setItem('dataBBM_v1', JSON.stringify(dataBBM));
+}
+
+function renderRingkasan() {
+    const totalServis = dataServis.reduce((s, i) => s + Number(i.cost || 0), 0);
+    const totalBBM = dataBBM.reduce((s, i) => s + Number(i.cost || 0), 0);
+    const totalGabungan = totalServis + totalBBM;
+
+    const platSet = new Set();
+    dataServis.forEach(i => i.plateNumber && platSet.add(i.plateNumber.toUpperCase()));
+    dataBBM.forEach(i => i.plateNumber && platSet.add(i.plateNumber.toUpperCase()));
+
+    const bulanIni = new Date().toISOString().substring(0, 7);
+    const servisBulanIni = dataServis.filter(i => i.date && i.date.substring(0, 7) === bulanIni).length;
+
+    const elTotal = document.getElementById('ringkasanTotal');
+    const elVeh = document.getElementById('ringkasanKendaraan');
+    const elBulan = document.getElementById('ringkasanBulanIni');
+    if (elTotal) elTotal.textContent = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(totalGabungan);
+    if (elVeh) elVeh.textContent = platSet.size;
+    if (elBulan) elBulan.textContent = servisBulanIni;
+}
+
+function perbaruiDropdownMonth() {
+    const namaBulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+    const monthsServisSet = new Set();
+    dataServis.forEach(item => {
+        if (item.date) monthsServisSet.add(item.date.substring(0, 7));
+    });
+    const sortedServisMonths = Array.from(monthsServisSet).sort().reverse();
+    const currentServisMonth = filterServiceMonth.value;
+    filterServiceMonth.innerHTML = '<option value="ALL">Semua Bulan</option>';
+    sortedServisMonths.forEach(ym => {
+        const [year, month] = ym.split('-');
+        const opt = document.createElement('option');
+        opt.value = ym;
+        opt.textContent = `${namaBulan[parseInt(month, 10) - 1]} ${year}`;
+        filterServiceMonth.appendChild(opt);
+    });
+    filterServiceMonth.value = currentServisMonth;
+
+    const monthsBBMSet = new Set();
+    dataBBM.forEach(item => {
+        if (item.date) monthsBBMSet.add(item.date.substring(0, 7));
+    });
+    const sortedBBMMonths = Array.from(monthsBBMSet).sort().reverse();
+    const currentBBMMonth = filterFuelMonth.value;
+    filterFuelMonth.innerHTML = '<option value="ALL">Semua Bulan</option>';
+    sortedBBMMonths.forEach(ym => {
+        const [year, month] = ym.split('-');
+        const opt = document.createElement('option');
+        opt.value = ym;
+        opt.textContent = `${namaBulan[parseInt(month, 10) - 1]} ${year}`;
+        filterFuelMonth.appendChild(opt);
+    });
+    filterFuelMonth.value = currentBBMMonth;
+}
+
 function perbaruiDropdownPlat() {
     const mapKendaraan = new Map();
 
@@ -1174,7 +1876,7 @@ function perbaruiDropdownPlat() {
 
     const currentFilterVal = filterServiceVehicle.value;
     filterServiceVehicle.innerHTML = '<option value="ALL">Semua Kendaraan</option>';
-    
+
     const currentFuelFilterVal = filterFuelVehicle.value;
     filterFuelVehicle.innerHTML = '<option value="ALL">Semua Kendaraan</option>';
 
@@ -1193,8 +1895,12 @@ function perbaruiDropdownPlat() {
     filterServiceVehicle.value = currentFilterVal;
     filterFuelVehicle.value = currentFuelFilterVal;
 
-    [plateSelect, fuelPlateSelect].forEach(select => {
-        const curValue = select.value;
+    const dropdowns = [
+        { select: plateSelect, currentVal: plateSelect.value },
+        { select: fuelPlateSelect, currentVal: fuelPlateSelect.value }
+    ];
+
+    dropdowns.forEach(({ select, currentVal }) => {
         select.innerHTML = '';
 
         if (mapKendaraan.size > 0) {
@@ -1219,23 +1925,22 @@ function perbaruiDropdownPlat() {
             select.appendChild(optEmpty);
         }
 
-        if (curValue && Array.from(select.options).some(o => o.value === curValue)) {
-            select.value = curValue;
-        }
+        if (currentVal) select.value = currentVal;
     });
 
     pemicuPerubahanPlat();
     pemicuPerubahanPlatBBM();
+    perbaruiDropdownMonth();
 }
 
 function pemicuPerubahanPlat() {
     if (plateSelect.value === 'BARU') {
         newPlateContainer.style.display = 'block';
         newPlateNumber.setAttribute('required', 'true');
+        vehicleInput.removeAttribute('readonly');
+        typeInput.style.pointerEvents = 'auto';
         if (editIdInput.value === '') {
             vehicleInput.value = '';
-            vehicleInput.removeAttribute('readonly');
-            typeInput.style.pointerEvents = 'auto';
             manufactureDateInput.value = '';
         }
     } else {
@@ -1243,7 +1948,7 @@ function pemicuPerubahanPlat() {
         newPlateNumber.removeAttribute('required');
 
         const opsiTerpilih = plateSelect.options[plateSelect.selectedIndex];
-        if (opsiTerpilih && opsiTerpilih.dataset) {
+        if (opsiTerpilih) {
             vehicleInput.value = opsiTerpilih.dataset.vehicle || '';
             typeInput.value = opsiTerpilih.dataset.type || '🏍️ Motor';
             manufactureDateInput.value = opsiTerpilih.dataset.mfg || '';
@@ -1257,10 +1962,10 @@ function pemicuPerubahanPlatBBM() {
     if (fuelPlateSelect.value === 'BARU') {
         newFuelPlateContainer.style.display = 'block';
         newFuelPlateNumber.setAttribute('required', 'true');
+        fuelVehicleInput.removeAttribute('readonly');
+        fuelTypeInput.style.pointerEvents = 'auto';
         if (editFuelIdInput.value === '') {
             fuelVehicleInput.value = '';
-            fuelVehicleInput.removeAttribute('readonly');
-            fuelTypeInput.style.pointerEvents = 'auto';
             fuelManufactureDateInput.value = '';
         }
     } else {
@@ -1268,7 +1973,7 @@ function pemicuPerubahanPlatBBM() {
         newFuelPlateNumber.removeAttribute('required');
 
         const opsiTerpilih = fuelPlateSelect.options[fuelPlateSelect.selectedIndex];
-        if (opsiTerpilih && opsiTerpilih.dataset) {
+        if (opsiTerpilih) {
             fuelVehicleInput.value = opsiTerpilih.dataset.vehicle || '';
             fuelTypeInput.value = opsiTerpilih.dataset.type || '🏍️ Motor';
             fuelManufactureDateInput.value = opsiTerpilih.dataset.mfg || '';
@@ -1281,52 +1986,38 @@ function pemicuPerubahanPlatBBM() {
 plateSelect.addEventListener('change', pemicuPerubahanPlat);
 fuelPlateSelect.addEventListener('change', pemicuPerubahanPlatBBM);
 
-/* Reset State Form */
-function resetForms() {
-    editIdInput.value = '';
-    submitBtn.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 18px; height: 18px;"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
-        Simpan Log Aktivitas`;
-    serviceForm.reset();
-    document.querySelectorAll('input[name="serviceItems"]').forEach(cb => cb.checked = false);
-    document.getElementById('otherServiceCheckbox').checked = false;
-    document.getElementById('otherServiceInput').value = '';
+/* Switch Tab & Adaptif Floating FAB */
+function switchTab(tabName) {
+    activeTabGlobal = tabName;
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    document.querySelectorAll('.desktop-nav-item').forEach(item => item.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
 
-    editFuelIdInput.value = '';
-    submitFuelBtn.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 18px; height: 18px;"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
-        Simpan Catatan BBM`;
-    fuelForm.reset();
-    const pertaliteRadio = document.querySelector('input[name="fuelBrand"][value="Pertalite"]');
-    if (pertaliteRadio) pertaliteRadio.checked = true;
+    const activeTabObj = document.getElementById(`tab${tabName.charAt(0).toUpperCase()}${tabName.slice(1)}`);
+    if (activeTabObj) activeTabObj.classList.add('active');
 
-    setHariIni();
-    perbaruiDropdownPlat();
+    document.querySelectorAll(`[data-tab="${tabName}"]`).forEach(btn => btn.classList.add('active'));
+
+    const fabBtn = document.getElementById('dynamicFabBtn');
+
+    if (tabName === 'dashboard' || tabName === 'form') {
+        fabBtn.classList.remove('fab-fuel');
+        fabBtn.title = 'Tambah Servis Baru';
+        if (tabName === 'dashboard') tampilkanRiwayat();
+        else perbaruiDropdownPlat();
+    } else if (tabName === 'fuelHistory' || tabName === 'fuelForm') {
+        fabBtn.classList.add('fab-fuel');
+        fabBtn.title = 'Tambah Catatan BBM';
+        if (tabName === 'fuelHistory') tampilkanRiwayatBBM();
+        else perbaruiDropdownPlat();
+    }
 }
 
-/* Navigasi Tab Terpusat */
-function switchTab(tabName) {
-    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-    document.querySelectorAll('.nav-item, .desktop-nav-item').forEach(item => {
-        if (item.getAttribute('data-tab') === tabName) {
-            item.classList.add('active');
-        } else {
-            item.classList.remove('active');
-        }
-    });
-
-    if (tabName === 'dashboard') {
-        document.getElementById('tabDashboard').classList.add('active');
-        tampilkanRiwayat();
-    } else if (tabName === 'form') {
-        document.getElementById('tabForm').classList.add('active');
-        if (editIdInput.value === '') perbaruiDropdownPlat();
-    } else if (tabName === 'fuelHistory') {
-        document.getElementById('tabFuelHistory').classList.add('active');
-        tampilkanRiwayatBBM();
-    } else if (tabName === 'fuelForm') {
-        document.getElementById('tabFuelForm').classList.add('active');
-        if (editFuelIdInput.value === '') perbaruiDropdownPlat();
+function handleFabClick() {
+    if (activeTabGlobal === 'fuelHistory' || activeTabGlobal === 'fuelForm') {
+        switchTab('fuelForm');
+    } else {
+        switchTab('form');
     }
 }
 
@@ -1337,18 +2028,21 @@ function formatTanggalSederhana(strDate) {
     return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
-/* Render Dashboard & Riwayat */
 function tampilkanRiwayat() {
-    perbaruiDropdownPlat();
-
+    renderRingkasan();
     const selectedFilter = filterServiceVehicle.value;
+    const selectedMonth = filterServiceMonth.value;
     let filteredData = dataServis.map((item, index) => ({ ...item, originalIndex: index }));
 
     if (selectedFilter !== 'ALL') {
         filteredData = filteredData.filter(item => item.plateNumber.toUpperCase() === selectedFilter.toUpperCase());
     }
 
-    const grandTotal = filteredData.reduce((sum, item) => sum + Number(item.cost || 0), 0);
+    if (selectedMonth !== 'ALL') {
+        filteredData = filteredData.filter(item => item.date && item.date.substring(0, 7) === selectedMonth);
+    }
+
+    const grandTotal = filteredData.reduce((sum, item) => sum + Number(item.cost), 0);
     document.getElementById('summaryTotalCost').textContent = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(grandTotal);
     document.getElementById('summaryTotalCount').textContent = `${filteredData.length} Log`;
 
@@ -1357,7 +2051,7 @@ function tampilkanRiwayat() {
             <div class="empty-state">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.008 1.24l.885 1.77a2.25 2.25 0 0 0 2.007 1.24h1.98a2.25 2.25 0 0 0 2.007-1.24l.885-1.77a2.25 2.25 0 0 1 2.007-1.24h3.86m-18 0h18a2.25 2.25 0 0 1 2.25 2.25v4.25A2.25 2.25 0 0 1 18.75 21H5.25A2.25 2.25 0 0 1 3 18.75V15.75A2.25 2.25 0 0 1 2.25 13.5ZM2.25 13.5V6a2.25 2.25 0 0 1 2.25-2.25h15A2.25 2.25 0 0 1 21.75 6v7.5m-10.5-6h.008v.008H11.25V7.5Zm.008 3h.008v.008H11.25v-.008Zm3-3h.008v.008h-.008V7.5Zm.008 3h.008v.008h-.008v-.008Z" /></svg>
                 <h3 style="margin: 0; font-size: 15px; font-weight:700;">Riwayat Servis Tidak Ditemukan</h3>
-                <p style="font-size:12px; max-width:260px; margin:6px auto 0 auto; line-height:1.4;">Tidak ada catatan pemeliharaan yang cocok dengan filter kendaraan saat ini.</p>
+                <p style="font-size:12px; max-width:260px; margin:6px auto 0 auto; line-height:1.4;">Tidak ada catatan pemeliharaan yang cocok dengan filter kendaraan/bulan saat ini.</p>
             </div>`;
         return;
     }
@@ -1375,7 +2069,7 @@ function tampilkanRiwayat() {
         const [namaKendaraan, platNomor, jenis, tglBuat] = key.split('|||');
         grupKendaraan[key].sort((a, b) => new Date(b.date) - new Date(a.date));
 
-        const totalBiaya = grupKendaraan[key].reduce((sum, item) => sum + Number(item.cost || 0), 0);
+        const totalBiaya = grupKendaraan[key].reduce((sum, item) => sum + Number(item.cost), 0);
         const formatTotalRupiah = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(totalBiaya);
         const textTglRakit = formatTanggalSederhana(tglBuat);
 
@@ -1383,8 +2077,8 @@ function tampilkanRiwayat() {
             <div class="vehicle-card">
                 <div class="vehicle-hero">
                     <div class="v-info-group">
-                        <h3 class="v-meta-title">${namaKendaraan}</h3>
-                        <span class="v-badge">${platNomor}</span>
+                        <h3 class="v-meta-title">${escapeHTML(namaKendaraan)}</h3>
+                        <span class="v-badge">${escapeHTML(platNomor)}</span>
                         ${textTglRakit ? `<span class="v-badge v-badge-year">🏗️ ${textTglRakit}</span>` : ''}
                     </div>
                     <div class="v-total-cost">
@@ -1402,14 +2096,14 @@ function tampilkanRiwayat() {
             cardHtml += `
                 <div class="history-node">
                     <div class="node-top">
-                        <span>${item.serviceType}</span>
-                        <span style="color: var(--primary);">${formatRupiah}</span>
+                        <span>${escapeHTML(item.serviceType)}</span>
+                        <span style="color: var(--accent);">${formatRupiah}</span>
                     </div>
                     <div class="node-sub">
                         <span>📅 ${formatTanggal}</span>
                         <span>⏱️ ${Number(item.odometer).toLocaleString('id-ID')} KM</span>
                     </div>
-                    ${item.notes ? `<div class="node-notes">${item.notes}</div>` : ''}
+                    ${item.notes ? `<div class="node-notes">${escapeHTML(item.notes)}</div>` : ''}
                     <div class="node-actions">
                         <button class="action-link action-edit" onclick="aktifkanModeEdit(${item.originalIndex})">Ubah</button>
                         <button class="action-link action-delete" onclick="hapusCatatan(${item.originalIndex})">Hapus</button>
@@ -1424,16 +2118,20 @@ function tampilkanRiwayat() {
 }
 
 function tampilkanRiwayatBBM() {
-    perbaruiDropdownPlat();
-
+    renderRingkasan();
     const selectedFilter = filterFuelVehicle.value;
+    const selectedMonth = filterFuelMonth.value;
     let filteredData = dataBBM.map((item, index) => ({ ...item, originalIndex: index }));
 
     if (selectedFilter !== 'ALL') {
         filteredData = filteredData.filter(item => item.plateNumber.toUpperCase() === selectedFilter.toUpperCase());
     }
 
-    const grandTotal = filteredData.reduce((sum, item) => sum + Number(item.cost || 0), 0);
+    if (selectedMonth !== 'ALL') {
+        filteredData = filteredData.filter(item => item.date && item.date.substring(0, 7) === selectedMonth);
+    }
+
+    const grandTotal = filteredData.reduce((sum, item) => sum + Number(item.cost), 0);
     document.getElementById('summaryFuelTotalCost').textContent = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(grandTotal);
     document.getElementById('summaryFuelTotalCount').textContent = `${filteredData.length} Log`;
 
@@ -1442,7 +2140,7 @@ function tampilkanRiwayatBBM() {
             <div class="empty-state">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 1 9 3.603e-4a1 1 0 0 1 1.2 1.488 6.25 6.25 0 0 0 1.8 11.262 1 1 0 0 0 1.2-1.488c-.687-.825-1.2-1.83-1.2-2.925a1 1 0 0 1 1.707-.707c1.55 1.55 2.655 3.5 2.655 5.576Z" /></svg>
                 <h3 style="margin: 0; font-size: 15px; font-weight:700;">Belum Ada Catatan BBM</h3>
-                <p style="font-size:12px; max-width:260px; margin:6px auto 0 auto; line-height:1.4;">Tidak ada catatan BBM yang cocok dengan filter kendaraan saat ini.</p>
+                <p style="font-size:12px; max-width:260px; margin:6px auto 0 auto; line-height:1.4;">Tidak ada catatan BBM yang cocok dengan filter kendaraan/bulan saat ini.</p>
             </div>`;
         return;
     }
@@ -1460,7 +2158,7 @@ function tampilkanRiwayatBBM() {
         const [namaKendaraan, platNomor, jenis, tglBuat] = key.split('|||');
         grupKendaraan[key].sort((a, b) => Number(a.odometer) - Number(b.odometer));
 
-        const totalBiaya = grupKendaraan[key].reduce((sum, item) => sum + Number(item.cost || 0), 0);
+        const totalBiaya = grupKendaraan[key].reduce((sum, item) => sum + Number(item.cost), 0);
         const formatTotalRupiah = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(totalBiaya);
         const textTglRakit = formatTanggalSederhana(tglBuat);
 
@@ -1468,8 +2166,8 @@ function tampilkanRiwayatBBM() {
             <div class="vehicle-card">
                 <div class="vehicle-hero">
                     <div class="v-info-group">
-                        <h3 class="v-meta-title">${namaKendaraan}</h3>
-                        <span class="v-badge">${platNomor}</span>
+                        <h3 class="v-meta-title">${escapeHTML(namaKendaraan)}</h3>
+                        <span class="v-badge">${escapeHTML(platNomor)}</span>
                         ${textTglRakit ? `<span class="v-badge v-badge-year">🏗️ ${textTglRakit}</span>` : ''}
                     </div>
                     <div class="v-total-cost">
@@ -1504,15 +2202,15 @@ function tampilkanRiwayatBBM() {
             cardHtml += `
                 <div class="history-node">
                     <div class="node-top">
-                        <span>⛽ ${item.brand || 'BBM'} (${item.liters} L)</span>
-                        <span style="color: var(--primary);">${formatRupiah}</span>
+                        <span>⛽ ${escapeHTML(item.brand || 'BBM')} (${item.liters} L)</span>
+                        <span style="color: var(--accent-2);">${formatRupiah}</span>
                     </div>
                     <div class="node-sub">
                         <span>📅 ${formatTanggal}</span>
                         <span>⏱️ ${Number(item.odometer).toLocaleString('id-ID')} KM</span>
                         <span>💵 ${hargaPerLiter}/L</span>
                     </div>
-                    ${textEfisiensi ? `<div class="node-notes" style="background:var(--primary-glow); border-color:var(--primary); color:var(--primary);">${textEfisiensi}</div>` : ''}
+                    ${textEfisiensi ? `<div class="node-notes" style="background:var(--accent-2-soft); border-color:var(--accent-2); color:var(--accent-2);">${textEfisiensi}</div>` : ''}
                     <div class="node-actions">
                         <button class="action-link action-edit" onclick="aktifkanModeEditBBM(${item.originalIndex})">Ubah</button>
                         <button class="action-link action-delete" onclick="hapusCatatanBBM(${item.originalIndex})">Hapus</button>
@@ -1526,10 +2224,11 @@ function tampilkanRiwayatBBM() {
     }
 }
 
-/* Ekspor & Impor */
+/* ---------- Export & Import Excel / JSON ---------- */
 exportBtn.addEventListener('click', function() {
     if (dataServis.length === 0 && dataBBM.length === 0) {
-        return alert('Tidak ada data untuk diekspor!');
+        tampilkanToast('Tidak ada data untuk diekspor!', 'error');
+        return;
     }
     const combinedData = { servis: dataServis, bbm: dataBBM };
     const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(combinedData, null, 2));
@@ -1539,16 +2238,19 @@ exportBtn.addEventListener('click', function() {
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
-    menuDropdownWrapper.classList.remove('show');
+    tutupModalSetting();
+    tampilkanToast('Data berhasil diekspor ke JSON.', 'success');
 });
 
 exportExcelBtn.addEventListener('click', function() {
     if (dataServis.length === 0 && dataBBM.length === 0) {
-        return alert('Tidak ada data untuk diekspor!');
+        tampilkanToast('Tidak ada data untuk diekspor!', 'error');
+        return;
     }
 
     if (typeof XLSX === 'undefined') {
-        return alert('Pustaka SheetJS belum dimuat. Periksa koneksi internet Anda.');
+        tampilkanToast('Pustaka SheetJS belum dimuat. Pastikan koneksi internet stabil.', 'error');
+        return;
     }
 
     const wb = XLSX.utils.book_new();
@@ -1589,37 +2291,130 @@ exportExcelBtn.addEventListener('click', function() {
     }
 
     XLSX.writeFile(wb, `Laporan_GarasiKu_Pro_${new Date().toISOString().substring(0,10)}.xlsx`);
-    menuDropdownWrapper.classList.remove('show');
+    tutupModalSetting();
+    tampilkanToast('Laporan Excel berhasil diunduh.', 'success');
 });
 
 importFile.addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(evt) {
-        try {
-            const parsedData = JSON.parse(evt.target.result);
-            if (Array.isArray(parsedData)) {
-                dataServis = parsedData;
-                simpanKeBrowser();
-                switchTab('dashboard');
-                alert('Sinkronisasi riwayat servis berhasil!');
-            } else if (parsedData && (parsedData.servis || parsedData.bbm)) {
-                dataServis = parsedData.servis || [];
-                dataBBM = parsedData.bbm || [];
-                simpanKeBrowser();
-                switchTab('dashboard');
-                alert('Sinkronisasi seluruh data garasi berhasil!');
-            } else {
-                alert('Struktur berkas JSON tidak sesuai.');
+
+    const fileExt = file.name.split('.').pop().toLowerCase();
+
+    if (fileExt === 'json') {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+            try {
+                const parsedData = JSON.parse(evt.target.result);
+                if (Array.isArray(parsedData)) {
+                    dataServis = parsedData;
+                    simpanKeBrowser();
+                    perbaruiDropdownPlat();
+                    tampilkanRiwayat();
+                    tampilkanToast('Impor data servis berhasil!', 'success');
+                } else if (parsedData.servis || parsedData.bbm) {
+                    dataServis = parsedData.servis || [];
+                    dataBBM = parsedData.bbm || [];
+                    simpanKeBrowser();
+                    perbaruiDropdownPlat();
+                    tampilkanRiwayat();
+                    tampilkanRiwayatBBM();
+                    tampilkanToast('Impor seluruh data garasi berhasil!', 'success');
+                }
+            } catch (err) {
+                tampilkanToast('Format berkas cadangan JSON tidak valid.', 'error');
             }
-        } catch (err) {
-            alert('Format berkas cadangan JSON tidak valid.');
+        };
+        reader.readAsText(file);
+    } else if (fileExt === 'xlsx' || fileExt === 'xls') {
+        if (typeof XLSX === 'undefined') {
+            tampilkanToast('Pustaka SheetJS belum dimuat.', 'error');
+            return;
         }
-    };
-    reader.readAsText(file);
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+            try {
+                const data = new Uint8Array(evt.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                let importedServisCount = 0;
+                let importedBBMCount = 0;
+
+                if (workbook.SheetNames.includes("Laporan Servis")) {
+                    const wsServis = workbook.Sheets["Laporan Servis"];
+                    const jsonServis = XLSX.utils.sheet_to_json(wsServis);
+                    jsonServis.forEach(row => {
+                        if (row['Plat Nomor'] && row['Nama Kendaraan']) {
+                            dataServis.push({
+                                vehicle: String(row['Nama Kendaraan']).toUpperCase().trim(),
+                                plateNumber: String(row['Plat Nomor']).toUpperCase().trim(),
+                                vehicleType: row['Jenis Kendaraan'] || '🏍️ Motor',
+                                manufactureDate: row['Tgl Rakit/Pembuatan'] !== '-' ? row['Tgl Rakit/Pembuatan'] : '',
+                                date: row['Tanggal Servis'] || new Date().toISOString().substring(0, 10),
+                                odometer: Number(row['Odometer (KM)']) || 0,
+                                serviceType: row['Tindakan Perawatan'] || 'Servis Rutin',
+                                cost: Number(row['Total Biaya (Rp)']) || 0,
+                                notes: row['Catatan'] !== '-' ? row['Catatan'] : ''
+                            });
+                            importedServisCount++;
+                        }
+                    });
+                }
+
+                if (workbook.SheetNames.includes("Laporan BBM")) {
+                    const wsBBM = workbook.Sheets["Laporan BBM"];
+                    const jsonBBM = XLSX.utils.sheet_to_json(wsBBM);
+                    jsonBBM.forEach(row => {
+                        if (row['Plat Nomor'] && row['Nama Kendaraan']) {
+                            dataBBM.push({
+                                vehicle: String(row['Nama Kendaraan']).toUpperCase().trim(),
+                                plateNumber: String(row['Plat Nomor']).toUpperCase().trim(),
+                                vehicleType: row['Jenis Kendaraan'] || '🏍️ Motor',
+                                manufactureDate: row['Tgl Rakit/Pembuatan'] !== '-' ? row['Tgl Rakit/Pembuatan'] : '',
+                                date: row['Tanggal Pengisian'] || new Date().toISOString().substring(0, 10),
+                                odometer: Number(row['Odometer (KM)']) || 0,
+                                brand: row['Merek/Jenis BBM'] || 'Pertalite',
+                                liters: Number(row['Jumlah Liter (L)']) || 0,
+                                unitPrice: Number(row['Harga / Liter (Rp)']) || 0,
+                                cost: Number(row['Total Biaya (Rp)']) || 0
+                            });
+                            importedBBMCount++;
+                        }
+                    });
+                }
+
+                if (importedServisCount > 0 || importedBBMCount > 0) {
+                    simpanKeBrowser();
+                    perbaruiDropdownPlat();
+                    tampilkanRiwayat();
+                    tampilkanRiwayatBBM();
+                    tampilkanToast(`Berhasil mengimpor data dari Excel (${importedServisCount} Servis, ${importedBBMCount} BBM)!`, 'success');
+                } else {
+                    tampilkanToast('Tidak ada lembar kerja "Laporan Servis" atau "Laporan BBM" yang cocok di file Excel ini.', 'error');
+                }
+            } catch (err) {
+                tampilkanToast('Gagal memproses berkas Excel.', 'error');
+            }
+        };
+        reader.readAsArrayBuffer(file);
+    }
+
     importFile.value = '';
-    menuDropdownWrapper.classList.remove('show');
+    tutupModalSetting();
+});
+
+/* ---------- Fitur Reset Semua Data ---------- */
+deleteAllDataBtn.addEventListener('click', async function() {
+    tutupModalSetting();
+    const ok = await konfirmasiHapus('Apakah Anda YAKIN ingin menghapus SELURUH data transaksi servis & BBM? Tindakan ini tidak dapat dibatalkan!');
+    if (ok) {
+        dataServis = [];
+        dataBBM = [];
+        simpanKeBrowser();
+        perbaruiDropdownPlat();
+        tampilkanRiwayat();
+        tampilkanRiwayatBBM();
+        tampilkanToast('Semua data garasi berhasil dihapus.', 'info');
+    }
 });
 
 function sinkronkanTglPembuatan(plat, mfgDate) {
@@ -1636,30 +2431,28 @@ function sinkronkanTglPembuatan(plat, mfgDate) {
     });
 }
 
-/* Submit Form Handlers */
+/* Submit Form Servis */
 serviceForm.addEventListener('submit', function(e) {
     e.preventDefault();
 
     let platFinal = (plateSelect.value === 'BARU') ? newPlateNumber.value.toUpperCase().trim() : plateSelect.value;
-    if (!platFinal) return alert('Plat nomor wajib diisi!');
-
     const checkedBoxes = document.querySelectorAll('input[name="serviceItems"]:checked');
-    const otherCheckbox = document.getElementById('otherServiceCheckbox');
-    const otherInput = document.getElementById('otherServiceInput');
 
-    if (checkedBoxes.length === 0 && !otherCheckbox.checked) {
-        return alert('Pilih minimal satu item perawatan!');
+    if (checkedBoxes.length === 0 && !otherServiceCheckbox.checked) {
+        tampilkanToast('Pilih minimal satu item perawatan!', 'error');
+        return;
     }
 
     const serviceTypeArray = [];
     checkedBoxes.forEach(cb => serviceTypeArray.push(cb.value));
 
-    if (otherCheckbox.checked) {
-        const otherValue = otherInput.value.trim();
+    if (otherServiceCheckbox.checked) {
+        const otherValue = otherServiceInput.value.trim();
         if (otherValue !== '') {
             serviceTypeArray.push(otherValue);
         } else {
-            return alert('Harap isi nama perawatan lainnya!');
+            tampilkanToast('Harap isi nama perawatan lainnya!', 'error');
+            return;
         }
     }
 
@@ -1678,25 +2471,33 @@ serviceForm.addEventListener('submit', function(e) {
 
     if (idx === '') {
         dataServis.push(itemData);
+        tampilkanToast('Log servis berhasil ditambahkan!', 'success');
     } else {
-        dataServis[parseInt(idx, 10)] = itemData;
+        dataServis[parseInt(idx)] = itemData;
+        submitBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 18px; height: 18px;"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg> Simpan Log Aktivitas';
+        editIdInput.value = '';
+        tampilkanToast('Log servis berhasil diperbarui!', 'success');
     }
 
     sinkronkanTglPembuatan(platFinal, manufactureDateInput.value);
     simpanKeBrowser();
-    resetForms();
+    perbaruiDropdownPlat();
+    serviceForm.reset();
+    document.querySelectorAll('input[name="serviceItems"]').forEach(cb => cb.checked = false);
+    otherServiceCheckbox.checked = false;
+    otherServiceInput.value = '';
+    setHariIni();
     switchTab('dashboard');
 });
 
+/* Submit Form BBM */
 fuelForm.addEventListener('submit', function(e) {
     e.preventDefault();
 
     let platFinal = (fuelPlateSelect.value === 'BARU') ? newFuelPlateNumber.value.toUpperCase().trim() : fuelPlateSelect.value;
-    if (!platFinal) return alert('Plat nomor wajib diisi!');
+    const selectedBrand = document.querySelector('input[name="fuelBrand"]:checked')?.value || 'BBM';
 
     const idx = editFuelIdInput.value;
-    const selectedBrandRadio = document.querySelector('input[name="fuelBrand"]:checked');
-
     const itemData = {
         vehicle: fuelVehicleInput.value.toUpperCase().trim(),
         plateNumber: platFinal,
@@ -1704,33 +2505,45 @@ fuelForm.addEventListener('submit', function(e) {
         manufactureDate: fuelManufactureDateInput.value,
         date: document.getElementById('fuelDate').value,
         odometer: parseRibuan(fuelOdometerInput.value),
-        liters: parseFloat(fuelLitersInput.value) || 0,
+        brand: selectedBrand,
+        liters: parseFloat(fuelLitersInput.value),
         unitPrice: parseRibuan(fuelUnitPriceInput.value),
-        cost: parseRibuan(fuelCostInput.value),
-        brand: selectedBrandRadio ? selectedBrandRadio.value : 'Pertalite'
+        cost: parseRibuan(fuelCostInput.value)
     };
 
     if (idx === '') {
         dataBBM.push(itemData);
+        tampilkanToast('Catatan BBM berhasil disimpan!', 'success');
     } else {
-        dataBBM[parseInt(idx, 10)] = itemData;
+        dataBBM[parseInt(idx)] = itemData;
+        submitFuelBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 18px; height: 18px;"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg> Simpan Catatan BBM';
+        editFuelIdInput.value = '';
+        tampilkanToast('Catatan BBM berhasil diperbarui!', 'success');
     }
 
     sinkronkanTglPembuatan(platFinal, fuelManufactureDateInput.value);
     simpanKeBrowser();
-    resetForms();
+    perbaruiDropdownPlat();
+    fuelForm.reset();
+    setHariIni();
     switchTab('fuelHistory');
 });
 
-/* Mode Edit & Hapus */
-function aktifkanModeEdit(originalIndex) {
-    const item = dataServis[originalIndex];
+/* Edit & Hapus Servis */
+function aktifkanModeEdit(index) {
+    const item = dataServis[index];
     if (!item) return;
 
-    editIdInput.value = originalIndex;
-
+    editIdInput.value = index;
     perbaruiDropdownPlat();
-    plateSelect.value = item.plateNumber;
+
+    const hasPlate = Array.from(plateSelect.options).some(opt => opt.value === item.plateNumber.toUpperCase());
+    if (hasPlate) {
+        plateSelect.value = item.plateNumber.toUpperCase();
+    } else {
+        plateSelect.value = 'BARU';
+        newPlateNumber.value = item.plateNumber;
+    }
     pemicuPerubahanPlat();
 
     vehicleInput.value = item.vehicle;
@@ -1738,53 +2551,57 @@ function aktifkanModeEdit(originalIndex) {
     manufactureDateInput.value = item.manufactureDate || '';
     document.getElementById('date').value = item.date;
     odometerInput.value = formatRibuan(item.odometer);
-
-    const checkboxes = document.querySelectorAll('input[name="serviceItems"]');
-    const otherCheckbox = document.getElementById('otherServiceCheckbox');
-    const otherInput = document.getElementById('otherServiceInput');
-
-    checkboxes.forEach(cb => cb.checked = false);
-    otherCheckbox.checked = false;
-    otherInput.value = '';
-
-    if (item.serviceType) {
-        const itemServices = item.serviceType.split(', ');
-        const standardValues = Array.from(checkboxes).map(cb => cb.value);
-
-        itemServices.forEach(serviceName => {
-            if (standardValues.includes(serviceName)) {
-                const targetCb = Array.from(checkboxes).find(cb => cb.value === serviceName);
-                if (targetCb) targetCb.checked = true;
-            } else {
-                otherCheckbox.checked = true;
-                otherInput.value = serviceName;
-            }
-        });
-    }
-
     costInput.value = formatRibuan(item.cost);
     document.getElementById('notes').value = item.notes || '';
 
-    submitBtn.innerHTML = '🔄 Perbarui Informasi Servis';
+    const itemsArr = item.serviceType.split(', ').map(s => s.trim());
+    const checkboxes = document.querySelectorAll('input[name="serviceItems"]');
+
+    checkboxes.forEach(cb => {
+        cb.checked = itemsArr.includes(cb.value);
+    });
+
+    const standardValues = Array.from(checkboxes).map(cb => cb.value);
+    const otherValues = itemsArr.filter(val => !standardValues.includes(val));
+
+    if (otherValues.length > 0) {
+        otherServiceCheckbox.checked = true;
+        otherServiceInput.value = otherValues.join(', ');
+    } else {
+        otherServiceCheckbox.checked = false;
+        otherServiceInput.value = '';
+    }
+
+    submitBtn.innerHTML = '✏️ Perbarui Log Servis';
     switchTab('form');
 }
 
-function hapusCatatan(originalIndex) {
-    if (confirm('Apakah Anda yakin ingin menghapus data log servis ini?')) {
-        dataServis.splice(originalIndex, 1);
+async function hapusCatatan(index) {
+    const ok = await konfirmasiHapus('Apakah Anda yakin ingin menghapus catatan servis ini?');
+    if (ok) {
+        dataServis.splice(index, 1);
         simpanKeBrowser();
+        perbaruiDropdownPlat();
         tampilkanRiwayat();
+        tampilkanToast('Catatan servis telah dihapus.', 'info');
     }
 }
 
-function aktifkanModeEditBBM(originalIndex) {
-    const item = dataBBM[originalIndex];
+/* Edit & Hapus BBM */
+function aktifkanModeEditBBM(index) {
+    const item = dataBBM[index];
     if (!item) return;
 
-    editFuelIdInput.value = originalIndex;
-
+    editFuelIdInput.value = index;
     perbaruiDropdownPlat();
-    fuelPlateSelect.value = item.plateNumber;
+
+    const hasPlate = Array.from(fuelPlateSelect.options).some(opt => opt.value === item.plateNumber.toUpperCase());
+    if (hasPlate) {
+        fuelPlateSelect.value = item.plateNumber.toUpperCase();
+    } else {
+        fuelPlateSelect.value = 'BARU';
+        newFuelPlateNumber.value = item.plateNumber;
+    }
     pemicuPerubahanPlatBBM();
 
     fuelVehicleInput.value = item.vehicle;
@@ -1792,29 +2609,65 @@ function aktifkanModeEditBBM(originalIndex) {
     fuelManufactureDateInput.value = item.manufactureDate || '';
     document.getElementById('fuelDate').value = item.date;
     fuelOdometerInput.value = formatRibuan(item.odometer);
-    fuelLitersInput.value = item.liters || (item.unitPrice ? (item.cost / item.unitPrice).toFixed(2) : 0);
-    fuelUnitPriceInput.value = formatRibuan(item.unitPrice);
+    fuelLitersInput.value = item.liters;
+    fuelUnitPriceInput.value = formatRibuan(item.unitPrice || Math.round(item.cost / item.liters));
     fuelCostInput.value = formatRibuan(item.cost);
 
-    const fuelRadios = document.querySelectorAll('input[name="fuelBrand"]');
-    fuelRadios.forEach(radio => {
-        radio.checked = (item.brand && item.brand.includes(radio.value));
+    const brandRadios = document.querySelectorAll('input[name="fuelBrand"]');
+    brandRadios.forEach(radio => {
+        radio.checked = (radio.value === item.brand);
     });
 
-    submitFuelBtn.innerHTML = '🔄 Perbarui Catatan BBM';
+    submitFuelBtn.innerHTML = '✏️ Perbarui Catatan BBM';
     switchTab('fuelForm');
 }
 
-function hapusCatatanBBM(originalIndex) {
-    if (confirm('Apakah Anda yakin ingin menghapus catatan BBM ini?')) {
-        dataBBM.splice(originalIndex, 1);
+async function hapusCatatanBBM(index) {
+    const ok = await konfirmasiHapus('Apakah Anda yakin ingin menghapus catatan pengisian BBM ini?');
+    if (ok) {
+        dataBBM.splice(index, 1);
         simpanKeBrowser();
+        perbaruiDropdownPlat();
         tampilkanRiwayatBBM();
+        tampilkanToast('Catatan BBM telah dihapus.', 'info');
     }
 }
 
-/* Inisialisasi Aplikasi */
-switchTab('dashboard');
+/* ---------- Instal Aplikasi (PWA) ---------- */
+(function () {
+    const installAppBtn = document.getElementById('installAppBtn');
+    if (!installAppBtn) return;
+
+    const sudahTerinstal = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    installAppBtn.style.display = sudahTerinstal ? 'none' : 'flex';
+
+    installAppBtn.addEventListener('click', async function () {
+        if (window.__pwaDeferredPrompt) {
+            tutupModalSetting();
+            window.__pwaDeferredPrompt.prompt();
+            try {
+                const hasil = await window.__pwaDeferredPrompt.userChoice;
+                if (hasil.outcome === 'accepted') {
+                    tampilkanToast('Aplikasi sedang diinstal ke perangkat Anda!', 'success');
+                } else {
+                    tampilkanToast('Instalasi dibatalkan.', 'info');
+                }
+            } catch (err) { /* diabaikan */ }
+            window.__pwaDeferredPrompt = null;
+        } else {
+            const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            if (iOS) {
+                tampilkanToast('Di iPhone/iPad: tekan tombol Share (Bagikan), lalu pilih "Tambah ke Layar Utama".', 'info');
+            } else {
+                tampilkanToast('Buka menu browser (⋮), lalu pilih "Instal Aplikasi" / "Tambah ke Layar Utama".', 'info');
+            }
+        }
+    });
+})();
+
+/* Inisialisasi awal aplikasi */
+perbaruiDropdownPlat();
+tampilkanRiwayat();
 </script>
 </body>
 </html>
